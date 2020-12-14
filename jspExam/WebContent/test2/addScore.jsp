@@ -18,15 +18,16 @@
 		
 	%>
 	<form name="addScoreForm" method="post" action="addScoreProc.jsp">
-		학년 : <input type="radio" name="hakyun" value="1">1
-		<input type="radio" name="hakyun" value="2">2
-		<input type="radio" name="hakyun" value="3">3<br>
+		학년 : <input type="radio" name="hakyun" value="1학년">1학년
+		<input type="radio" name="hakyun" value="2학년">2학년
+		<input type="radio" name="hakyun" value="3학년">3학년<br>
 		시험구분 : <input type="radio" name="testType" value="중간고사">중간고사
 		<input type="radio" name="testType" value="기말고사">기말고사<br>
 		국어 : <input type="text" name="kor"><br>
 		영어 : <input type="text" name="eng"><br>
 		수학 : <input type="text" name="mat"><br>
 		과학 : <input type="text" name="sci"><br>
+		역사 : <input type="text" name="his"><br>
 		학생 아이디 : 
 		<select name="sid">
 			<%

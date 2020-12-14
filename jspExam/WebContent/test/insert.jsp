@@ -14,7 +14,9 @@
 		부모 이름 : <input type="text" name="pname"><br>
 		부모 전화번호 : <input type="text" name="pphone"><br>
 		주소 : <input type="text" name="addr"><br>
-		학년 : <input type="text" name="hakyun"><br>
+		학년 : <input type="radio" name="hakyun" value="1학년">1학년
+		<input type="radio" name="hakyun" value="2학년">2학년
+		<input type="radio" name="hakyun" value="3학년">3학년<br>
 		<input type="submit">
 	</form>
 </body>

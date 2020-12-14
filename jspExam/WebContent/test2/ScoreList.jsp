@@ -19,6 +19,7 @@
 			<td>영어점수</td>
 			<td>수학점수</td>
 			<td>과학점수</td>
+			<td>역사점수</td>
 			<td>총점</td>
 			<td>평균</td>
 			<td>학생 아이디</td>
@@ -36,6 +37,7 @@
 			<td><%=dto.getEng() %></td>
 			<td><%=dto.getMat() %></td>
 			<td><%=dto.getSci() %></td>
+			<td><%=dto.getHis() %></td>
 			<td><%=dto.getTot() %></td>
 			<td><%=dto.getAvg() %></td>
 			<td><%=dto.getSid() %></td>

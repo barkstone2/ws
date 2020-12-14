@@ -9,6 +9,7 @@ public class ScoreDTO {
 	private int eng;
 	private int mat;
 	private int sci;
+	private int his;
 	private int tot;
 	private double avg;
 	private String sid;
@@ -17,6 +18,13 @@ public class ScoreDTO {
 	public ScoreDTO() {
 	}
 
+	public int getHis() {
+		return his;
+	}
+
+	public void setHis(int his) {
+		this.his = his;
+	}
 
 	public int getNo() {
 		return no;

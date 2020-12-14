@@ -6,8 +6,8 @@
 <jsp:setProperty property="*" name="dto"/>
 
 <%
-	dto.setTot(dto.getKor()+dto.getEng()+dto.getMat()+dto.getSci());
-	dto.setAvg(dto.getTot()/4.0);
+	dto.setTot(dto.getKor()+dto.getEng()+dto.getMat()+dto.getSci()+dto.getHis());
+	dto.setAvg(dto.getTot()/5.0);
 	ScoreDAO dao = new ScoreDAO();
 	int result = dao.setInsert(dto);
 	if(result>0){
