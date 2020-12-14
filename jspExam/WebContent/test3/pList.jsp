@@ -11,11 +11,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-	<div style="display:flex">
-		<div style="margin-right: 10px">상품이름</div>
-		<div style="margin-right: 10px">할인된가격(상품가격)</div>
-	</div>
+	
+	<div>
+		<div style="display:flex">
+			<div style="margin-right: 10px; width: 100px;">상품이름</div>
+			<div style="margin-right: 10px; width: 100px;">할인된가격</div>
+			<div style="margin-right: 10px; width: 100px;">상품가격</div>
+		</div>
 	
 	<%
 		ProductDAO dao = new ProductDAO();
@@ -28,13 +30,16 @@
 			total += dto.getpPrice();
 			%>
 			<div style="display:flex">
-				<div style="margin-right: 10px"><%=dto.getpName() %></div>
-				<div><%=dto.getSalePrice()+"("+dto.getpPrice()+")"%></div>
+				<div style="margin-right: 10px; width: 100px;"><%=dto.getpName() %></div>
+				<div style="margin-right: 10px; width: 100px;"><%=dto.getSalePrice()%></div>
+				<div style="width: 100px;"><%=dto.getpPrice()%></div>
 			</div>
 		<%}%>
 		<div style="display:flex">
-			<div style="margin-right: 10px">합계</div>
-			<div><%=saleTotal+"("+total+")"%></div>
+			<div style="margin-right: 10px; width: 100px;">합계</div>
+			<div style="margin-right: 10px; width: 100px;"><%=saleTotal%></div>
+			<div style="width: 100px;"><%=total%></div>
 		</div>
+	</div>
 </body>
 </html>
