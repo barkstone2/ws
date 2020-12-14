@@ -1,0 +1,13 @@
+
+세션 (session) < 도메인, 모든 페이지에서 인식, 서버에 저장
+쿠키 (cookies) < 클라이언트에 저장
+
+
+netstat -a -n -o -p tcp
+taskkill /f /pid ????
+
+
+refNo : 부모글 refNo
+stepNo : 부모글 stepNo +1
+levelNo : 해당 답글의 부모글이 가진 levelNo보다 큰 다른 모든 게시글의 levelNo +1
+해당 답글과 해당 답글 부모글의 levelNo는 변하지 않음.

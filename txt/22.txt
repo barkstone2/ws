@@ -1,0 +1,29 @@
+
+
+* 회원관리
+
+- DB관리자 영역 : root
+1. 데이터베이스 생성
+2. 사용자계정 생성 - 아이디, 비번
+
+- 개발자 영역
+db name : exam
+user id : exam
+user pw : 1234
+
+1. DB접속
+2. DB 선택
+3. 회원테이블 생성 : member
+desc 테이블명
+
+insert into member set
+id = 'kim',
+pwd = '0000',
+name = '김민수',
+byear = 1995,
+bmonth = 9,
+bday = 31,
+gender = '남자',
+email = 'kim@gmail.com',
+phonenation = 'korea',
+phonenumber = '010-1234-5678';

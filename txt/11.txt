@@ -1,0 +1,147 @@
+* database (데이터베이스)
+* table (테이블)
+* record (레코드), tuple(튜플), row, cardinalrity, 기수 <--- 행
+* field(필드), column(컬럼), degree, 차수, attribute(속성) <--- 열
+
+* 관계형 데이터베이스(RDB)
+table(테이블) <----------> table(테이블)
+PK              <-- 관계 --> FK
+
+1. 데이타베이스 생성 <- root (DB관리자)
+2. 사용자계정 생성 <- root (DB관리자)
+
+3. 계정으로 로그인 <- 개발자
+4. 테이블 생성 <- 개발자
+-------------------------------------------------
+데이터베이스 이름 : hkit201
+사용자 아이디 : hkit201
+사용자 비밀번호 : 1234
+--------------------------------------------------
+
+insert into student (hakbun, name, gender, phonenumber, address, email, parentName, parentPhoneNumber)
+values('H002','이성순','남','010-2222-2222','서울','lee@gmail.com','이부모','010-2222-3333');
+
+insert into student (hakbun, name, gender, phonenumber, address, email, parentName, parentPhoneNumber)
+values('H003','장천용','남','010-3333-3333','경기','jang@gmail.com','장부모','010-3333-4444');
+
+
+
+foreign key (hakbun) references student(hakbun)
+
+* primary key 제약조건
+- 중복 불가능
+- null값 허용안함.
+
+* 하나의 테이블에는 반드시 primary key를 가지도록 하라.
+
+PK <----> FK
+1 : 1
+1 : M(1 대 다)
+
+
+database : 데이터의 저장소
+table : 데이터를 표 형태로 저장
+행 : record, row
+열 : field, column
+
+Primary Key(PK)
+데이터가 중복되지 않는 유일한 값.
+중복되지 않고, Null 허용안함.(비어있지 않다.)
+예) 사이트 회원가입시 아이디(ID)
+테이블당 기본키는 1개만 존재한다.
+
+Foreign Key(FK)
+두 테이블의 관계를 맺어주는 키를 말한다.
+다른 테이블의 주 키와 대응되는 필드.
+
+DBMS : 데이터베이스를 관리하고 운영하는 소프트웨어
+MySQL
+Oracle
+MS-SQL
+PostgreSQL
+
+RDBMS : 관계형 DBMS 표로 구성
+
+데이터베이스를 통해 얻을 수 있는 장점.
+1. 보안 - 데이터를 안전하게 보관할 수 있다.
+2. 권한기능 - 데이터베이스를 사용하는 여러 유저들을
+각자의 접근 레벨을 적용하여 관리할 수 있다.
+
+데이터베이스의 단점.
+
+
+
+-----------------------------------------
+* SQL 문의 분류
+DDL : 데이터 정의어 - create, drop, alter 등 (테이블 생성, 삭제, 수정)
+DML : 데이터 조작어 - select, insert, update, delete 등(테이블 내 데이터 처리)
+DCL :데이터 제어어 - grant, revoke, deny 등(유저 권한 부여 등)
+
+
+
+select
+from
+where <- 레코드에 조건
+group by
+having <- 그룹에 대한 조건
+order by
+
+
+--------------------------------------------
+
+* 하위쿼리 (sub-query)
+
+
+
+
+테이블 < 관계형데이터베이스
+스키마 : MySQL은 데이터베이스와 Schema가 동일하다.
+	오라클은 User가 Schema이다.
+
+
+
+
+
+
+substr : 문자를 잘라 추출
+substr(자를 문자, 시작 위치, 자를 범위)
+substr('abcdefg', 3, 2) -> 3번째인 c부터 두 개인 cd 추출
+
+instr(특정 문자의 위치를 구하는 함수)
+instr(대상, 시작위치, 몇번째 발견)
+
+select instr('WELCOME TO ORACLE', 'O', 6, 2)
+6번째 글자부터 두번째 나오는 O 찾기
+
+LPAD : (원본 단어, 늘릴 자리수, 채울 단어), RPAD
+원본 단어의 길이를 왼쪽으로 늘릴 자리수 만큼 늘린 뒤, 빈 공간을 채울 단어로 채운다.
+ex)
+select LPAD('Oracle', 20, '#') from dual;
+##############Oracle(20자)
+RPAD는 오른쪽으로
+
+
+LTRIM, RTRIM, TRIM
+공백 제거. 좌 우 양쪽
+
+concat : 단어 결합, 인자는 최대 두개.
+||로 단어 구분해도 같은 기능.
+
+abs : 절대값.
+floor : 소수점 이하 절삭
+round : 특정 자리에서 반올림.(소수점 n번째 자리까지 남김)
+trunc : 특정 자리이하를 버림(소수점 n번째 자리까지 남김)
+mod : 나머지 구함
+power : (2, 3)-> 2의 3승
+
+
+
+
+
+
+
+
+
+
+
+
