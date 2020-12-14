@@ -1,0 +1,57 @@
+<%@page import="member.MemberDTO"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="member.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>
+<%
+	String cookId = "";
+	if(session.getAttribute("cookId") != null){
+		cookId = (String) session.getAttribute("cookId");
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<td>회원번호</td>
+			<td>아이디</td>
+			<td>이름</td>
+		</tr>
+		<%
+			MemberDAO dao = new MemberDAO();
+			ArrayList<MemberDTO> list = dao.getListAll();
+			for(int i=0; i<list.size(); i++){
+				MemberDTO dto = list.get(i);
+			%>
+				<tr>
+					<td><a href="#" onclick="memView('<%=dto.getNo() %>', '<%=dto.getId() %>');"><%=dto.getNo() %></a></td>
+					<td><%=dto.getId() %></td>
+					<td><%=dto.getName() %></td>
+				</tr>
+			<%}
+			
+		%>
+	</table>
+	<a href="join.jsp">[가입하기]</a>
+	<%
+		if(cookId.isEmpty()){%>
+			<a href="login.jsp">[로그인]</a>
+		<%}else{%>
+			<a href="logoutProc.jsp">[로그아웃]</a>
+		<%}
+	%>
+	
+</body>
+<script>
+	function memView(value1, value2){
+		if(<%=cookId%>==)
+		location.href="view.jsp?no="+value1+"&id="+value2;
+	}
+</script>
+</html>

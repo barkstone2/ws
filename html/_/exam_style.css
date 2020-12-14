@@ -1,0 +1,184 @@
+.content-box {
+    width: 80%;
+    height: inherit;
+    margin: auto;
+    background-color: #ff000040;
+}
+.hidden {
+    display: none;
+}
+/* --------------------------------------------- */
+
+#header {
+    height: 100px;
+    background-color: aqua;
+}
+    #header > .content-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #logo{	
+        position: relative;
+        left:0px;
+        top:0px;
+        margin: 0px 20px 0px 0px;
+    }
+    .logo_img {
+        width: 100px;
+        height: 100px;
+    }
+    #main-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #main-menu > nav > ul {	
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        --background-color: gray;
+    }
+    #main-menu > nav > ul li {	
+        margin: 0px 20px;
+    }
+    #search-form {
+        text-align: center;
+        line-height: 100px;
+        padding: 0px 20px;
+        --background-color: cadetblue;
+    }
+    #member-menu {
+        height: inherit;
+        padding: 0px 0px;
+        --background-color: blue;
+    }
+    #member-menu > nav:nth-child(1) > ul {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        --background-color:gray;
+        margin-bottom: 10px;
+    }
+    #member-menu > nav:nth-child(1) > ul li {
+        margin: 0px 15px;
+    }
+    #member-menu > nav:nth-child(2) > ul {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        --background-color: aquamarine;
+    }
+    #member-menu > nav:nth-child(2) > ul li {
+        margin: 0px 15px;
+    }
+
+#body {
+    height:300px;
+    background-color: aquamarine;
+}
+    #body > .content-box {
+        display: flex;
+    }
+    #aside {
+        width: 20%;
+        height: inherit;
+        background-color: blanchedalmond;
+    }
+        #body_nav {
+            width: 70%;
+            margin: auto;
+            --background-color: gray;
+        }
+        #body_nav h1 {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 30px 0px 10px 0px;
+        }
+        #body_nav > nav > ul {
+            --list-style-type: circle;
+            --padding: 20px;
+            margin: 0px 0px 0px 0px;
+        }
+        #body_nav > ul li {	
+            margin: 0px 20px;
+        }
+
+    #main {
+        width: 80%;
+        height: inherit;
+        background-color: burlywood;
+    }
+        #main > section, main > nav {
+            width: 90%;
+            margin: auto;
+            --background-color: yellow;
+        }
+        #main > section:nth-child(1) > h1 {
+            padding: 30px 0px 20px 0px;
+        }
+        #main > section:nth-child(2) > div {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 90%;
+            height: 50px;
+            --background-color: yellow;
+        }
+        #main > nav > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+            height: 30px;
+            --background-color: yellow;
+        }
+        #main > nav > div > ul {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            --background-color: yellow;
+            margin: 0px 10px
+        }
+        #main > nav > div > ul > li {
+            margin: 0px 10px;
+        }
+#footer {
+    height: 100px;
+    background-color: bisque;
+    margin: auto;
+    line-height: inherit;
+}
+        #footer > .content-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            --background-color: blueviolet;
+        }
+        #footer_logo {
+            float: left;
+        }
+        #footer_logo{	
+            position: relative;
+            left:0px;
+            top:0px;
+            margin: 0px 20px 0px 0px;
+        }
+        .footer_logo_img {
+            width: 100px;
+            height: 100px;
+        }
+        #owner_info > dl {
+            display: flex;
+        }
+        #owner_info > dl > dt {
+            display: flex;
+            padding: 0px 20px 0px 0px;
+        }
+        #owner_info > dl > dd {
+            display: flex;
+            padding: 0px 50px 0px 0px;
+        }
+        #copyright_info {
+            margin: 5px 0px 0px 0px;
+        }

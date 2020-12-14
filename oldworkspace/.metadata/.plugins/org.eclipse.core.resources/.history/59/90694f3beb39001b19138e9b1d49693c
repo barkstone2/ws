@@ -1,0 +1,16 @@
+package board;
+
+public class BoardDTO {
+	private int no;
+	private int num;
+	private String writer varchar2(50) not null,
+	private String subject varchar2(50) not null,
+	private String content clob not null,
+	private String email varchar2(50) not null,
+	private String pw varchar2(50) not null,
+	private int refNo number not null,
+	private int stepNo number not null,
+	private int levelNo number not null,
+	private int hit number not null,
+	private Date regiDate date default sysdate
+}

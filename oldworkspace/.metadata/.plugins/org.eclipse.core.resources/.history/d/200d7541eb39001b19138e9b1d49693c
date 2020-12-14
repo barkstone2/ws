@@ -1,0 +1,16 @@
+package board;
+
+public class BoardDTO {
+	private int no;
+	private int num;
+	private String writer;
+	private String subject;
+	private String content;
+	private String email;
+	private String pw;
+	private int refNo;
+	private int stepNo;
+	private int levelNo;
+	private int hit;
+	private Date regiDate;
+}

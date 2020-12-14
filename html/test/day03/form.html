@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+
+</head>
+
+<body>
+    <form name="joinForm" method="get" action="joinProc.jsp">
+        <table border="1">
+            <tr>
+                <td style="width: 100px;">아이디</td>
+                <td style="width: 200px;">
+                    <input type="text" name="id" value="" style="width: 80px;">
+                </td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td>
+                    <input type="password" name="passwd" value="" style="width: 80px;">
+                </td>
+            </tr>
+            <tr>
+                <td>이름</td>
+                <td>
+                    <input type="text" name="name" value="" style="width: 80px;">
+                </td>
+            </tr>
+            <tr>
+                <td>전화번호</td>
+                <td>
+                    <input type="text" name="phone" value="" style="width: 80px;">
+                </td>
+            </tr>
+            <tr>
+                <td>주소</td>
+                <td>
+                    <input type="text" name="address" value="" style="width: 150px;">
+                </td>
+            </tr>
+            <tr>
+                <td>성별</td>
+                <td>
+                    <input type="radio" name="gender" value="남자">남
+                    <input type="radio" name="gender" value="여자">여
+                </td>
+            </tr>
+            <tr>
+                <td>관심분야</td>
+                <td>
+                    <input type="checkbox" name="interest" value="스포츠">스포츠
+                    <input type="checkbox" name="interest" value="여행">여행
+                    <input type="checkbox" name="interest" value="영화감상">영화감상
+                    <br>
+                    <input type="checkbox" name="interest" value="캠핑">캠핑
+                    <input type="checkbox" name="interest" value="낚시">낚시
+
+                </td>
+            </tr>
+            <tr>
+                <td>출생년도</td>
+                <td>
+                    <select name="born">
+                        <option value="">선택하세요</option>
+                        <option value="2000">2000</option>
+                        <option value="2001">2001</option>
+                        <option value="2002">2002</option>
+                        <option value="2003">2003</option>
+                        <option value="2004">2004</option>
+                    </select>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td colspan="2" align="center">
+                    <button type="button">가입하기</button>
+                    <input type="submit" value="가입하기">
+                    <input type="button" value="가입하기">
+                </td>
+            </tr>
+        </table>
+    </form>
+</body>
+
+</html>

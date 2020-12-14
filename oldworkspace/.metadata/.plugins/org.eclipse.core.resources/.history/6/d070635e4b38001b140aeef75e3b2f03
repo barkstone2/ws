@@ -1,0 +1,127 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	String cookId = null;
+	if(session.getAttribute("cookId") != null){
+		cookId = (String) session.getAttribute("cookId");
+	}
+%>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h1>회원가입 - <%=cookId %></h1>
+		<form name="form" method="post" action="joinFormProc.jsp">
+			<table>
+				<tr>
+					<td align="right">아이디 : </td>
+					<td><input type="text" name="id"></td>
+				</tr>
+				<tr>
+					<td align="right">비밀번호 : </td>
+					<td><input type="password" name="pw"></td>
+				</tr>
+				<tr>
+					<td align="right">비밀번호확인 : </td>
+					<td><input type="password" name="pwc"></td>
+				</tr>
+				<tr>
+					<td align="right">이름 : </td>
+					<td><input type="text" name="name"></td>
+				</tr>
+				<tr>
+					<td align="right">전화번호 : </td>
+					<td><input type="text" name="phone"></td>
+				</tr>
+				<tr>
+					<td align="right">이메일 : </td>
+					<td><input type="text" name="email"></td>
+				</tr>
+				<tr>
+					<td align="right">출생년도 : </td>
+					<td><input type="text" name="birth"></td>
+				</tr>
+			</table>
+			<a href="#" onclick="login();">[가입하기]</a>
+			<!-- <input type="button" value="가입하기" onclick="login();">
+			<button type="button" onclick="login();">가입하기</button> -->
+			<button type="reset">초기화</button>
+		</form>
+		
+	<div style="display:flex;">
+		<form name="form2" method="post" action="memberList.jsp">
+			<input type="button" value="회원조회" onclick="mlist();">
+		</form>
+		<a href="login.jsp">[로그인]</a>
+	</div>
+
+
+</body>
+
+<script>
+	function login() {
+		if(confirm('가입하시겠습니까?')) {
+			if (form.id.value == '') {
+	            alert('아이디를 입력하세요');
+	            document.form.id.focus();
+	            return false;
+	        }
+	        if(form.pw.value == ''){
+	            alert('비밀번호를 입력하세요');
+	            document.form.pw.focus();
+	            return false;
+	        }
+	        if(form.pwc.value == ''){
+	            alert('비밀번호확인을 입력하세요');
+	            document.form.pwc.focus();
+	            return false;
+	        }
+	        if(form.name.value == '') {
+	            alert('이름을 입력하세요');
+	            document.form.name.focus();
+	            return false;
+	        }
+	        if(form.phone.value == '') {
+	            alert('전화번호를 입력하세요');
+	            document.form.phone.focus();
+	            return false;
+	        }
+	        if(form.email.value == '') {
+	            alert('이메일을 입력하세요');
+	            document.form.email.focus();
+	            return false;
+	        }
+	        if(form.birth.value == '') {
+	            alert('전화번호를 입력하세요');
+	            document.form.birth.focus();
+	            return false;
+	        }
+			if(form.pw.value !== form.pwc.value){
+				alert('비밀번호가 일치하지 않습니다.');
+				document.form.pwc.focus();
+				return false;
+			}
+			
+			form.method="post";
+			form.action = "joinFormProc.jsp";
+			form.submit();
+			
+		}
+	}
+	
+</script>
+<script>
+	function mlist() {
+		if(cookId != null){
+			if(confirm('회원목록을 보시겠습니까?')) {
+				location.href="memberList.jsp";
+			}
+		}
+	}
+
+</script>
+
+</html>

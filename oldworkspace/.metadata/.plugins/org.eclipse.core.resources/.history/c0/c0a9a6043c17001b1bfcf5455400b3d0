@@ -1,0 +1,26 @@
+package com.day6;
+
+import java.util.TreeSet;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		
+		
+		
+		
+		
+		
+	} // main end
+
+	public static void getGroupCount(TreeSet tset, int from, int to) {
+		// TODO Auto-generated method stub
+
+	}
+	
+	
+	
+	
+	
+}

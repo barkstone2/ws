@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./aa.css">
+</head>
+
+<body>
+    <header id="header">
+        <div class="content-box">
+            <section id="logo">
+                <h1>
+                    <img src="./images/apple.jpg" class="logo_img">
+                </h1>
+            </section>
+
+            <section id="main-menu">
+                <h1 class="hidden">머릿말</h1>
+
+                <nav>
+                    <h1 class="hidden">메인메뉴</h1>
+                    <ul>
+                        <li>주인장소개</li>
+                        <li>주인장연혁</li>
+                        <li>주인동동향</li>
+                    </ul>
+                </nav>
+
+                <section id="search-form">
+                    <h1 class="hidden">검색폼</h1>
+                    <form>
+                        <fieldset>
+                            <legend class="hidden">검색어 입력필드</legend>
+                            <label class="hidden">검색어</label>
+                            <input type="text" name="">
+                            <input type="button" value="검색">
+                        </fieldset>
+                    </form>
+                </section>
+
+                <div id="member-menu">
+                    <nav>
+                        <h1 class="hidden">회원메뉴</h1>
+                        <ul>
+                            <li><a href="./index.html">Home</a></li>
+                            <li>로그인</li>
+                            <li>회원가입</li>
+                        </ul>
+                    </nav>
+
+                    <nav>
+                        <h1 class="hidden">바로가기메뉴</h1>
+                        <ul>
+                            <li>마이페이지</li>
+                            <li>게시판</li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+        </div>
+    </header>
+
+    <div id="body">
+        <div class="content-box">
+            <div id="aside">
+                <section id="body_nav">
+                    <h1 class="hidden">고객센터</h1>
+                    <nav>
+                        <h1>고객센터메뉴</h1>
+                        <ul>
+                            <li>공지사항</li>
+                            <li>자주하는질문</li>
+                            <li>
+                                <a href="./aa.html" target="">
+                                    1:1문의
+                                </a>
+                            </li>
+                            <li>이벤트</li>
+                        </ul>
+                    </nav>
+
+                    <nav>
+                        <h1>연관업체</h1>
+                        <ul>
+                            <li>연관업체1</li>
+                            <li>연관업체2</li>
+                            <li>연관업체3</li>
+                        </ul>
+                    </nav>
+                </section>
+            </div>
+
+            <div id="main">
+                <div>
+                    >>> 1:1 문의
+                </div>
+
+                <section id="main-content">
+
+                    <section id="form-box">
+
+                        <form name="questform" method="POST" action="questProc.jsp">
+                            <div id="info">
+                                <div>
+                                    1:1 E-MAIL 상담
+                                </div>
+
+                                <div>
+                                    | 로그인 후 문의하시면 보다 정확한 답변을 받으실 수 있습니다.
+                                </div>
+                            </div>
+                            <div>
+                                >>상담정보
+                            </div>
+                            <table border="1">
+                                <tr>
+                                    <td class="menu">상담분류</td>
+                                    <td>
+                                        <select name="questoption">
+                                            <option value="">선택</option>
+                                            <option value="aboutbuy">구매관련</option>
+                                            <option value="aboutsell">판매관련</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <div>
+                                >>회원정보
+                            </div>
+
+                            <table border="1">
+                                <tr>
+                                    <td class="menu">
+                                        이름
+                                    </td>
+                                    <td>
+                                        <input type="text" name="name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="menu">
+                                        연락처(선택)
+                                    </td>
+                                    <td>
+                                        메일 답변 알림을 SMS로 수신하기 원하실 경우 연락처를 입력해 주세요.
+                                        <br>
+                                        <select>
+                                            <option value="">010</option>
+                                            <option value="">011</option>
+                                            <option value="">017</option>
+                                            <option value="">018</option>
+                                            <option value="">019</option>
+                                        </select>
+                                        -
+                                        <input type="text"> -
+                                        <input type="text">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="menu">
+                                        답변 E-Mail
+                                    </td>
+                                    <td>
+                                        <input type="text" name="emailid"> @ <input type="text" name="emailaddr">
+                                        <select name="selectaddr" id="">
+                                            <option value="false">직접 입력</option>
+                                            <option value="naver.com">naver.com</option>
+                                            <option value="hanmail.com">hanmail.com</option>
+                                            <option value="nate.com">nate.com</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <div>
+                                >>질문내용
+                            </div>
+                            <table border="1">
+                                <tr>
+                                    <td class="menu">
+                                        제목
+                                    </td>
+                                    <td>
+                                        <input type="text" class="q-content" name="questsubj">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="menu">
+                                        내용
+                                    </td>
+                                    <td>
+                                        <textarea id="" cols="30" rows="10" class="q-content"
+                                            name="questcon"></textarea>
+                                    </td>
+                                </tr>
+                            </table>
+                            <section id="quesbt">
+                                <div>
+                                    <input type="button" value="보내기" onclick="login()">
+                                </div>
+                                <div>
+                                    <input type="button" value="취소">
+                                </div>
+                            </section id="quesbt">
+
+                        </form>
+                    </section>
+                </section>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="content-box">
+            <section id="logo_foot">
+                <h1><img src="./images/Kiwi.jpg" class="logo_img"></h1>
+            </section>
+
+            <div>
+                <section id="owner_info">
+                    <h1 class="hidden">소유권정보</h1>
+                    <dl>
+                        <dt>주소:</dt>
+                        <dd>경기도 성남시 대왕판교로 111</dd>
+                        <dt>관리자메일 :</dt>
+                        <dd>hong@hong.com</dd>
+                    </dl>
+                    <dl>
+                        <dt>사업자등록번호 :</dt>
+                        <dd>111-22-33333</dd>
+                        <dt>통신판매업신고 :</dt>
+                        <dd>신고제 1111-경기성남-1111호</dd>
+                    </dl>
+                    <dl>
+                        <dt>상호 :</dt>
+                        <dd>홍길동사</dd>
+                        <dt>대표 :</dt>
+                        <dd>홍길동</dd>
+                        <dt>전화번호 :</dt>
+                        <dd>010-1111-1111</dd>
+                    </dl>
+                </section>
+
+                <section id="copyright_info">
+                    <h1 class="hidden">저작권정보</h1>
+                    <div>Copyright c hong.com 2012-2014 All Right Reserved. Contact hong@hong.com</div>
+                </section>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<script>
+    function login() {
+        f = document.questform
+        if (f.questoption.value == '') {
+            alert('상담 분류를 선택하세요');
+            f.questoption.focus();
+            return false;
+        }
+        if (f.name.value == '') {
+            alert('이름을 입력하세요');
+            f.name.focus();
+            return false;
+        }
+        if (f.emailid.value == '') {
+            alert('이메일 주소를 입력하세요');
+            f.emailid.focus();
+            return false;
+        }
+        if (f.emailaddr.value == '') {
+            alert('이메일 주소를 입력하세요');
+            f.emailaddr.focus();
+            return false;
+        }
+        if (f.questsubj.value == '') {
+            alert('질문 제목을 입력하세요');
+            f.questsubj.focus();
+            return false;
+        }
+        if (f.questcon.value == '') {
+            alert('질문 내용을 입력하세요');
+            f.questcon.focus();
+            return false;
+        }
+        
+        f.submit();
+    }
+
+
+</script>

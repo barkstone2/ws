@@ -1,0 +1,31 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	
+
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+html, body {
+margin: 0;
+height: 100%;
+overflow: hidden;
+}
+</style>
+</head>
+<body>
+	<div style="width: 100%; height: inherit; background-color: yellow;">
+		 
+	</div>
+</body>
+</html>

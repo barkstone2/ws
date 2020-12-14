@@ -1,0 +1,42 @@
+package com.day6;
+
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		TreeSet set = new TreeSet(new Comparator() {
+			public int compare(Object o1, Object o2) {
+				if(o1 instanceof Student && o2 instanceof Student) {
+					
+					Student tmp1 = (Student) o1;
+					Student tmp2 = (Student) o2;
+					
+					if(tmp1.getAverage() > tmp2.getAverage()) {
+						return 1;
+					}else if(tmp1.getAverage() == tmp2.getAverage()) {
+						return 0;
+					}
+				}//if end
+				return -1;
+			}//compare end
+		});
+		
+		
+		
+		
+		
+	} // main end
+
+	public static int getGroupCount(TreeSet tset, int from, int to) {
+		
+		return tset.subSet(from, to);
+	}
+	
+	
+	
+	
+	
+}

@@ -1,0 +1,19 @@
+#loginpage{
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#loginbtncell {
+    text-align: center;
+}
+#loginbtncell > input {
+    width: 80px;
+}
+.menu-cell {
+    text-align: center;
+}
+
+.login-input {
+    width: 120px;
+}

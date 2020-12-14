@@ -1,0 +1,14 @@
+package member;
+
+public class MemberDTO {
+
+id
+pw
+pwc
+name
+
+phone
+email
+birth
+
+}

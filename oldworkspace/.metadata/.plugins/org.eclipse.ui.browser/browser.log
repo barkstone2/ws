@@ -1,0 +1,41 @@
+
+12월 03, 2020 11:16:54.61 NEW SESSION
+12월 03, 2020 11:16:54.61 [3460:2796:1203/111654.601:ERROR:device_event_log_impl.cc(208)] [11:16:54.610] Bluetooth: bluetooth_adapter_winrt.cc:1076 Getting Default Adapter failed.
+12월 03, 2020 11:26:50.38 [1203/112650.388:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+
+12월 07, 2020 14:43:02.50 NEW SESSION
+12월 07, 2020 14:43:02.50 [9560:4140:1207/144302.503:ERROR:device_event_log_impl.cc(208)] [14:43:02.502] Bluetooth: bluetooth_adapter_winrt.cc:1076 Getting Default Adapter failed.
+12월 07, 2020 14:55:53.08 [8424:2552:1207/145553.085:ERROR:device_event_log_impl.cc(208)] [14:55:53.093] Bluetooth: bluetooth_adapter_winrt.cc:1076 Getting Default Adapter failed.
+12월 07, 2020 15:05:44.80 [1207/150544.806:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+12월 07, 2020 16:57:02.02 [2808:7812:1207/165702.022:ERROR:device_event_log_impl.cc(208)] [16:57:02.015] Bluetooth: bluetooth_adapter_winrt.cc:1076 Getting Default Adapter failed.
+12월 07, 2020 17:06:56.50 [1207/170656.500:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+
+12월 09, 2020 09:01:41.87 NEW SESSION
+12월 09, 2020 09:01:41.87 [11056:4620:1209/090141.876:ERROR:device_event_log_impl.cc(208)] [09:01:41.876] Bluetooth: bluetooth_adapter_winrt.cc:1076 Getting Default Adapter failed.
+12월 09, 2020 09:11:33.88 [1209/091133.882:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+12월 09, 2020 13:23:39.43 [7628:6312:1209/132339.432:ERROR:device_event_log_impl.cc(208)] [13:23:39.440] Bluetooth: bluetooth_adapter_winrt.cc:1076 Getting Default Adapter failed.
+12월 09, 2020 13:33:29.53 [1209/133329.533:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+
+12월 10, 2020 08:54:14.59 NEW SESSION
+12월 10, 2020 08:54:14.59 [11004:4932:1210/085414.593:ERROR:device_event_log_impl.cc(211)] [08:54:14.593] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+12월 10, 2020 08:54:14.62 [11004:4932:1210/085414.624:ERROR:device_event_log_impl.cc(211)] [08:54:14.624] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+12월 10, 2020 09:04:04.55 [1210/090404.551:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+
+12월 11, 2020 09:15:06.40 NEW SESSION
+12월 11, 2020 09:15:06.40 [5360:3612:1211/091506.402:ERROR:device_event_log_impl.cc(211)] [09:15:06.402] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+12월 11, 2020 09:15:06.40 [5360:3612:1211/091506.408:ERROR:device_event_log_impl.cc(211)] [09:15:06.408] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+12월 11, 2020 09:24:57.86 [1211/092457.860:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+12월 11, 2020 09:52:56.84 [5100:2120:1211/095256.842:ERROR:device_event_log_impl.cc(211)] [09:52:56.842] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+12월 11, 2020 09:52:56.84 [5100:2120:1211/095256.849:ERROR:device_event_log_impl.cc(211)] [09:52:56.849] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+
+12월 11, 2020 09:57:13.73 NEW SESSION
+12월 11, 2020 09:57:13.73 [7532:2968:1211/095713.729:ERROR:device_event_log_impl.cc(211)] [09:57:13.729] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+12월 11, 2020 09:57:13.73 [7532:2968:1211/095713.735:ERROR:device_event_log_impl.cc(211)] [09:57:13.734] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+12월 11, 2020 10:07:06.06 [1211/100706.066:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)
+
+12월 11, 2020 16:32:42.22 NEW SESSION
+12월 11, 2020 16:32:42.22 [2416:1408:1211/163242.224:ERROR:device_event_log_impl.cc(211)] [16:32:42.224] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+12월 11, 2020 16:32:42.25 [2416:1408:1211/163242.250:ERROR:device_event_log_impl.cc(211)] [16:32:42.250] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+12월 11, 2020 17:05:50.09 [4804:9704:1211/170550.090:ERROR:device_event_log_impl.cc(211)] [17:05:50.089] USB: usb_device_handle_win.cc:1020 Failed to read descriptor from node connection: 시스템에 부착된 장치가 작동하지 않습니다. (0x1F)
+12월 11, 2020 17:05:50.09 [4804:9704:1211/170550.095:ERROR:device_event_log_impl.cc(211)] [17:05:50.095] Bluetooth: bluetooth_adapter_winrt.cc:1073 Getting Default Adapter failed.
+12월 11, 2020 17:15:47.01 [1211/171547.017:ERROR:directory_reader_win.cc(43)] FindFirstFile: 지정된 경로를 찾을 수 없습니다. (0x3)

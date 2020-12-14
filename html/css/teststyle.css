@@ -1,0 +1,37 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.p1{
+    background-color: blue;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    line-height: 150px;
+}
+.u1{
+    background-color: yellow;
+    width: 150px;
+}
+
+h2{
+    background-color: green;
+}
+div{
+    background-color: purple;
+}
+
+span{
+    background-color: rebeccapurple;
+}
+
+hr{
+    width: 150px;
+    height: 30px;
+    background-color: red;
+}
+
+img{
+    width: 50px;
+    height: 50px;
+}

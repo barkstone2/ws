@@ -1,0 +1,133 @@
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8"); %>
+<%
+	String cookId = null;
+	if(session.getAttribute("cookId") != null){
+		cookId = (String) session.getAttribute("cookId");
+	}
+%>    
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	String id = request.getParameter("id");
+	String pw = null;
+	String name = null;
+	String phone = null;
+	String email = null;
+	String birth = null;
+
+	Connection conn = null;
+	PreparedStatement pstmt = null;
+	ResultSet rs = null;
+	
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String dbUrl = "jdbc:oracle:thin:@localhost:1521:xe";
+	String dbId = "jspTest";
+	String dbPw = "1234";
+	
+	try {
+		Class.forName(driver);
+		conn = DriverManager.getConnection(dbUrl, dbId, dbPw);
+		System.out.println("오라클 접속 성공");
+		
+		String sql = "select * from joinTBL01 where id = ?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		rs = pstmt.executeQuery();
+		System.out.println("쿼리 성공");
+		
+		if(rs.next()){
+			pw = rs.getString("pw");
+			name = rs.getString("name");
+			phone = rs.getString("phone");
+			email = rs.getString("email");
+			birth = rs.getString("birth").substring(0,4);
+		}
+		
+	}catch(Exception e){
+		System.out.println("오라클 접속 에러");
+		e.printStackTrace();
+	}finally{
+		try{
+			if(rs != null){rs.close();}
+			if(pstmt != null){pstmt.close();}
+			if(conn != null){conn.close();}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+%>
+	<h1>회원정보 상세보기 - <%=cookId %></h1>
+	
+	<table>
+		<tr>
+			<td width="100" align="center">아이디 : </td>
+			<td><%=id %></td>
+		</tr>
+		<tr>
+			<td align="center">비밀번호 : </td>
+			<td><%=pw %></td>
+		</tr>
+		<tr>
+			<td align="center">이름 : </td>
+			<td><%=name %></td>
+		</tr>
+		<tr>
+			<td align="center">전화번호 : </td>
+			<td><%=phone %></td>
+		</tr>
+		<tr>
+			<td align="center">이메일 : </td>
+			<td><%=email %></td>
+		</tr>
+		<tr>
+			<td align="center">출생년도 : </td>
+			<td><%=birth %></td>
+		</tr>
+	</table>
+	<br>
+	<%-- <a href="memberModify.jsp?id=<%=id %>">[수정하기]</a>
+	<a href="memberDelete.jsp?id=<%=id %>">[삭제하기]</a> --%>
+	
+	<a href="#" onclick="move('M', '<%=id%>');">[수정하기]</a>
+	<a href="#" onclick="move('D', '<%=id%>');">[삭제하기]</a>
+		
+	<a href="#" onclick="modify('<%=id%>');">[수정하기]</a>
+	<a href='joinForm.jsp'>[처음으로]</a>
+</body>
+
+<script>
+	function move(value1, value2) {
+		if(value1=='M'){
+			alert('수정하기 페이지로 이동합니다.' + value2);
+			location.href="memberModify.jsp?id="+value2;
+		}else{
+			alert('삭제하기 페이지로 이동합니다.' + value2);
+			location.href="memberDelete.jsp?id="+value2;
+		}
+		
+	}
+	
+	function modify(value1) {
+		alert('수정하기 페이지로 이동합니다.' + value1);
+		location.href="memberModify.jsp?id="+value1;
+		
+	}
+	
+	
+</script>
+
+
+
+</html>

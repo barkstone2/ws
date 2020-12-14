@@ -1,0 +1,5 @@
+1604023465613	Inline local variable 'sc'
+1604023500316	Extract local variable 'scanner'
+1604025334948	Rename type 'Test'
+1604025498305	Delete element
+1604040211128	Rename type 'Book'

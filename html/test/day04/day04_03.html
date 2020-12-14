@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+</head>
+
+<!-- 
+outline : 제목을 붙이는 것
+
+글자만 쭉 적고 제목 붙여서 CSS 적용
+
+content block
+* 블럭화 - 마크
+제목 : <h>
+목록 : <ul>, <ol>, <dl>
+표 : <table>
+폼 : <form>
+기타 : <div>
+
+* 제목 - outline
+
+
+
+
+
+* 시멘틱 태그
+<header></header>
+문서의 header를 나타날 때 사용하고, 사이트 로고, 회원가입, 언어셋 등의 링크 등을 추가합니다.
+
+<nav></nav>
+문서의 navigation을 나타낼 때 사용하고, 보통 메뉴 영역으로 사용합니다.
+브라우저가 네비게이션 영역을 알 수 있게되면 검색엔진 색인에 도움을 줄 수 있습니다.
+
+<section></section>
+문서의 section을 의미하며, 같은 성격의 내용일 때 section으로 묶어 사용합니다.
+section 내부에서는 제목의 번호를 1번부터 사용할 수 있습니다.
+넘버링을 1부터 시작하도록,
+다시 시작되는 영역으로 만들어 주는 것.
+
+<article></article>
+section 태그의 하위 개념으로 분류되며 뉴스 기사나 블로그 글 같은 독립적인 내용이 들어갑니다.
+
+<aside></aside>
+본문 전체 내용과 직접적인 연관성이 없는 분리된 내용을 담을 때 사용합니다.
+주로 사이드바에 사용되며 다른 예로는 배너 광고, 위젯 등이 있습니다.
+
+<footer></footer>
+문서의 footer를 나타날 때 사용하고, 주소나 연락처, 저작권 등을 넣습니다.
+
+-->
+
+
+
+
+
+<body>
+    <header>
+        <section>
+            <h1>Hong's Site</h1>
+        </section>
+
+        <section>
+            <h1>머릿말</h1>
+            <nav>
+                <h1>메인메뉴</h1>
+                <ul>
+                    <li>주인장소개</li>
+                    <li>주인장연혁</li>
+                    <li>주인장동향</li>
+                </ul>
+            </nav>
+
+            <section>
+                <h1>검색</h1>
+                <form>
+                    <fieldset>
+                        <legend>
+                            검색폼
+                        </legend>
+                        <label>검색</label>
+                        <input type="text">
+                        <input type="submit" value="검색">
+                    </fieldset>
+                </form>
+            </section>
+
+            <nav>
+                <h1>회원메뉴</h1>
+                <ul>
+                    <li>Home</li>
+                    <li>로그인</li>
+                    <li>회원가입</li>
+                </ul>
+            </nav>
+
+            <nav>
+                <h1>바로가기메뉴</h1>
+                <ul>
+                    <li>마이페이지</li>
+                    <li>게시판</li>
+                </ul>
+            </nav>
+        </section>
+    </header>
+
+
+    <aside>
+        <h1>고객센터</h1>
+        <nav>
+            <h1>고객센터메뉴</h1>
+            <ul>
+                <li>공지사항</li>
+                <li>자주하는질문</li>
+                <li>1:1문의</li>
+                <li>이벤트</li>
+            </ul>
+        </nav>
+
+        <nav>
+            <h1>연관업체</h1>
+            <ul>
+                <li>연관업체1</li>
+                <li>연관업체2</li>
+                <li>연관업체3</li>
+            </ul>
+        </nav>
+    </aside>
+
+
+    <main>
+        <section>
+            <h1>공지사항</h1>
+            <section>
+                <h1>경로</h1>
+                <ol>
+                    <li>Home</li>
+                    <li>고객센터</li>
+                    <li>공지사항</li>
+                </ol>
+            </section>
+
+            <section>
+                <h1>공지사항목록</h1>
+                <table border="1">
+                    <tr>
+                        <th>순번</th>
+                        <th>제목</th>
+                        <th>등록일</th>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>무더운 날씨.. 건강조심하세요..</td>
+                        <td>2020-01-01</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>무더운 날씨.. 건강조심하세요..</td>
+                        <td>2020-01-01</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>무더운 날씨.. 건강조심하세요..</td>
+                        <td>2020-01-01</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>무더운 날씨.. 건강조심하세요..</td>
+                        <td>2020-01-01</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>무더운 날씨.. 건강조심하세요..</td>
+                        <td>2020-01-01</td>
+                    </tr>
+                </table>
+            </section>
+
+            <section>
+                <h1>페이지정보</h1>
+                <div>1/1 pages</div>
+            </section>
+
+            <nav>
+                <h1>페이저</h1>
+                <div>
+                    <div>이전</div>
+                    <ul>
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                        <li>5</li>
+                    </ul>
+                    <div>다음</div>
+                </div>
+            </nav>
+        </section>
+    </main>
+
+    <footer>
+        <section>
+            <h1>회사로고</h1>
+            <section>
+                <h1>회사정보</h1>
+                <dl>
+                    <dt>주소:</dt>
+                    <dd>경기도 성남시 대왕판교로 111</dd>
+                    <dt>관리자메일:</dt>
+                    <dd>hong@hong.com</dd>
+                    <dt>사업자등록번호:</dt>
+                    <dd>111-22-33333</dd>
+                    <dt>통신판매업신고:</dt>
+                    <dd>신고제 1111-경기성남-1111호</dd>
+                    <dt>상호:</dt>
+                    <dd>홍길동사</dd>
+                    <dt>대표:</dt>
+                    <dd>홍길동</dd>
+                    <dt>전화번호:</dt>
+                    <dd>010-1111-1111</dd>
+                </dl>
+            </section>
+
+            <section>
+                <h1>저작권정보</h1>
+                <div>Copyright c hong.com 2012-2014 All Right Reserved. Contact hong@hong.com</div>
+            </section>
+        </section>
+    </footer>
+</body>
+
+</html>

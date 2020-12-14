@@ -1,0 +1,66 @@
+package member;
+
+public class MemberDTO {
+	String id;
+	String pw;
+	String pwc;
+	String name;
+	String phone;
+	String email;
+	int birth;
+	
+	public MemberDTO() {
+	}
+
+	
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getPw() {
+		return pw;
+	}
+
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+
+	public String getPwc() {
+		return pwc;
+	}
+
+	public void setPwc(String pwc) {
+		this.pwc = pwc;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public int getBirth() {
+		return birth;
+	}
+
+	public void setBirth(int birth) {
+		this.birth = birth;
+	}
+	
+	
+}

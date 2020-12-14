@@ -1,0 +1,16 @@
+/* 
+ol > li : ol의 자식인 li만을 대상으로 함.
+ol 자식의 자식(손자)에는 적용 X
+
+ol li : ol의 밑에 있는 li에는 모두 적용
+ol의 자식인 ul의 자식 li에도 적용
+
+ol > li{
+    color: red;
+}
+*/
+
+p{
+    color: red;
+}
+

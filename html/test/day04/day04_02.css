@@ -1,0 +1,111 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#header{
+    height: 100px;
+    background-color: rgb(141, 179, 212);
+}
+
+#menu{
+    height: 30px;
+}
+
+/*
+앞에 -- 붙이면 한줄 주석
+*/
+
+#content{
+    height: 300px;
+}
+
+#footer{
+    height: 100px;
+    background-color: rgb(141, 179, 212);
+}
+
+#menu > ul{
+    width: 100px;
+    height: inherit;
+    text-align: center;
+    float: left;
+    line-height: 30px;
+    border-right: 1px solid black;
+}
+
+aside{
+    width: 20%;
+    height: inherit;
+    background-color: coral;
+    float: left;
+}
+
+main{
+    width: 80%;
+    height: inherit;
+    background-color: crimson;
+    float:left;
+}
+
+.submenu01 > li:nth-child(2){
+    display: none;
+}
+
+.submenu02 > li:nth-child(2){
+    display: none;
+}
+
+.submenu03 > li:nth-child(2){
+    display: none;
+}
+
+.submenu01:hover > li:nth-child(1){
+    height: 30px;
+    color: #ffffff;
+    background-color: mediumblue;
+    
+}
+
+.submenu02:hover > li:nth-child(1){
+    height: 30px;
+    color: #ffffff;
+    background-color: mediumblue;
+}
+
+.submenu03:hover > li:nth-child(1){
+    height: 30px;
+    color: #ffffff;
+    background-color: mediumblue;
+    
+}
+
+.submenu01:hover > li:nth-child(2){
+    position: relative;
+    display: block;
+}
+
+.submenu02:hover > li:nth-child(2){
+    position: relative;
+    display: block;
+}
+
+.submenu03:hover > li:nth-child(2){
+    position: relative;
+    display: block;
+}
+
+#menu > ul > li > ul{
+    background-color: mediumseagreen;
+}
+
+/*
+시멘틱태그
+Header
+Section - aside
+        - navigation
+        - article
+main
+Footer
+*/

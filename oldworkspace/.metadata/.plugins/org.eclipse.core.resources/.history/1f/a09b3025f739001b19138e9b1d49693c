@@ -1,0 +1,165 @@
+package board;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import member.MemberDTO;
+
+public class BoardDAO {
+	private Connection conn;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+	
+	public BoardDAO() {
+	}
+	
+	public void getConn() {
+		try {
+			String driver = "oracle.jdbc.driver.OracleDriver";
+			String dbUrl = "jdbc:oracle:thin:@localhost:1521:xe";
+			String dbId = "jspSample2";
+			String dbPw = "1234";
+			
+			Class.forName(driver);
+			conn = DriverManager.getConnection(dbUrl, dbId, dbPw);
+			System.out.println("오라클 접속 성공");
+		}catch(Exception e) {
+			System.out.println("오라클 접속 실패");
+			e.printStackTrace();
+		}
+	}
+	
+	public void quitConn() {
+		try {
+			if(rs != null) {rs.close();}
+			if(pstmt != null) {pstmt.close();}
+			if(conn != null) {conn.close();}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int setInsert(BoardDTO dto) {
+		int max = getMaxNum()+1;
+		System.out.println(max);
+		int result = 0;
+		getConn();
+		try {
+			String sql = "insert into board values(seq_board.nextval, ?, ?, ?, ?, ?, ?, ?, 0, 0, 0, default)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, max);
+			pstmt.setString(2, dto.getWriter());
+			pstmt.setString(3, dto.getSubject());
+			pstmt.setString(4, dto.getContent());
+			pstmt.setString(5, dto.getEmail());
+			pstmt.setString(6, dto.getPw());
+			pstmt.setInt(7, max);
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}
+	
+	public int getMaxNum() {
+		getConn();
+		int result = 0;
+		try {
+			String sql = "select max(num) from board";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}
+	
+	public ArrayList<BoardDTO> getListAll() {
+		ArrayList<BoardDTO> list = new ArrayList<>();
+		getConn();
+		try {
+			String sql = "";
+			sql = "select * from board";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setRowNum(rs.getRow());
+				dto.setNo(rs.getInt("no"));
+				dto.setNum(rs.getInt("num"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPw(rs.getString("pw"));
+				dto.setRefNo(rs.getInt("refNo"));
+				dto.setStepNo(rs.getInt("stepNo"));
+				dto.setLevelNo(rs.getInt("levelNo"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+				list.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return list;
+	}
+	
+	public BoardDTO getSelect(int no) {
+		getConn();
+		BoardDTO dto = new BoardDTO();
+		try {
+			String sql = "select * from board where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dto.setRowNum(rs.getRow());
+				dto.setNo(rs.getInt("no"));
+				dto.setNum(rs.getInt("num"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPw(rs.getString("pw"));
+				dto.setRefNo(rs.getInt("refNo"));
+				dto.setStepNo(rs.getInt("stepNo"));
+				dto.setLevelNo(rs.getInt("levelNo"));
+				dto.setHit(rs.getInt("hit"));
+				dto.setRegiDate(rs.getDate("regiDate"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return dto;
+	}
+	
+	public int setUpdate(BoardDTO dto) {
+		int result = 0;
+		getConn();
+		try {
+			String sql = "update board set subject=?, content=? where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getSubject());
+			pstmt.setString(2, dto.getContent());
+			pstmt.setInt(3, dto.getNo());
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}
+	
+	
+}

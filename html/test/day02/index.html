@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <!--
+a링크에서 target에 사용할 수 있는 것
+_blank : 새창(새탭)으로 열림
+_top : 링크된 문서를 창 전체에서 염
+_parent : 부모 프레임에서 염
+_self : 클릭한 것과 동일한 창에서 염
+프레임의 이름 : 해당 프레임에서 염
+
+-->
+
+
+    <a href="./index.html">Home</a>
+    |
+
+    <!--
+        target
+        _blank
+        _top
+        _self
+        _parent
+    -->
+    <a href="./sample.html" target="iframe">샘플페이지</a>
+
+    <hr>
+
+    <p>index.html</p>
+    <br><br><br>
+    <iframe name="iframe" style="width:300px;height: 500px;"></iframe>
+    <br>
+
+    <a href="https://daum.net">
+        사과</a>
+
+
+    &nbsp;&nbsp;&nbsp;
+    <a href="https://daum.net">
+        딸기</a>
+
+    &nbsp;&nbsp;&nbsp;
+
+    <a href="https://daum.net">
+        키위</a>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+package member;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+public class MemberDAO {
+	
+	private Connection conn;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+	
+	public MemberDAO() {
+	}
+	
+	public void getConn() {
+		try {
+			String driver = "oracle.jdbc.driver.OracleDriver";
+			String dbUrl = "jdbc:oracle:thin:@localhost:1521:xe";
+			String dbId = "jspTest";
+			String dbPw = "1234";
+			
+			Class.forName(driver);
+			conn = DriverManager.getConnection(dbUrl, dbId, dbPw);
+			System.out.println("오라클 접속 성공");
+		}catch(Exception e) {
+			System.out.println("오라클 접속 실패");
+			e.printStackTrace();
+		}
+	}//getConn() End
+	
+	
+	public void quitConn() {
+		try {
+			if(rs != null) {rs.close();}
+			if(pstmt != null) {pstmt.close();}
+			if(conn != null) {conn.close();}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}//quitConn() End
+	
+	
+	public int setInsert(MemberDTO dto) {
+		getConn();
+		int result = 0;
+		try {
+			String sql = "insert into joinTBL01 values(?,?,?,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getId());
+			pstmt.setString(2, dto.getPw());
+			pstmt.setString(3, dto.getName());
+			pstmt.setString(4, dto.getPhone());
+			pstmt.setString(5, dto.getEmail());
+			pstmt.setInt(6, dto.getBirth());
+			result = pstmt.executeUpdate();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	} //setInsert() End
+	
+	
+	public ArrayList<MemberDTO> getListAll() {
+		getConn();
+		ArrayList<MemberDTO> list = new ArrayList<>();
+		try {
+			String sql = "select id, pw, name, phone, email, birth from joinTBL01";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				MemberDTO dto = new MemberDTO();
+				dto.setId(rs.getString("id"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setEmail(rs.getString("email"));
+				dto.setBirth(rs.getInt("birth"));
+				list.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return list;
+	} //getListAll() End
+	
+	
+	public MemberDTO getSelect(String id) {
+		MemberDTO dto = new MemberDTO();
+		getConn();
+		try {
+			String sql = "select * from joinTBL01 where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dto.setId(rs.getString("id"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setEmail(rs.getString("email"));
+				dto.setBirth(rs.getInt("birth"));
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return dto;
+	}
+	
+	public int modify(MemberDTO dto) {
+		getConn();
+		int result = 0;
+		try {
+			String sql = "update joinTBL01 set pw=?, name=?, phone=?, email=?, birth=? where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getPw());
+			pstmt.setString(2, dto.getName());
+			pstmt.setString(3, dto.getPhone());
+			pstmt.setString(4, dto.getEmail());
+			pstmt.setInt(5, dto.getBirth());
+			pstmt.setString(6, dto.getId());
+			result = pstmt.executeUpdate();
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}
+	
+	public int delete(String id) {
+		getConn();
+		int result = 0;
+		try {
+			String sql = "delete joinTBL01 where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.executeUpdate();
+		}catch(Exception e) {
+			
+		}
+		quitConn();
+	}
+	
+	
+}

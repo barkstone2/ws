@@ -1,0 +1,74 @@
+<%@page import="board.BoardDAO"%>
+<%@page import="board.BoardDTO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>    
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>게시글 내용</title>
+</head>
+<body>
+
+<%	
+	String no_ = request.getParameter("no");
+	int no = Integer.parseInt(no_);
+	BoardDAO dao = new BoardDAO();
+	dao.setHit(no);
+	BoardDTO dto = dao.getSelect(no);
+	
+%>	
+	<h2>게시글 내용</h2>
+	<table border="1" width="600" align="left">
+			<tr>
+				<td>제목</td>
+				<td><%=dto.getSubject() %></td>
+				
+			</tr>
+			<tr>
+				<td>작성자</td>
+				<td><%=dto.getWriter() %></td>
+				<td>조회수</td>
+				<td><%=dto.getHit() %></td>
+			</tr>
+			<tr>
+				<td>비밀번호 : </td>
+				<td><input type="text" name="pw" value=""></td>
+			</tr>
+			<tr>
+				<td>제목 : </td>
+				<td><input type="text" name="subject"></td>
+			</tr>
+			<tr>
+				<td>내용 : </td>
+				<td><%=dto.getContent() %></td>
+			</tr>
+			<tr>
+				<td colspan="2"><button type="button" onclick="move('M', '<%=dto.getNo() %>')">[수정하기]</button>
+				<button type="button" onclick="move('D', '<%=dto.getNo() %>')">[삭제하기]</button>
+				<button type="button" onclick="location.href='boardList.jsp'">목록으로</button></td>
+			</tr>
+		</table>
+	제목 : <%=dto.getSubject() %>&nbsp;&nbsp;&nbsp;
+	글쓴이 : <%=dto.getWriter() %>&nbsp;&nbsp;&nbsp;
+	조회수 : <%=dto.getHit() %>
+	<br>
+	내용 : <%=dto.getContent() %>
+	<br>
+	<a href="#" onclick="move('M', '<%=dto.getNo() %>')">[수정하기]</a>
+	<a href="#" onclick="move('D', '<%=dto.getNo() %>')">[삭제하기]</a>
+	<a href="#" onclick="location.href='boardList.jsp'">[목록으로]</a>
+	
+</body>
+<script>
+	function move(value1, value2){
+		if(value1 == 'M'){
+			location.href="modify.jsp?no="+value2;
+		}else{
+			location.href="delete.jsp?no="+value2;
+		}
+	}
+</script>
+</html>

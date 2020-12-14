@@ -1,0 +1,11 @@
+#joinpage{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#joinbtncell {
+    text-align: center;
+}
+.menu-cell {
+    text-align: center;
+}

@@ -1,0 +1,41 @@
+<%@page import="member.MemberDTO"%>
+<%@page import="member.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8"); %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<%
+		String id = request.getParameter("id");
+		MemberDAO dao = new MemberDAO();
+		MemberDTO dto = dao.getSelect(id);
+	%>
+	<h1>회원정보 수정</h1>
+	<form name="modiForm" method="post" action="modiProc.jsp">
+		<input type="hidden" name="id" value="<%=dto.getId() %>" readonly>
+		아이디 : <%=dto.getId() %><br>
+		비밀번호 : <input type="text" name="pw"><br>
+		이름 : <input type="text" name="name" value="<%=dto.getName() %>"> <br>
+		전화번호 : <input type="text" name="phone" value="<%=dto.getPhone() %>"> <br>
+		이메일 : <input type="text" name="email" value="<%=dto.getEmail() %>"><br>
+		출생년도 : <input type="text" name="birth" value="<%=dto.getBirth() %>"><br>
+		<a href="#" onclick="memModify();">[수정하기]</a>	
+	</form>
+	
+</body>
+<script>
+	function memModify(){
+		if(modiForm.pw.value==<%=dto.getPw()%>){
+			modiForm.submit();
+		}else{
+			alert('비밀번호가 틀립니다.');
+			modiForm.pw.focus();
+		}
+	}
+</script>
+</html>

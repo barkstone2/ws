@@ -1,0 +1,36 @@
+package com.day6;
+
+import java.util.Comparator;
+import java.util.TreeSet;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		TreeSet set = new TreeSet(new Comparator() {
+			public int compare(Object o1, Object o2) {
+				
+				
+				
+				
+				
+				retrun -1;
+			}
+		});
+		
+		
+		
+		
+		
+	} // main end
+
+	public static void getGroupCount(TreeSet tset, int from, int to) {
+		
+
+	}
+	
+	
+	
+	
+	
+}

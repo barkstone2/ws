@@ -1,0 +1,100 @@
+.logo-img{
+    width: 100px;
+    height: 100px;
+}
+
+.hidden{
+    display: none;
+}
+
+/* ---------------------------------------- */
+
+#header{
+    height: 100px;
+    background-color: green;
+}
+    #header > .content-box{
+        height: inherit;
+        width: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #main-menu > ul{
+        display: flex;
+    }
+    #main-menu > ul > li {
+        margin: 0px 10px 0px 10px;
+    }
+    #join-menu > div > ul {
+        display: flex;
+        justify-content: center;
+    }
+    #join-menu > div > ul > li {
+        margin: 0px 10px 0px 10px;
+    }
+
+
+#body {
+    height: 300px;
+    background-color: steelblue;
+}
+    #body > .content-box {
+        height: inherit;
+        width: inherit;
+        display: flex;
+    }
+    #aside-menu {
+        width: 20%;
+        background-color: plum;
+    }
+    #aside-menu > nav > div > h1 {
+        padding-left: 10px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    #aside-menu > nav > div > ul > li {
+        padding-left: 30px;
+    }
+    
+    #main {
+        width: 100%;
+    }
+
+    #main > section:nth-child(1) {
+        height: 50px;
+        width: inherit;
+        --background-color: red;
+        line-height: 50px;
+    }
+    #main > section:nth-child(2) {
+        height: 250px;
+        width: inherit;
+        --background-color: rosybrown;
+        line-height: 200px;
+        text-align: center;
+    }
+
+
+#footer {
+    height: 100px;
+    background-color: rebeccapurple;
+}
+
+    #footer > .content-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #owner-info >section:nth-child(1) > dl{
+        display: flex;
+    }
+    #owner-info > section:nth-child(1) > dl > dt {
+        margin: 0px 10px 0px 10px;
+    }
+    #owner-info > section:nth-child(1) > dl > dd {
+        margin-right: 15px;
+    }
+    #owner-info > section:nth-child(2) >div {
+        margin: 10px 10px 0px 10px;
+    }

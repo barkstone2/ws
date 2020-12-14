@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #wrapper {
+            width: 95%;
+            height: 95%;
+            margin: 5px;
+            border: solid 1px gray;
+            padding: 10px;
+        }
+
+        #header {
+            width: 100%;
+            height: 20%;
+            max-height: 100px;
+            border: solid 1px gray;
+            position: static;
+            top: 5%;
+        }
+
+        #header h2 {
+            margin-left: 10px;
+            position: relative;
+            top: 35%;
+        }
+
+        #footer p {
+            margin-left: 10px;
+            font-size: 20px;
+            line-height: 100px;
+        }
+
+        #container {
+            width: 100%;
+            height: 60%;
+            position: relative;
+            top: 5%;
+        }
+
+        .sidebar {
+            border: 1px solid gray;
+            width: 20%;
+            height: 50%;
+        }
+
+        #sb1 {
+            float: left;
+        }
+
+        #sb2 {
+            float: right;
+            right: 5%;
+        }
+
+        #content {
+            border: 1px solid gray;
+            width: 50%;
+            height: 100%;
+            float: left;
+            position: relative;
+            left: 5%;
+        }
+
+        #footer {
+            border: solid 1px gray;
+            max-height: 100px;
+            float: left;
+            position: absolute;
+            height: 20%;
+            bottom: 3%;
+            right: 1%;
+            left: 1%;
+            width: 95%;
+        }
+        .sidebar h2{
+            margin-left: 10px;
+        }
+        .sidebar li{
+            margin-left: 20%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h2>3-Column Layout</h2>
+        </div>
+        <div id="container">
+            <div class="sidebar" id="sb1"><h2>Sidebar</h2>
+                <li>Lorem</li>
+                <li>Ipsum</li>
+                <li>Dolor</li>
+            </div>
+            <div id="content">
+                <h2>Content</h2>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Totam a odit ipsum minima molestias,
+                    reiciendis possimus suscipit esse voluptatibus quasi? Libero at quaerat quidem nemo, voluptatum
+                    numquam labore tempore delectus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque modi
+                    illum, excepturi sed numquam id molestias? Tenetur cumque exercitationem reprehenderit accusamus!
+                    Doloribus architecto ab, unde vitae odit corrupti deserunt aspernatur!</p>
+                <br>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt, aliquid laboriosam accusantium
+                    iste deleniti repellat, sed quisquam modi error saepe sint laborum impedit dolorem? Odio odit
+                    quaerat dicta cupiditate esse! Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet fuga
+                    quo error quae accusamus natus debitis pariatur illum ea cum, quam ipsam temporibus, aliquam quaerat
+                    eligendi nulla magnam inventore sunt.</p>
+            </div>
+
+            <div class="sidebar" id="sb2"><h2>Sidebar</h2>
+                <li>Lorem</li>
+                <li>Ipsum</li>
+                <li>Dolor</li>
+            </div>
+        </div>
+
+        <div id="footer">
+            <p>Copyright</p>
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

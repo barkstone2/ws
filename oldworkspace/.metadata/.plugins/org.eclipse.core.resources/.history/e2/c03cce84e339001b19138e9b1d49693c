@@ -1,0 +1,199 @@
+package member;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+public class MemberDAO {
+	private Connection conn;
+	private PreparedStatement pstmt;
+	private ResultSet rs;
+	
+	public MemberDAO() {
+	}
+	
+	public void getConn() {
+		try {
+			String driver = "oracle.jdbc.driver.OracleDriver";
+			String dbUrl = "jdbc:oracle:thin:@localhost:1521:xe";
+			String dbId = "jspSample";
+			String dbPw = "1234";
+			
+			Class.forName(driver);
+			conn = DriverManager.getConnection(dbUrl, dbId, dbPw);
+			System.out.println("오라클 접속 성공");
+		}catch(Exception e) {
+			System.out.println("오라클 접속 실패");
+			e.printStackTrace();
+		}
+	}
+	
+	public void quitConn() {
+		try {
+			if(rs != null) {rs.close();}
+			if(pstmt != null) {pstmt.close();}
+			if(conn != null) {conn.close();}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int setInsert(MemberDTO dto) {
+		int result = 0;
+		getConn();
+		try {
+			String sql = "insert into member values(seq_mem.nextval,?,?,?,?,?,?,default,default)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getId());
+			pstmt.setString(2, dto.getPw());
+			pstmt.setString(3, dto.getName());
+			pstmt.setString(4, dto.getPhone());
+			pstmt.setString(5, dto.getEmail());
+			pstmt.setInt(6, dto.getBirth());
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}
+	
+	public ArrayList<MemberDTO> getListAll(String state) {
+		ArrayList<MemberDTO> list = new ArrayList<>();
+		getConn();
+		try {
+			String sql = "";
+			if(state==null) {
+				sql = "select * from member order by no";
+				pstmt = conn.prepareStatement(sql);
+			}else {
+				sql = "select * from member where memberstate=? order by no";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, state);
+			}
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				MemberDTO dto = new MemberDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setId(rs.getString("id"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setBirth(rs.getInt("birth"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setEmail(rs.getString("email"));
+				dto.setjDate(rs.getDate("jDate"));
+				dto.setMemberstate(rs.getInt("memberstate"));
+				list.add(dto);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return list;
+	}
+	
+	public MemberDTO getSelect(int no, String id) {
+		getConn();
+		MemberDTO dto = new MemberDTO();
+		try {
+			String sql = "select * from member where no=? and id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setString(2, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setId(rs.getString("id"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setBirth(rs.getInt("birth"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setEmail(rs.getString("email"));
+				dto.setjDate(rs.getDate("jdate"));
+				dto.setState(rs.getInt("state"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return dto;
+	}
+	
+	public int setUpdate(MemberDTO dto) {
+		int result = 0;
+		getConn();
+		try {
+			String sql = "update member set phone=?, email=? where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getPhone());
+			pstmt.setString(2, dto.getEmail());
+			pstmt.setString(3, dto.getId());
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}
+	
+	public int setInvalid(String id) {
+		int result = 0;
+		getConn();
+		try {
+			String sql = "update member set invalidCheck=1 where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}//setInvalid() End
+	
+	public int setDelete(String id, int no) {
+		getConn();
+		int result = 0;
+		try {
+			String sql = "delete from member where id=? and no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setInt(2, no);
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return result;
+	}//setDelete() End
+	
+	public MemberDTO getLogin(String id) {
+		getConn();
+		MemberDTO dto = new MemberDTO();
+		try {
+			String sql = "select * from member where id=? and (state=0 or state=2)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				dto.setNo(rs.getInt("no"));
+				dto.setId(rs.getString("id"));
+				dto.setPw(rs.getString("pw"));
+				dto.setName(rs.getString("name"));
+				dto.setBirth(rs.getInt("birth"));
+				dto.setPhone(rs.getString("phone"));
+				dto.setEmail(rs.getString("email"));
+				dto.setjDate(rs.getDate("jdate"));
+				dto.setState(rs.getInt("state"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		quitConn();
+		return dto;
+	}
+	
+}

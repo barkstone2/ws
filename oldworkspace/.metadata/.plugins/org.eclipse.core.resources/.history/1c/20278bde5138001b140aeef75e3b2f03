@@ -1,0 +1,18 @@
+package member;
+
+public class MemberDTO {
+
+private String id;
+private String pw;
+private String pwc;
+private String name;
+private String phone;
+private String email;
+private String birth;
+
+public MemberDTO() {
+}
+
+
+
+}

@@ -1,0 +1,73 @@
+<%@page import="member.MemberDAO"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>
+<%
+	String id = request.getParameter("id");
+	String pw = request.getParameter("pw");
+	String id_ = "";
+	String pw_ = "";
+
+	MemberDAO dao = new MemberDAO();
+	dao.getLogin();
+	
+	
+	try{
+		Class.forName(driver);
+		conn = DriverManager.getConnection(dbUrl, dbId, dbPw);
+		System.out.println("오라클 접속 성공");
+		
+		String sql = "select * from joinTBL01 where id=?";
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, id);
+		rs = pstmt.executeQuery();
+		
+		if(rs.next()){
+			id_ = rs.getString("id");
+			pw_ = rs.getString("pw");
+		}
+		System.out.println("쿼리 성공");
+		
+		String cookId = null;
+		if(id.equals(id_)){
+			if(pw.equals(pw_)){
+				session.setAttribute("cookId", id);
+			%>
+				<script>
+					alert('로그인 성공');
+					location.href='memberList.jsp';
+				</script>	
+				
+			<%}else{%>
+				<script>
+					alert('비밀번호가 틀립니다.');
+					location.href='login.jsp';
+				</script>
+			<%}
+		}else{%>
+			<script>
+				alert('등록되지 않은 아이디입니다.');
+				location.href='login.jsp';
+			</script>	
+		<%}
+		
+	}catch(Exception e){
+		e.printStackTrace();
+	}finally{
+		try{
+			if(rs != null){rs.close();}
+			if(pstmt != null){pstmt.close();}
+			if(conn != null){conn.close();}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
+
+
+%>    
+    

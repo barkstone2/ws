@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body style="background-color: black;color: white;">
+
+    &#60;p&gt; 태그는 단락을 나타냅니다.
+
+    <!-- 
+        * 엔티티(Entity)
+        &nbsp;    &#160;
+        < &lt;      &#60;
+        > &gt;      &#62;
+        & &amp;     &#38;
+        " &quot;    &#34;
+        ' &apos;    &#39;
+    -->
+
+    <!-- 
+        String str = <script>location.href='https://naver.com';</script>";
+        str = str.replace(", &quot;);
+        str = str.replace(', &apos;);
+        str = str.replace(<, &lt;);
+        str = str.replace(>, &gt;);
+
+        &lt;script&gt;location.href=&apos;https://naver.com&apos;&lt;/script&gt;
+    -->
+
+    <br>
+    나의 조국은 "대한민국"입니다.
+    <br>
+    나의 조국은 &quot;대한민국&quot;입니다.
+<br>
+a&#768;
+&cent;
+&dollar;
+&yen;
+&euro;
+
+
+</body>
+
+</html>

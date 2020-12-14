@@ -1,0 +1,42 @@
+<%@page import="board.BoardDAO"%>
+<%@page import="board.BoardDTO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<% request.setCharacterEncoding("utf-8"); %>    
+<%	
+	String no_ = request.getParameter("no");
+	int no = Integer.parseInt(no_);
+	BoardDAO dao = new BoardDAO();
+	dao.setHit(no);
+	BoardDTO dto = dao.getSelect(no);
+	
+%>	
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title><%=dto.getSubject() %></title>
+</head>
+<body>
+
+	제목 : <%=dto.getSubject() %>&nbsp;&nbsp;&nbsp;
+	글쓴이 : <%=dto.getWriter() %>&nbsp;&nbsp;&nbsp;
+	조회수 : <%=dto.getHit() %>
+	<br>
+	내용 : <%=dto.getContent() %>
+	<br>
+	<a href="#" onclick="move('M', '<%=dto.getNo() %>')">[수정하기]</a>
+	<a href="#" onclick="move('D', '<%=dto.getNo() %>')">[삭제하기]</a>
+	<a href="#" onclick="location.href='boardList.jsp'">[목록으로]</a>
+	
+</body>
+<script>
+	function move(value1, value2){
+		if(value1 == 'M'){
+			location.href="modify.jsp?no="+value2;
+		}else{
+			location.href="delete.jsp?no="+value2;
+		}
+	}
+</script>
+</html>

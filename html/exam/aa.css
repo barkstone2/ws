@@ -1,0 +1,46 @@
+#form-box{
+    width: 700px;
+}
+
+#form-box > form {
+    width: inherit;
+}
+#form-box > form > table {
+    width: inherit;
+}
+
+#info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+#info > div {
+    margin: 0px 5px 0px 5px;
+}
+#info > div:nth-child(1){
+    font-size: 22px;
+    font-weight: bold;
+}
+#info > div:nth-child(2){
+    font-size: 12px;
+    color: gray;
+}
+
+
+.menu{
+    width: 100px;
+}
+
+.q-content {
+    width: 598px;
+}
+
+#quesbt {
+    width: inherit;
+    display: flex;
+    justify-content: center;
+}
+
+#quesbt > div {
+    margin: 5px 10px 0px 10px;
+}

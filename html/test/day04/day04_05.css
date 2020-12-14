@@ -1,0 +1,200 @@
+
+.content-box{
+    width: 80%;
+    height: inherit;
+    background-color: #ff000040;
+    margin: 0 auto;
+}
+.hidden{
+    display: none;
+}
+.logo_img{
+    width: 80px;
+    height: 80px;
+}
+
+/* ----------------------------------- */
+
+#header {
+    height: 100px;
+    background-color: aqua;
+}
+
+#header > .content-box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#logo{
+    position: relative;
+    left: 0px;
+    top: 0px;
+    margin: 0px 20px 0px 0px;
+    line-height: 10px;
+}
+
+#main-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#main-menu > nav > ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --background-color: gray;
+}
+
+#main-menu > nav > ul li {
+    margin: 0px 20px;
+}
+
+#search-form{
+    text-align: center;
+    line-height: inherit;
+    padding: 0px 20px;
+    --background-color: cadetblue;
+}
+
+#member-menu{
+    height: inherit;
+    padding: 0px 0px;
+    --background-color: blue;
+}
+
+#member-menu > nav:nth-child(1) >ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --background-color: gray;
+    margin-bottom: 10px;
+}
+
+#member-menu > nav:nth-child(1) >ul li {
+    margin: 0px 15px;
+}
+
+#member-menu > nav:nth-child(2) >ul {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --background-color: aquamarine;
+    margin-bottom: 10px;
+}
+
+#member-menu > nav:nth-child(2) >ul li {
+    margin: 0px 15px;
+}
+
+
+
+#body {
+    height: 500px;
+    background-color: aquamarine;
+}
+    #body > .content-box {
+        display: flex;
+    }
+    #aside{
+        width: 20%;
+        height: inherit;
+        background-color: blanchedalmond;
+    }
+    #body_nav{
+        width: 70%;
+        margin: auto;
+        --background-color: gray;
+    }
+    #body_nav h1 {
+        font-size: 20px;
+        font-weight: bold;
+        margin: 0px 0px 10px 0px;
+        padding-top: 30px;
+    }
+    #body_nav > nav > ul {
+      --list-style-type: circle;
+      --padding: 20px;
+        margin: 0px 0px 0px 0px;
+    }
+    #body_nav > nav > ul li {
+        margin: 0px 20px;
+    }
+
+    #main {
+        width: 80%;
+        height: inherit;
+        background-color: burlywood;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    #table{
+        border: solid 1px;
+        padding-top: 10px;
+    }
+
+    #table > form > .tborder{
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid;
+    }
+    
+    #table > form > .joinbt {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        margin-bottom: 20px;
+    }
+
+    #table > form > div > div{
+        margin: 0px 10px;
+    }
+ 
+ 
+
+
+#footer {
+    height: 100px;
+    background-color: bisque;
+    margin: auto;
+    line-height: inherit;
+}
+    #footer > .content-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        --background-color: blueviolet;
+    }
+    
+    #footer_logo{
+        float: left;
+        position: relative;
+        left: 0px;
+        top: 0px;
+        margin: 0px 20px 0px 0px;
+        line-height: 10px;
+    }
+
+
+
+
+    #owner_info > dl {
+        display: flex;
+    }
+    #owner_info > dl > dt {
+        display: flex;
+        margin: 0px 20px 0px 0px;
+    }
+    #owner_info > dl > dd {
+        display: flex;
+        margin: 0px 50px 0px 0px;
+    }
+    #copyright_info {
+        margin: 5px 0px 0px 0px;
+    }
+   

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="reset.css">
+    <link rel="stylesheet" type="text/css" href="day04_05.css">
+</head>
+
+<body>
+    <!--
+콘텐츠 뽑고
+블럭지정
+마킹
+아웃라인 - 제목
+
+레이아웃
+
+-->
+
+
+
+    <header id="header">
+        <div class="content-box">
+
+            <section id="logo">
+                <h1>
+                    <a href="#"><img src="../../images/apple.jpg" class="logo_img"></a>
+                </h1>
+            </section>
+
+            <section id="main-menu">
+                <h1 class="hidden">머릿말</h1>
+                <nav>
+                    <h1 class="hidden">메인메뉴</h1>
+                    <ul>
+                        <li>주인장소개</li>
+                        <li>주인장연혁</li>
+                        <li>주인장동향</li>
+                    </ul>
+                </nav>
+
+                <section id="search-form">
+                    <h1 class="hidden">검색</h1>
+                    <form>
+                        <fieldset>
+                            <legend class="hidden">
+                                검색폼
+                            </legend>
+                            <label class="hidden">검색</label>
+                            <input type="text">
+                            <input type="submit" value="검색">
+                        </fieldset>
+                    </form>
+                </section>
+
+                <div id="member-menu">
+                    <nav>
+                        <h1 class="hidden">회원메뉴</h1>
+                        <ul>
+                            <li><a href="./mainpage.html" target="_self">Home</a></li>
+                            <li><a href="./login.html">로그인</a></li>
+                            <li><a href="./day04_05.html" target='_self'>회원가입</a></li>
+                        </ul>
+                    </nav>
+
+                    <nav>
+                        <h1 class="hidden">바로가기메뉴</h1>
+                        <ul>
+                            <li>마이페이지</li>
+                            <li><a href="./day04_04.html" target="_self">게시판</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+        </div>
+    </header>
+
+    <div id="body">
+        <div class="content-box">
+            <aside id="aside">
+                <section id="body_nav">
+                    <h1 class="hidden">고객센터</h1>
+                    <nav>
+                        <h1>고객센터메뉴</h1>
+                        <ul>
+                            <li>공지사항</li>
+                            <li>자주하는질문</li>
+                            <li>1:1문의</li>
+                            <li>이벤트</li>
+                        </ul>
+                    </nav>
+
+                    <nav>
+                        <h1>연관업체</h1>
+                        <ul>
+                            <li>연관업체1</li>
+                            <li>연관업체2</li>
+                            <li>연관업체3</li>
+                        </ul>
+                    </nav>
+                </section>
+            </aside>
+
+            <main id="main">
+                <form name="login" method="post" action="loginProc.jsp">
+                    <table border="1">
+                        <tr>
+                            <td style="width: 100px; text-align: center;">아이디</td>
+                            <td style="width: 200px;">
+                                <input type="text" name="id" value="" style="width: 120px;">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 100px; text-align: center;">비밀번호</td>
+                            <td style="width: 200px;">
+                                <input type="password" name="passwd" value="" style="width: 120px;">
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <input type="button" value="로그인" style="width: 100px;">
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </main>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <div class="content-box">
+            <section id="footer_logo">
+                <h1>
+                    <a href="#"><img src="../../images/apple.jpg" class="logo_img"></a>
+                </h1>
+            </section>
+
+            <div>
+                <section id="owner_info">
+                    <h1 class="hidden">회사정보</h1>
+                    <dl>
+                        <dt>주소:</dt>
+                        <dd>경기도 성남시 대왕판교로 111</dd>
+                        <dt>관리자메일 :</dt>
+                        <dd>hong@hong.com</dd>
+                    </dl>
+
+                    <dl>
+                        <dt>사업자등록번호:</dt>
+                        <dd>111-22-33333</dd>
+                        <dt>통신판매업신고:</dt>
+                        <dd>신고제 1111-경기성남-1111호</dd>
+                    </dl>
+
+                    <dl>
+                        <dt>상호:</dt>
+                        <dd>홍길동사</dd>
+                        <dt>대표:</dt>
+                        <dd>홍길동</dd>
+                        <dt>전화번호:</dt>
+                        <dd>010-1111-1111</dd>
+                    </dl>
+                </section>
+
+                <section id="copyright_info">
+                    <h1 class="hidden">저작권정보</h1>
+                    <div>
+                        Copyright c hong.com 2012-2014 All Right Reserved. Contact hong@hong.com
+                    </div>
+                </section>
+            </div>
+        </div>
+    </footer>
+
+
+
+
+
+
+
+</body>
+
+</html>

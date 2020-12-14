@@ -1,0 +1,35 @@
+<%@page import="member.MemberDTO"%>
+<%@page import="member.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8");%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	String id = request.getParameter("id");
+	MemberDAO dao = new MemberDAO();
+	MemberDTO dto = dao.getSelect(id);
+%>
+	아이디 : <%=dto.getId() %><br>
+	이름 : <%=dto.getName() %><br>
+	성별 : <%=dto.getGender() %><br>
+	생년월일 : 
+	전화번호 : 
+	이메일 : 
+	주소 : 
+	가입일 : 
+			<td><%=dto.getName() %></td>
+					<td><%=dto.getGender() %></td>
+					<td><%=dto.getBirth() %></td>
+					<td><%=dto.getPhone() %></td>
+					<td><%=dto.getEmail() %></td>
+					<td><%=dto.getAddr() %></td>
+					<td><%=dto.getJDate() %></td>
+</body>
+</html>

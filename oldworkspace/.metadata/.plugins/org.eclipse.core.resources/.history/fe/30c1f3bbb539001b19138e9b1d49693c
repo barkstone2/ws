@@ -1,0 +1,41 @@
+<%@page import="member.MemberDTO"%>
+<%@page import="member.MemberDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8");%>
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%	
+	int no = request.getParameter("no");
+	String id = request.getParameter("id");
+	MemberDAO dao = new MemberDAO();
+	MemberDTO dto = dao.getSelect(id);
+%>	
+	
+	아이디 : <%=dto.getId() %><br>
+	이름 : <%=dto.getName() %><br>
+	생년월일 : <%=dto.getBirth() %><br>
+	전화번호 : <%=dto.getPhone() %><br>
+	이메일 : <%=dto.getEmail() %><br>
+	가입일 : <%=dto.getjDate() %><br>
+	<a href="#" onclick="move('M', '<%=dto.getId() %>')">[수정하기]</a>
+	<a href="#" onclick="move('D', '<%=dto.getId() %>')">[삭제하기]</a>
+	
+</body>
+<script>
+	function move(value1, value2){
+		if(value1 == 'M'){
+			location.href="modify.jsp?id="+value2;
+		}else{
+			location.href="delete.jsp?id="+value2;
+		}
+	}
+</script>
+
+</html>

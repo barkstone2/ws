@@ -1,0 +1,52 @@
+<%@page import="board.BoardDTO"%>
+<%@page import="board.BoardDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8"); %>
+<jsp:useBean id="dto" class="board.BoardDTO" scope="page"></jsp:useBean>
+<jsp:setProperty property="*" name="dto"/>>
+
+<%
+	int no = dto.getNo();
+	BoardDAO dao = new BoardDAO();
+	
+	if(no != 0){
+		BoardDTO dto2 = dao.getSelect(no);
+		int refNo = dto2.getRefNo();
+		int stepNo = dto2.getStepNo()+1;
+		int levelNo = dto2.getLevelNo();
+		dto.setRefNo(refNo);
+		dto.setStepNo(stepNo);
+		dto.setLevelNo(levelNo);
+		
+		if(dto.getStepNo()>1){
+			String subj = "";
+			for(int j=1; j<dto.getStepNo(); j++){
+				subj += "Re: ";
+			}
+			subj += dto.getSubject();
+			dto.setSubject(subj);
+		}
+	}
+	
+	if(dto.getLevelNo()>0){
+		dao.setLevelNo(dto.getLevelNo());
+	}
+	int result = dao.setInsert(dto);
+	if(result >0){%>
+		<script>
+			alert('글쓰기 성공');
+			location.href='boardList.jsp';
+		</script>
+	<%}else{%>
+		<script>
+			alert('글쓰기 실패');
+			location.href='write.jsp';
+		</script>
+		
+	<%}
+
+%>
+
+
+    

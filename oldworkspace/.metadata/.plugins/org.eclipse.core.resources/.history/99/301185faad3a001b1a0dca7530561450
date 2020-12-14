@@ -1,0 +1,44 @@
+<%@page import="board.BoardDTO"%>
+<%@page import="board.BoardDAO"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%request.setCharacterEncoding("utf-8");%>
+<%
+	String cookId = "";
+	if(session.getAttribute("cookId") != null){
+		cookId = (String) session.getAttribute("cookId");
+	}
+%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<%
+	String no_ = request.getParameter("no");
+	int no = Integer.parseInt(no_);
+	BoardDAO dao = new BoardDAO();
+	BoardDTO dto = dao.getSelect(no);
+%>
+	<form name="delForm" method="post" action="delProc.jsp">
+		<input type="hidden" name="no" value=<%=dto.getNo() %>>
+		비밀번호 : <input type="text" name="pw"><br>
+		<a href="#" onclick="memDelete();">[삭제하기]</a>
+	</form>
+	
+</body>
+<script>
+	function memDelete(){
+		if(confirm('정말 삭제하시겠습니까?')){
+			if(delForm.pw.value==<%=dto.getPw()%>){
+				delForm.submit();
+			}else{
+				alert('비밀번호가 일치하지 않습니다.');
+				delForm.pw.focus();
+			}
+		}
+	}
+</script>
+</html>
