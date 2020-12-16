@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 
 import db.Db;
 import db.MySqlDb;
-import db.OracleDb;
 import member.MemberDTO;
 
 public class Member02DAO {

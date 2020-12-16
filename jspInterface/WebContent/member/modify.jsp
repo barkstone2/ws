@@ -15,7 +15,7 @@
 	MemberDAO dao = new MemberDAO();
 	MemberDTO dto = dao.getSelect(id);
 %>
-	<form name="modifyForm" type="method" action="modifyProc.jsp">
+	<form name="modifyForm" method="post" action="modifyProc.jsp">
 		<table border="1">
 			<tr>
 				<td>회원번호</td>
