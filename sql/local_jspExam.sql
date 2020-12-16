@@ -53,6 +53,7 @@ select * from product;
 
 alter table product modify(salePrice number not null);
 
+drop table sj;
 
 create table sj(
 name varchar2(50) not null,

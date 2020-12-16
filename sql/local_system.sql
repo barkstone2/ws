@@ -106,3 +106,12 @@ identified by 1234
 default tablespace users
 temporary tablespace temp;
 
+
+
+create user jspInterface
+identified by 1234
+default tablespace users
+temporary tablespace temp;
+
+grant connect, resource, dba to jspInterface;
+
