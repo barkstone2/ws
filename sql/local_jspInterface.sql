@@ -2,7 +2,7 @@
 drop table member;
 
 create table member (
-no number not null unique,
+no number default 0 not null unique,
 id varchar2(50) not null primary key,
 pw varchar2(50) not null,
 name varchar2(50) not null,
@@ -15,7 +15,7 @@ wdate date default sysdate not null
 );
 
 alter table member modify wdate TIMESTAMP default CURRENT_TIMESTAMP;
-
+alter table member modify no number default 0;
 desc member;
 select * from member;
 
@@ -49,3 +49,5 @@ insert into member values((select max(no)+1 from member alias_for_no), 'test1234
 select * from member;
 commit;
 select max(no) from member;
+delete from member;
+commit;
