@@ -11,8 +11,8 @@ import db.OracleDb;
 
 @SuppressWarnings("unused")
 public class MemberDAO {
-//	private Db db = new OracleDb();
-	private Db db = new MySqlDb();
+	private Db db = new OracleDb();
+//	private Db db = new MySqlDb();
 	private Connection conn = db.getConn();
 	private PreparedStatement pstmt;
 	private ResultSet rs;
@@ -33,8 +33,31 @@ public class MemberDAO {
 	
 	public int setInsert(MemberDTO dto) {
 		int result = 0;
+		int no = getMaxNo();
 		try {
-			pstmt = db.setInsert(dto, conn);
+			String sql = "insert into member values(?,?,?,?,?,?,?,?,?,default)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setString(2, ((MemberDTO) dto).getId());
+			pstmt.setString(3, ((MemberDTO) dto).getPw());
+			pstmt.setString(4, ((MemberDTO) dto).getName());
+			pstmt.setString(5, ((MemberDTO) dto).getSid());
+			pstmt.setString(6, ((MemberDTO) dto).getPhone());
+			pstmt.setString(7, ((MemberDTO) dto).getEmail());
+			pstmt.setString(8, ((MemberDTO) dto).getGender());
+			pstmt.setInt(9, ((MemberDTO) dto).getAge());
+
+//			String sql = "insert into member values((select max(no)+1 from member alias_for_no),?,?,?,?,?,?,?,?,default)";
+//			pstmt = conn.prepareStatement(sql);
+//			pstmt.setString(1, ((MemberDTO) dto).getId());
+//			pstmt.setString(2, ((MemberDTO) dto).getPw());
+//			pstmt.setString(3, ((MemberDTO) dto).getName());
+//			pstmt.setString(4, ((MemberDTO) dto).getSid());
+//			pstmt.setString(5, ((MemberDTO) dto).getPhone());
+//			pstmt.setString(6, ((MemberDTO) dto).getEmail());
+//			pstmt.setString(7, ((MemberDTO) dto).getGender());
+//			pstmt.setInt(8, ((MemberDTO) dto).getAge());
+			//pstmt = db.setInsert(dto, conn);
 			result = pstmt.executeUpdate();
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -60,7 +83,7 @@ public class MemberDAO {
 				dto.setEmail(rs.getString("email"));
 				dto.setGender(rs.getString("gender"));
 				dto.setPhone(rs.getString("phone"));
-				dto.setWdate(rs.getDate("wdate"));
+				dto.setWdate(rs.getTimestamp("wdate"));
 				list.add(dto);
 			}
 			
@@ -88,7 +111,7 @@ public class MemberDAO {
 				dto.setEmail(rs.getString("email"));
 				dto.setGender(rs.getString("gender"));
 				dto.setPhone(rs.getString("phone"));
-				dto.setWdate(rs.getDate("wdate"));
+				dto.setWdate(rs.getTimestamp("wdate"));
 			}
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -126,7 +149,20 @@ public class MemberDAO {
 		return result;
 	}
 	
-	
+	public int getMaxNo() {
+		int result = 0;
+		try {
+			String sql = "select max(no) from member";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt("max(no)");
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result+1; 
+	}
 	
 	
 }

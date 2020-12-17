@@ -21,7 +21,6 @@ public class OracleDb implements Db{
 			String dbPw = "1234";
 			Class.forName(driver);
 			conn = DriverManager.getConnection(dbUrl, dbId, dbPw);
-			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

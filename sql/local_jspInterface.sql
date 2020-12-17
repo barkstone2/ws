@@ -14,6 +14,11 @@ age number not null,
 wdate date default sysdate not null
 );
 
+alter table member modify wdate TIMESTAMP default CURRENT_TIMESTAMP;
+
+desc member;
+select * from member;
+
 create sequence seq_member
 start with 1
 increment by 1
@@ -37,6 +42,10 @@ age int not null,
 wdate date default now() not null
 );
 */
+select * from member;
 
+insert into member values((select max(no)+1 from member alias_for_no), 'test1234','1234','Å×½ºÆ®','9612121234567','010-1234-1234','test@gmail.com','M','25',default);
 
-
+select * from member;
+commit;
+select max(no) from member;

@@ -1,6 +1,6 @@
 package member;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class MemberDTO {
 	private int no;
@@ -12,7 +12,8 @@ public class MemberDTO {
 	private String email;
 	private String gender;
 	private int age;
-	private Date wdate;
+	private Timestamp wdate;
+	
 	
 	public MemberDTO() {
 	}
@@ -90,11 +91,11 @@ public class MemberDTO {
 		this.age = age;
 	}
 
-	public Date getWdate() {
+	public Timestamp getWdate() {
 		return wdate;
 	}
 
-	public void setWdate(Date wdate) {
+	public void setWdate(Timestamp wdate) {
 		this.wdate = wdate;
 	}
 	
