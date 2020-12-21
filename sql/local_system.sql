@@ -123,3 +123,25 @@ temporary tablespace temp;
 
 grant connect, resource, dba to jspInterfaceImpl02;
 
+
+create user jspInterfaceImplExam
+identified by 1234
+default tablespace users
+temporary tablespace temp;
+
+grant connect, resource, dba to jspInterfaceImplExam;
+
+
+/*
+create database jspInterfaceImplExam;
+grant all privileges on jspInterfaceImplExam.* to jspInterfaceImplExam@localhost identified by '1234';
+exit;
+
+mysql -u jspInterfaceImplExam -p;
+1234;
+
+use jspInterfaceImplExam;
+
+
+*/
+

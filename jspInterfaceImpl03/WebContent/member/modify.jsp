@@ -27,7 +27,7 @@
 			</tr>
 			<tr>
 				<td><%=dto.getNo() %></td>
-				<td><input type="hidden" name="id" value="<%=dto.getId() %>"><%=dto.getId() %></td>
+				<td><input type="hidden" name="id" value="<%=dto.getId() %>">${param.id }</td>
 	 			<td><%=dto.getName() %></td>
 				<td><input type="text" name="phone" value="<%=dto.getPhone() %>"></td>
 				<td>
