@@ -141,7 +141,24 @@ mysql -u jspInterfaceImplExam -p;
 1234;
 
 use jspInterfaceImplExam;
+*/
 
 
+create user test1222
+identified by 1234
+default tablespace users
+temporary tablespace temp;
+
+grant connect, resource, dba to test1222;
+
+/*
+create database test1222;
+grant all privileges on test1222.* to test1222@localhost identified by '1234';
+exit;
+
+mysql -u test1222 -p;
+1234;
+
+use test1222;
 */
 
