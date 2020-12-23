@@ -40,3 +40,4 @@ job varchar(50) not null
 );
 */
 
+select * from member;

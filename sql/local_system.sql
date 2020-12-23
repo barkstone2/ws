@@ -162,3 +162,10 @@ mysql -u test1222 -p;
 use test1222;
 */
 
+create user javaIoTExam
+identified by 1234;
+
+grant connect, resource, dba to javaIoTExam;
+
+
+

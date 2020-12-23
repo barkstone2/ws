@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class MemberExample {
 
-//	private MemberDAO dao = new MemberDAOImplOracle();
-	private MemberDAO dao = new MemberDAOImplMySQL();
+	private MemberDAO dao = new MemberDAOImplOracle();
+//	private MemberDAO dao = new MemberDAOImplMySQL();
 	
 	public MemberExample() {
 	}
