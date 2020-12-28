@@ -168,4 +168,11 @@ identified by 1234;
 grant connect, resource, dba to javaIoTExam;
 
 
+create user jspModel1
+identified by 1234;
+
+grant connect, resource, dba to jspModel1;
+
+
+
 
