@@ -174,5 +174,8 @@ identified by 1234;
 grant connect, resource, dba to jspModel1;
 
 
+create user jspws
+identified by 1234;
 
+grant connect, resource, dba to jspws;
 
