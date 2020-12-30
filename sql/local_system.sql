@@ -179,3 +179,9 @@ identified by 1234;
 
 grant connect, resource, dba to jspws;
 
+
+
+create user jspSQLExam
+identified by 1234;
+
+grant connect, resource, dba to jspSQLExam;
