@@ -185,3 +185,9 @@ create user jspSQLExam
 identified by 1234;
 
 grant connect, resource, dba to jspSQLExam;
+
+
+create user includeEx02
+identified by 1234;
+
+grant connect, resource, dba to includeEx02;
