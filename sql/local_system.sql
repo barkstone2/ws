@@ -191,3 +191,15 @@ create user includeEx02
 identified by 1234;
 
 grant connect, resource, dba to includeEx02;
+
+/*
+2021/01/04
+*/
+
+create user aca
+identified by 1234;
+
+grant connect, resource, dba to aca;
+
+
+

@@ -1,0 +1,30 @@
+
+* SQL 활용
+- 테이블 생성
+- primary key
+- foreign key
+  foreign key(sum) references table(sum) on delete cascade
+- insert
+- update
+- delete
+- delete
+commit; rollback;
+- 데이터 사전을 구성하는 개별 테이블 목록
+  select * from tab;
+- 인덱스 : primary key
+- 뷰
+* SQL 응용
+
+-----------------------------------------
+각 페이지 핵심을 뽑아야 한다.
+- list.jsp		: ArrayList<DTO> 걸리는 시간 5
+- view.jsp		: no 걸리는 시간 1
+- answer.jsp	: no 걸리는 시간 1
+.
+.
+.
+
+String referer = request.getHeader("REFERER");
+이전 페이지의 주소가 담긴다.
+처리 페이지에서 이전 페이지 주소를 체크할 때 사용.
+
