@@ -42,11 +42,11 @@
 		
 		BoardDTO dto = new BoardDTO();
 		dto.setNum(num);
-		dto.setWriter(num+"");
-		dto.setSubject(num+"");
-		dto.setContent(num+"");
-		dto.setEmail(num+"@gmail.com");
-		dto.setPasswd(num+"");
+		dto.setWriter(String.valueOf(num));
+		dto.setSubject(String.valueOf(num));
+		dto.setContent(String.valueOf(num));
+		dto.setEmail(String.valueOf(num)+"@gmail.com");
+		dto.setPasswd(String.valueOf(num));
 		String sql = "insert into board "
 				+"(no, num, writer, subject, content, email, passwd, ref, re_step, re_level, hit, regi_date) "
 				+"values(seq_board.nextval,?,?,?,?,?,?,?,?,?,0,default)";	
