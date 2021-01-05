@@ -19,7 +19,7 @@
 		Connection conn = db.dbConn();
 		PreparedStatement pstmt = null;
 		
-		String num_ = request.getParameter("num");
+		/*String num_ = request.getParameter("num");
 		int num;
 		if(num_ == null || num_.length() <=0){
 			num=0;
@@ -66,14 +66,14 @@
 			e.printStackTrace();
 		}
 		
-		db.dbConnClose();
+		db.dbConnClose(); */
 	
 	
 		
 		
 		
 		
-		/* String sql = "insert into board "
+		String sql = "insert into board "
 				+"(no, num, writer, subject, content, email, passwd, ref, re_step, re_level, hit, regi_date) "
 				+"values(?,?,?,?,?,?,?,?,?,?,0,default)";	
 		try{
@@ -95,15 +95,15 @@
 			e.printStackTrace();
 		}
 		
-		db.dbConnClose(); */
+		db.dbConnClose();
 	
 	%>
 	
 	
 </body>
-<script>
+<%-- <script>
 setTimeout(function(){
-		location.href = 'dummy.jsp?num=<%=num%>';
+		location.href='dummy.jsp?num=<%=num%>';
 }, 100); // 1000 - 1초
-</script>
+</script> --%>
 </html>

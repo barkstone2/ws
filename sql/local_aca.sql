@@ -31,3 +31,5 @@ select count(ROWNUM) from board;
 drop sequence seq_board;
 drop table board;
 commit;
+
+
