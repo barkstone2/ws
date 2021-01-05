@@ -9,8 +9,12 @@
 String referer = request.getHeader("REFERER");
 String ip = Inet4Address.getLocalHost().getHostAddress();
 
+int contentNum = 7;
 BoardDAO dao = new BoardDAO();
-ArrayList<BoardDTO> dtos = dao.getListAll();
+System.out.println(dao.getPageNum());
+
+dao = new BoardDAO();
+ArrayList<BoardDTO> dtos = dao.getListAll(contentNum);
 %>
 <!DOCTYPE html>
 <html>
@@ -33,9 +37,7 @@ create index 인덱스명 on 테이블명 (필드명);
 drop index 인덱스명;
 	
 	<%
-		int contentNum = 7;
-		dao = new BoardDAO();
-		System.out.println(dao.getPageNum());
+		
 		
 	%>
 	

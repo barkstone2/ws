@@ -33,3 +33,24 @@ drop table board;
 commit;
 
 
+begin
+for i in 1 .. 1000 loop
+insert into board values
+(seq_board.nextval, i, i, i, i, i, i, 1,1,1,0,default);
+end loop;
+end;
+
+begin
+for i in 1 .. 1000 loop
+insert into board values
+(seq_board.nextval, i, 'w'||i, 's'||i, 'c'||i, 'e'||i, 'p'||i, i,1,1,0,current_timestamp);
+end loop;
+commit;
+end;
+
+delete from board;
+select * from board;
+
+select rownum, A.* from (select * from board) A where rownum <=2 order by no, ref, re_level desc;
+
+

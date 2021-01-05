@@ -69,11 +69,14 @@ public class BoardDAO {
 		return result+1;
 	}
 	
-	public ArrayList<BoardDTO> getListAll(){
+	public ArrayList<BoardDTO> getListAll(int contentNum){
 		ArrayList<BoardDTO> dtos = new ArrayList<BoardDTO>();
 		try {
-			String sql = "select * from board order by no, ref, re_level desc";
+			String sql = "select rownum, A.no, A.ref, A.re_level, A.subject, A.writer,A.regi_date "
+					+ "from (select * from board) A where rownum <=? and rownum >=? order by no, ref, re_level desc";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, contentNum);
+			pstmt.setInt(2, contentNum-contentNum);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardDTO dto = new BoardDTO();
