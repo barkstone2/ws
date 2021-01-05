@@ -77,7 +77,14 @@ nvl((select sum(p.p_price)
         group by p.v_id),0) as priceTotal
 from vendor v;
 
-
+/*
+null °ª Ãâ·Â X
+select sum(p.p_price) as totalPrice,
+(select v.v_name from vendor v where p.v_id=v.v_id) as v_name,
+(select v.v_mobile from vendor v where p.v_id=v.v_id) as v_mobile
+from product p
+group by p.v_id;
+*/
 select v.v_name, v.v_mobile, p.p_name, p.p_price
 from vendor v
 join product p
