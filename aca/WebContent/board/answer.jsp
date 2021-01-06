@@ -49,7 +49,7 @@ BoardDTO dto = dao.getView(no);
 			</tr>
 		</table>
 		<a href="#" onclick="chuga();">[등록하기]</a>&nbsp;&nbsp;&nbsp;
-		<a href="view.jsp?no=<%=dto.getNo()%>">[돌아가기]</a>
+		<a href="view.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[돌아가기]</a>
 	</form>
 </body>
 <script>

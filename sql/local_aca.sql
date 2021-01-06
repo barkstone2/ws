@@ -54,3 +54,30 @@ select * from board;
 select rownum, A.* from (select * from board) A where rownum <=2 order by no, ref, re_level desc;
 
 
+
+create table transactionTBL (
+no number not null,
+name varchar2(50) not null,
+regi_date timestamp default current_timestamp
+);
+
+select count(*) from transactiontbl;
+select max(rownum) from transactiontbl;
+drop table transactiontbl;
+rollback;
+
+
+select rn, A.no, A.ref, A.re_level, A.subject, A.writer, A. regi_date 
+from (select rownum as rn, no, ref, re_level, subject, writer, regi_date from board order by no desc) A 
+where A.rn >=21 and A.rn <=30 order by no, ref, re_level desc;
+
+select rownum as rn, no, ref, re_level, subject, writer, regi_date from board order by no desc;
+
+select * from 
+(select rownum as rn, A.* from 
+(select no, ref, re_level, subject, writer, regi_date from board where subject like '%s90%' order by ref desc, re_level asc) A) 
+where rn >=1 and rn <=10;
+
+
+select * from board where subject like '%s90%';
+select count(rownum) from board where writer like '%w%';

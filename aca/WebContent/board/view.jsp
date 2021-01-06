@@ -52,10 +52,10 @@ requested Info: <%=request.getRequestURI() %><br>
 			<td colspan="4"><%=dto.getRegi_date() %></td>
 		</tr>
 	</table>
-	<a href="answer.jsp?no=<%=dto.getNo()%>">[답변쓰기]</a>&nbsp;&nbsp;
-	<a href="answer.jsp?no=<%=dto.getNo()%>">[수정하기]</a>&nbsp;&nbsp;
-	<a href="answer.jsp?no=<%=dto.getNo()%>">[삭제하기]</a>&nbsp;&nbsp;
-	<a href="list.jsp">[목록]</a>
+	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[답변쓰기]</a>&nbsp;&nbsp;
+	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[수정하기]</a>&nbsp;&nbsp;
+	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[삭제하기]</a>&nbsp;&nbsp;
+	<a href="list.jsp?pageNum=<%=request.getParameter("pageNum")%>">[목록]</a>
 	
 </body>
 </html>
