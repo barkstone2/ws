@@ -20,7 +20,7 @@
 	int re_step = Integer.parseInt(re_step_);
 	
 	BoardDAO dao = new BoardDAO();
-	dao.setRe_level(ref, re_level);
+	dao.setRe_level(ref, re_level, true);
 	
 	BoardDTO dto = new BoardDTO();
 	dto.setWriter(writer);

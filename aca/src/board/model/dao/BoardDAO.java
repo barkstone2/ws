@@ -15,14 +15,21 @@ public class BoardDAO {
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
 	
+	
+	public void quitConn() {
+		db.dbConnClose();
+	}
+	
+	
+	
 	public int setInsert(BoardDTO dto) {
 		int maxNum = maxNum();
 		int maxRef = maxRef();
 		int result = 0;
 		try {
 			String sql = "insert into board "
-					+"(no, num, writer, subject, content, email, passwd, ref, re_step, re_level, hit, regi_date) "
-					+"values(seq_board.nextval,?,?,?,?,?,?,?,1,1,0,default)";
+					+"(no, num, writer, subject, content, email, passwd, ref, re_step, re_level, parentNo, hit, regi_date) "
+					+"values(seq_board.nextval,?,?,?,?,?,?,?,1,1,default,0,default)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, maxNum);
 			pstmt.setString(2, dto.getWriter());
@@ -72,21 +79,25 @@ public class BoardDAO {
 	public ArrayList<BoardDTO> getListAll(int startRow, int endRow, String searchType, String searchData){
 		ArrayList<BoardDTO> dtos = new ArrayList<BoardDTO>();
 		try {
-			String coreSql = "select no, ref, re_level, subject, writer, regi_date, hit "
-					+ "from board order by ref desc, re_level asc";
+			//String coreSql = "select no, ref, re_level, subject, writer, regi_date, hit, re_step,parentNo "
+			//		+ "from board order by ref desc, re_level asc";
+			String coreSql = "select a.no, a.ref, a.re_level, a.subject, a.writer, "
+					+ "a.regi_date, a.hit, a.re_step, a.parentNo, "
+					+ "(select count(*) from board b where b.parentNo=a.no) childNum from board a ";
+			String orderBy = "order by ref desc, re_level asc";
+			if(searchType != null && searchData != null){
+				if(searchType.equals("all")) {
+					coreSql += "where subject like ? or content like ? ";
+				}else{
+					coreSql += "where "+searchType+" like ? ";
+				}
+			}
+			coreSql += orderBy;
+			
 			String sql = "select * from "
 					+ "(select rownum as rn, A.* from ("+coreSql+") A) "
 					+ "where rn >=? and rn <=?";
 			
-			if(searchType != null && searchData != null){
-				if(searchType.equals("all")) {
-					coreSql =  "select no, ref, re_level, subject, writer, regi_date, hit "
-							+ "from board where subject like ? or content like ? order by ref desc, re_level asc";
-				}else{
-					coreSql = "select no, ref, re_level, subject, writer, regi_date, hit "
-							+ "from board where "+searchType+" like ? order by ref desc, re_level asc";
-				}
-			}
 			pstmt = conn.prepareStatement(sql);
 			if(searchType != null && searchData != null) {
 				pstmt.setString(1, "%"+searchData+"%");
@@ -103,56 +114,6 @@ public class BoardDAO {
 				pstmt.setInt(2, endRow);
 			}
 			
-			
-//			if(searchType == null || searchData == null){
-//				sql = "select * from "
-//						+ "(select rownum as rn, A.* from ("+coreSql+") A) "
-//						+ "where rn >=? and rn <=?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setInt(1, startRow);
-//				pstmt.setInt(2, endRow);
-//			}else if(searchType.equals("subject")){
-//				coreSql = "select no, ref, re_level, subject, writer, regi_date, hit "
-//						+ "from board where subject like ? order by ref desc, re_level asc";
-//				sql = "select * from "
-//						+ "(select rownum as rn, A.* from ("+coreSql+") A) "
-//						+ "where rn >=? and rn <=?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//				pstmt.setInt(2, startRow);
-//				pstmt.setInt(3, endRow);
-//			}else if(searchType.equals("content")) {
-//				coreSql = "select no, ref, re_level, subject, writer, regi_date, hit "
-//						+ "from board where content like ? order by ref desc, re_level asc";
-//				sql = "select * from "
-//						+ "(select rownum as rn, A.* from ("+coreSql+") A) "
-//						+ "where rn >=? and rn <=?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//				pstmt.setInt(2, startRow);
-//				pstmt.setInt(3, endRow);
-//			}else if(searchType.equals("writer")) {
-//				coreSql = "select no, ref, re_level, subject, writer, regi_date, hit "
-//						+ "from board where writer like ? order by ref desc, re_level asc";
-//				sql = "select * from "
-//						+ "(select rownum as rn, A.* from ("+coreSql+") A) "
-//						+ "where rn >=? and rn <=?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//				pstmt.setInt(2, startRow);
-//				pstmt.setInt(3, endRow);
-//			}else if(searchType.equals("all")) {
-//				coreSql =  "select no, ref, re_level, subject, writer, regi_date, hit "
-//						+ "from board where subject like ? or content like ? order by ref desc, re_level asc";
-//				sql = "select * from "
-//						+ "(select rownum as rn, A.* from ("+coreSql+") A) "
-//						+ "where rn >=? and rn <=?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//				pstmt.setString(2, "%"+searchData+"%");
-//				pstmt.setInt(3, startRow);
-//				pstmt.setInt(4, endRow);
-//			}
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardDTO dto = new BoardDTO();
@@ -161,6 +122,10 @@ public class BoardDAO {
 				dto.setWriter(rs.getString("writer"));
 				dto.setRegi_date(rs.getString("regi_date"));
 				dto.setHit(rs.getInt("hit"));
+				dto.setRe_step(rs.getInt("re_step"));
+				dto.setRef(rs.getInt("ref"));
+				dto.setParentNo(rs.getInt("parentNo"));
+				dto.setChildNum(rs.getInt("childNum"));
 				dtos.add(dto);
 			}
 		}catch (Exception e) {
@@ -191,6 +156,7 @@ public class BoardDAO {
 				dto.setRef(rs.getInt("ref"));
 				dto.setWriter(rs.getString("writer"));
 				dto.setRegi_date(rs.getString("regi_date"));
+				dto.setParentNo(rs.getInt("parentNo"));
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -199,12 +165,18 @@ public class BoardDAO {
 		return dto;
 	}
 	
-	public void setRe_level(int ref, int re_level) {
+	public void setRe_level(int ref, int re_level, boolean method) {
 		try {
-			String sql = "update board set re_level=(re_level+1) where ref=? and re_level>?";
+			String sql = "";
+			if(method) {
+				sql ="update board set re_level=(re_level+1) where ref=? and re_level>?";
+			}else {
+				sql = "update board set re_level=(re_level-1) where ref=? and re_level>?";
+			}
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, ref);
 			pstmt.setInt(2, re_level);
+			pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -215,8 +187,8 @@ public class BoardDAO {
 		int result = 0;
 		try {
 			String sql = "insert into board "
-					+"(no, num, writer, subject, content, email, passwd, ref, re_step, re_level, hit, regi_date) "
-					+"values(seq_board.nextval,?,?,?,?,?,?,?,?,?,0,default)";
+					+"(no, num, writer, subject, content, email, passwd, ref, re_step, re_level,parentNo, hit, regi_date) "
+					+"values(seq_board.nextval,?,?,?,?,?,?,?,?,?,?,0,default)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, maxNum);
 			pstmt.setString(2, dto.getWriter());
@@ -227,6 +199,7 @@ public class BoardDAO {
 			pstmt.setInt(7, dto.getRef());
 			pstmt.setInt(8, dto.getRe_step());
 			pstmt.setInt(9, dto.getRe_level());
+			pstmt.setInt(10, dto.getNo());
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -270,25 +243,6 @@ public class BoardDAO {
 				if(searchType.equals("all")) pstmt.setString(2, "%"+searchData+"%");
 			}
 			
-			
-//			else if(searchType.equals("subject")){
-//				sql = "select count(rownum) from board where subject like ?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//			}else if(searchType.equals("content")) {
-//				sql = "select count(rownum) from board where content like ?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//			}else if(searchType.equals("writer")) {
-//				sql = "select count(rownum) from board where writer like ?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//			}else if(searchType.equals("all")) {
-//				sql = "select count(rownum) from board where subject like ? or content like ?";
-//				pstmt = conn.prepareStatement(sql);
-//				pstmt.setString(1, "%"+searchData+"%");
-//				pstmt.setString(2, "%"+searchData+"%");
-//			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				result = rs.getInt(1);
@@ -311,5 +265,88 @@ public class BoardDAO {
 		}
 	}
 	
+	public int getAnsNum(int no) {
+		int result = 0;
+		try {
+			String sql = "select count(*) from board where parentNo=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public int getMaxRestep(int ref) {
+		int result = 0;
+		try {
+			String sql = "select max(re_step) from board where ref=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, ref);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	public ArrayList<BoardDTO> getChild(int no){
+		ArrayList<BoardDTO> childs = new ArrayList<BoardDTO>();
+		try {
+			String sql = "select * from board where paretnNo=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO child = new BoardDTO();
+				child.setNo(rs.getInt("no"));
+				child.setRe_step(rs.getInt("re_step"));
+				child.setRe_level(rs.getInt("re_level"));
+				child.setRef(rs.getInt("ref"));
+				child.setParentNo(rs.getInt("parentNo"));
+				childs.add(child);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return childs;
+	}
+	
+	public int setDelete(int no) {
+		int result = 0;
+		try {
+			String sql = "delete from board where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
+	public int delCheck(int no) {
+		int result = 0;
+		try {
+			String sql = "select * from board where parentNo=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = -1;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 	
 }

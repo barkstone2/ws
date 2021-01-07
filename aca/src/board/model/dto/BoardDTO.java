@@ -13,7 +13,9 @@ public class BoardDTO {
 	private int re_step;
 	private int re_level;
 	private int hit;
+	private int parentNo;
 	private String regi_date;
+	private int childNum;
 	
 	public BoardDTO() {
 	}
@@ -29,6 +31,22 @@ public class BoardDTO {
 
 
 
+
+	public int getChildNum() {
+		return childNum;
+	}
+
+	public void setChildNum(int childNum) {
+		this.childNum = childNum;
+	}
+
+	public int getParentNo() {
+		return parentNo;
+	}
+
+	public void setParentNo(int parentNo) {
+		this.parentNo = parentNo;
+	}
 
 	public int getNo() {
 		return no;

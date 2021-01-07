@@ -1,3 +1,4 @@
+<%@page import="java.util.Iterator"%>
 <%@page import="java.net.Inet4Address"%>
 <%@page import="board.model.dto.BoardDTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -102,19 +103,60 @@ drop index 인덱스명;
 			<td>조회수</td>
 		</tr>
 <%
+dao = new BoardDAO();
+
+/* ArrayList<Integer> cList = new ArrayList<>();
 for(int i=0; i<dtos.size(); i++){
-	BoardDTO dto = dtos.get(i);%>
+	BoardDTO dto = dtos.get(i);
+	if(dto.getParentNo()!=0){
+		cList.add(dto.getParentNo());
+	} 
+}*/
+
+for(int i=0; i<dtos.size(); i++){
+	BoardDTO dto = dtos.get(i);
+	int ref = dto.getRef();
+	int no = dto.getNo();
+	int re_step = dto.getRe_step();
+	int maxReStep = dao.getMaxRestep(ref);
+	
+	/* int ansNum = 0;
+	Iterator<Integer> it = cList.iterator();
+	while(it.hasNext()){
+		if(it.next()==no){
+			ansNum++;	
+		}
+		
+	} */
+	
+	//int ansNum = dao.getAnsNum(no);
+	/* ArrayList<BoardDTO> childs = dao.getChild(no);
+	ArrayList<ArrayList<BoardDTO>> llist = new ArrayList<>();
+	for(int mrs=1; mrs<maxReStep; mrs++){
+		for(int childN=0; childN<childs.size(); childN++){
+			no = childs.get(childN).getNo();
+			ansNum += dao.getAnsNum(no);
+			llist.add(dao.getChild(no));
+		}
+		
+		
+	} */
+	
+	
+	%>
 		<tr>
 			<td><%=number--%></td>
-			<td><a href="view.jsp?no=<%=dto.getNo()%>
+			<td><%for(int rs=1; rs<dto.getRe_step(); rs++){out.print("&nbsp;&nbsp;");} %><a href="view.jsp?no=<%=dto.getNo()%>
 			&pageNum=<%=pageNum%>
 			&searchType=<%=searchType%>
-			&searchData=<%=searchData%>"><%=dto.getSubject() %></a></td>
+			&searchData=<%=searchData%>"><%=dto.getSubject()+"("+dto.getChildNum()+")" %></a></td>
 			<td><%=dto.getWriter() %></td>
 			<td><%=dto.getRegi_date() %></td>
 			<td><%=dto.getHit() %></td>
 		</tr>
-<%}%>
+<%}
+
+%>
 	<tr>
 		<td colspan="10" align="center">
 			<%if(startPage>10){%><a href="list.jsp?pageNum=<%=startPage-10%>
@@ -154,6 +196,7 @@ for(int i=0; i<dtos.size(); i++){
 		&nbsp;&nbsp;&nbsp;&nbsp;
 		<a href="write.jsp">[글쓰기]</a>
 	</div>
+	<%dao.quitConn(); %>
 </body>
 <script>
 	function search(){

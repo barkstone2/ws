@@ -89,8 +89,9 @@
 				pstmt.setInt(8, i);
 				pstmt.setInt(9, i);
 				pstmt.setInt(10, i);
-				pstmt.executeUpdate();
+				pstmt.addBatch();
 			}
+			pstmt.executeBatch();
 		}catch(Exception e){
 			e.printStackTrace();
 		}

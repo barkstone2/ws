@@ -54,7 +54,7 @@ requested Info: <%=request.getRequestURI() %><br>
 	</table>
 	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[답변쓰기]</a>&nbsp;&nbsp;
 	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[수정하기]</a>&nbsp;&nbsp;
-	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[삭제하기]</a>&nbsp;&nbsp;
+	<a href="delete.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[삭제하기]</a>&nbsp;&nbsp;
 	<a href="list.jsp?pageNum=<%=request.getParameter("pageNum")%>">[목록]</a>
 	
 </body>

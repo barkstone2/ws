@@ -1,5 +1,5 @@
 
-
+drop table board;
 create table board(
 no number not null,
 num number not null,
@@ -11,6 +11,7 @@ passwd varchar2(50) not null,
 ref number not null,
 re_step number not null,
 re_level number not null,
+parentNo number default 0 not null,
 hit number not null,
 regi_date timestamp default current_timestamp,
 primary key(no)
@@ -36,14 +37,14 @@ commit;
 begin
 for i in 1 .. 1000 loop
 insert into board values
-(seq_board.nextval, i, i, i, i, i, i, 1,1,1,0,default);
+(seq_board.nextval, i, i, i, i, i, i, 1,1,1,default,0,default);
 end loop;
 end;
 
 begin
 for i in 1 .. 1000 loop
 insert into board values
-(seq_board.nextval, i, 'w'||i, 's'||i, 'c'||i, 'e'||i, 'p'||i, i,1,1,0,current_timestamp);
+(seq_board.nextval, i, 'w'||i, 's'||i, 'c'||i, 'e'||i, 'p'||i, i,1,1,default,0,current_timestamp);
 end loop;
 commit;
 end;
@@ -81,3 +82,31 @@ where rn >=1 and rn <=10;
 
 select * from board where subject like '%s90%';
 select count(rownum) from board where writer like '%w%';
+
+
+select a.val1 - b.val2 from 
+(select max(re_level) val1 from board where ref=1000) a,
+(select re_level val2 from board where no=1) b;
+
+select * from board where ref=1000;
+
+
+(select count(*) cc from board,(select parentNo from board) a where a.parentNo=no);
+
+select b.*, 
+(select count(*) from board b1 where b1.no=
+(select parentNo from board))
+from board b 
+where ref=1000;
+
+select a.*, (select count(*) from (select parentNo from board) b 
+where b.parentNo=a.no) childCount from board a where ref=1000 order by ref desc, re_level asc;
+
+select a.*, (select count(*) from board where parentNo=a.no) childCount
+from board a order by ref desc, re_level asc;
+
+
+
+select * from board where parentNo=1008;
+
+
