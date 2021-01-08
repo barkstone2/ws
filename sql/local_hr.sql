@@ -780,5 +780,52 @@ select * from dept_copy;
 select * from dept_original;
 */
 
+/*
+21/01/08
+함수, 변수
+함수는 하나의 값만을 반환
+*/
+
+create or replace function fn_salary_ename
+(
+    v_first_name in employees.first_name%type, 
+    v_last_name in employees.last_name%type
+)
+    return number
+as
+    v_salary number(7,2);
+begin
+    select salary into v_salary
+    from employees
+    where first_name=v_first_name and last_name=v_last_name;
+    return v_salary;
+end;
+
+variable v_salary2 number;
+execute :v_salary2 := fn_salary_ename('Steven','King');
+print v_salary2;
 
 
+select * from employees;
+
+select first_name, last_name, fn_salary_ename(first_name, last_name) sal
+from employees;
+
+/*테이블 복사*/
+create table tbl01
+as select * from departments;
+
+/*테이블 틀만 복사(제약조건 복사 X)*/
+create table tbl02
+as select * from departments where 0=1;
+
+create table pTBL(
+uName nchar(3),
+season nchar(2),
+amount number(3)
+);
+
+select * from pTBL
+pivot(sum(amount) for season in('봄','여름','가을','겨울'));
+
+commit;
