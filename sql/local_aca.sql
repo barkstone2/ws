@@ -109,4 +109,39 @@ from board a order by ref desc, re_level asc;
 
 select * from board where parentNo=1008;
 
+create or replace view rnBoard
+as
+select rownum rn, A.* 
+from (select * from board order by ref desc, re_level asc) A;
 
+
+
+
+select rownum rn, A.* 
+from (select * from board order by ref desc, re_level asc) A;
+
+select * from (select b.*, LAG(no) over(order by ref desc, re_level asc),
+Lead(no) over(order by  ref desc, re_level asc) from Board b order by ref desc, re_level asc)
+where no=1000;
+
+select b.* from rnBoard b where no=1000
+or rn=((select rn from rnboard where no=1000)+1)
+or rn=((select rn from rnboard where no=1000)-1) 
+order by rn asc;
+
+
+
+
+(select rownum, A.* from board A order by ref desc, re_level asc);
+select * from board order by ref desc;
+
+select *
+from (select ref, 
+decode (to_char(re_step),'1','원글','2','첫번째 답글','3','두번째 답글','4','세번째 답글','5','네번째 답글') rs 
+from board where ref>995)
+pivot(
+    count(rs)
+    for
+    rs in ('원글','첫번째 답글','두번째 답글','세번째 답글','네번째 답글')
+)
+order by ref desc;

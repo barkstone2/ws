@@ -1,4 +1,5 @@
 <%@page import="java.util.Iterator"%>
+<%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.Inet4Address"%>
 <%@page import="board.model.dto.BoardDTO"%>
 <%@page import="java.util.ArrayList"%>
@@ -29,7 +30,8 @@ int count = dao.getTotalRecordCount(searchType,searchData);
 int pageSize = 10;
 //현재 페이지 번호
 String pageNum = request.getParameter("pageNum");
-if(pageNum==null || pageNum.length()<=0)pageNum = "1";
+if(pageNum==null || pageNum.length()<=0 || pageNum.equals("null"))pageNum = "1";
+
 int currentPage = Integer.parseInt(pageNum);
 //현재 페이지에 보여질 시작번호, 끝번호
 int startRow = (currentPage-1)*pageSize + 1;
@@ -54,6 +56,8 @@ if(count >0){
 	}
 }
 
+double totalPageDou = Math.ceil(count / (double)pageSize);
+int totalPage = (int)totalPageDou;
 
 
 
@@ -147,9 +151,9 @@ for(int i=0; i<dtos.size(); i++){
 		<tr>
 			<td><%=number--%></td>
 			<td><%for(int rs=1; rs<dto.getRe_step(); rs++){out.print("&nbsp;&nbsp;");} %><a href="view.jsp?no=<%=dto.getNo()%>
-			&pageNum=<%=pageNum%>
+			&pageNum=<%=pageNum%><%if(searchType!=null&&searchData!=null) {%>
 			&searchType=<%=searchType%>
-			&searchData=<%=searchData%>"><%=dto.getSubject()+"("+dto.getChildNum()+")" %></a></td>
+			&searchData=<%=searchData%><%}%>"><%=dto.getSubject()+"("+dto.getChildNum()+")" %></a></td>
 			<td><%=dto.getWriter() %></td>
 			<td><%=dto.getRegi_date() %></td>
 			<td><%=dto.getHit() %></td>
@@ -159,25 +163,34 @@ for(int i=0; i<dtos.size(); i++){
 %>
 	<tr>
 		<td colspan="10" align="center">
-			<%if(startPage>10){%><a href="list.jsp?pageNum=<%=startPage-10%>
+			<a href="list.jsp?pageNum=<%=1%><%if(searchType!=null&&searchData!=null) {%>
 			&searchType=<%=searchType%>
-			&searchData=<%=searchData%>">이전</a>&nbsp;
+			&searchData=<%=searchData%><%}%>">첫페이지</a>
+			<%if(startPage>10){%><a href="list.jsp?pageNum=<%=startPage-10%>
+			<%if(searchType!=null&&searchData!=null) {%>
+			&searchType=<%=searchType%>
+			&searchData=<%=searchData%><%}%>">이전</a>&nbsp;
 			<%} %>
 			<%for(int n=startPage; n<=endPage; n++) {
 				if(n==currentPage){%>
 					<span style="color:red; font-weight: bold;">
 					[<%=n%>]</span>
 				<%}else{%>
-					<a href="list.jsp?pageNum=<%=n%>&searchType=<%=searchType %>
-			&searchData=<%=searchData%>"><%=n%></a>&nbsp;	
+					<a href="list.jsp?pageNum=<%=n%><%if(searchType!=null&&searchData!=null) {%>
+			&searchType=<%=searchType%>
+			&searchData=<%=searchData%><%}%>"><%=n%></a>&nbsp;	
 				<%}%>
 					
 			<%}%>
 			
 			<%if(endPage<pageCount){%><a href="list.jsp?pageNum=<%=startPage+10%>
-			&searchType=<%=searchType %>
-			&searchData=<%=searchData%>">다음</a>
+			<%if(searchType!=null&&searchData!=null) {%>
+			&searchType=<%=searchType%>
+			&searchData=<%=searchData%><%}%>">다음</a>
 			<%} %>
+			<a href="list.jsp?pageNum=<%=pageCount%><%if(searchType!=null&&searchData!=null) {%>
+			&searchType=<%=searchType%>
+			&searchData=<%=searchData%><%}%>">마지막페이지</a>
 		</td>
 	</tr>
 	</table>

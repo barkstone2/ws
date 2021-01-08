@@ -7,7 +7,7 @@
 String no_ = request.getParameter("no");
 int no = Integer.parseInt(no_);
 BoardDAO dao = new BoardDAO();
-BoardDTO dto = dao.getView(no);
+BoardDTO dto = dao.getSelect(no);
 
 
 %>

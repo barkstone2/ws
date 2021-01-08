@@ -41,8 +41,9 @@ public class BoardDAO {
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
 		}
-		db.dbConnClose();
 		return result;
 	}
 	
@@ -130,14 +131,59 @@ public class BoardDAO {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
 		}
-		db.dbConnClose();
 		return dtos;
 	}
 	
-	public BoardDTO getView(int no) {
-		BoardDTO dto = new BoardDTO();
+	public ArrayList<BoardDTO> getView(int no) {
+		ArrayList<BoardDTO> dtos = new ArrayList<BoardDTO>();
 		setHit(no);
+		try {
+			/* CREATE VIEW FIRST
+			 * VIEW-RNBOARD SQL
+			 * select rownum rn, A.* 
+			 * from (select * from board order by ref desc, re_level asc) A;
+			 */     
+			
+			String sql = "select b.* from rnBoard b "
+					+"where no=? "
+					+"or rn=((select rn from rnboard where no=?)+1) "
+					+"or rn=((select rn from rnboard where no=?)-1) "
+					+"order by rn asc";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			pstmt.setInt(2, no);
+			pstmt.setInt(3, no);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO dto = new BoardDTO();
+				dto.setNo(rs.getInt("no"));
+				dto.setNum(rs.getInt("num"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setEmail(rs.getString("email"));
+				dto.setPasswd(rs.getString("passwd"));
+				dto.setHit(rs.getInt("hit")+1);
+				dto.setRe_level(rs.getInt("re_level"));
+				dto.setRe_step(rs.getInt("re_step"));
+				dto.setRef(rs.getInt("ref"));
+				dto.setWriter(rs.getString("writer"));
+				dto.setRegi_date(rs.getString("regi_date"));
+				dto.setParentNo(rs.getInt("parentNo"));
+				dtos.add(dto);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
+		}
+		return dtos;
+	}
+	
+	public BoardDTO getSelect(int no) {
+		BoardDTO dto = new BoardDTO();
 		try {
 			String sql = "select * from board where no=?";
 			pstmt = conn.prepareStatement(sql);
@@ -160,10 +206,13 @@ public class BoardDAO {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
 		}
-		db.dbConnClose();
 		return dto;
 	}
+	
+	
 	
 	public void setRe_level(int ref, int re_level, boolean method) {
 		try {
@@ -203,8 +252,9 @@ public class BoardDAO {
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
 		}
-		db.dbConnClose();
 		return result;
 	}
 	
@@ -221,8 +271,9 @@ public class BoardDAO {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
 		}
-		db.dbConnClose();
 		return result;
 	}
 	
@@ -230,7 +281,8 @@ public class BoardDAO {
 		int result = 0;
 		try {
 			String sql = "select count(rownum) from board";
-			if(searchType != null && searchData != null){
+			if(searchType == null || searchData == null){
+			}else{
 				if(searchType.equals("all")) {
 					sql += " where subject like ? or content like ?";
 				}else{
@@ -238,7 +290,8 @@ public class BoardDAO {
 				}
 			}
 			pstmt = conn.prepareStatement(sql);
-			if(searchType != null && searchData != null) {
+			if(searchType == null || searchData == null) {
+			}else {
 				pstmt.setString(1, "%"+searchData+"%");
 				if(searchType.equals("all")) pstmt.setString(2, "%"+searchData+"%");
 			}
@@ -249,8 +302,9 @@ public class BoardDAO {
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			db.dbConnClose();
 		}
-		db.dbConnClose();
 		return result;
 	}
 	

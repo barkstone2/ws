@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.net.Inet4Address"%>
 <%@page import="board.model.dto.BoardDTO"%>
 <%@page import="board.model.dao.BoardDAO"%>
@@ -7,10 +8,39 @@
 <%
 String referer = request.getHeader("REFERER");
 String ip = Inet4Address.getLocalHost().getHostAddress();
+
 String no_ = request.getParameter("no");
 int no = Integer.parseInt(no_);
 BoardDAO dao = new BoardDAO();
-BoardDTO dto = dao.getView(no);
+ArrayList<BoardDTO> dtos = dao.getView(no);
+int dSize = dtos.size();
+
+String preSubj = "없음";
+BoardDTO dto = null;
+String nextSubj = "없음";
+
+int preNo = 0;
+int nextNo = 0;
+if(dSize==1){
+	dto = dtos.get(0);
+}else if(dSize==2){
+	if(dtos.get(0).getNo()==no){
+		dto = dtos.get(0);
+		preSubj = dtos.get(1).getSubject();
+		preNo = dtos.get(1).getNo();
+	}else{
+		nextSubj = dtos.get(0).getSubject();
+		nextNo = dtos.get(0).getNo();
+		dto = dtos.get(1);
+	}
+}else if(dSize==3){
+	nextSubj = dtos.get(0).getSubject();
+	nextNo = dtos.get(0).getNo();
+	dto = dtos.get(1);
+	preSubj = dtos.get(2).getSubject();
+	preNo = dtos.get(2).getNo();
+}
+
 %>
 <!DOCTYPE html>
 <html>
@@ -52,6 +82,9 @@ requested Info: <%=request.getRequestURI() %><br>
 			<td colspan="4"><%=dto.getRegi_date() %></td>
 		</tr>
 	</table>
+	이전글 : <%if(preNo!=0){%><a href="view.jsp?no=<%=preNo%>"><%}%><%=preSubj%></a><br>
+	다음글 : <%if(nextNo!=0){%><a href="view.jsp?no=<%=nextNo%>"><%}%><%=nextSubj%></a><br>
+	
 	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[답변쓰기]</a>&nbsp;&nbsp;
 	<a href="answer.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[수정하기]</a>&nbsp;&nbsp;
 	<a href="delete.jsp?no=<%=dto.getNo()%>&pageNum=<%=request.getParameter("pageNum")%>">[삭제하기]</a>&nbsp;&nbsp;
