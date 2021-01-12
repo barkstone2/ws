@@ -146,7 +146,68 @@ pivot(
 )
 order by ref desc;
 
+/*
+21/01/12 설문조사 테이블
+*/
+
+create table survey(
+no number not null, --일련번호
+question varchar2(4000) not null, -- 질문
+select1 varchar2(500) not null, --선택내용1
+select2 varchar2(500) not null, --선택내용2
+select3 varchar2(500) not null, --선택내용3
+select4 varchar2(500) not null, --선택내용4
+status char(1) default '0', --서비스여부(0-안함, 1-함)
+primary key(no)
+);
+
+ALTER TABLE survey modify status varchar(2) default '0';
+
+create table survey_answer(
+no number not null,
+survey_no number not null,
+survey_answer number not null,
+primary key(no),
+foreign key(survey_no) references survey(no)
+);
+
+create sequence seq_survey;
+create sequence seq_survey_answer;
+
+select * from survey;
+update survey set status='0' where no='2';
+commit;
+select * from survey_answer;
+
+select a.no, a.question, a.select1, a.select2, a.select3, a.select4, 
+(select count(*) FROM survey_answer where survey_answer='1' and survey_no=a.no)AS c1,
+(select count(*) from survey_answer where survey_answer='2' and survey_no=a.no)as c2, 
+(select count(*) from survey_answer where survey_answer='3' and survey_no=a.no)as c3, 
+(select count(*) from survey_answer where survey_answer='4' and survey_no=a.no)as c4 
+from survey a order by a.no;
 
 
 
+select a.no, a.question, a.select1, a.select2, a.select3, a.select4, b.* 
+from survey a,
+(select * from survey_answer pivot(count(no) for survey_answer in(1,2,3,4))) b 
+where b.survey_no=a.no
+order by a.no;
 
+
+
+select * 
+FROM (
+select survey_no 
+from survey_answer 
+pivot(count(*) for survey_answer in('1','2','3','4');
+
+
+select * from survey_answer 
+pivot(count(no) for survey_answer in(1,2,3,4)) order by survey_no;
+
+
+select * from survey_answer 
+pivot(count(no) for survey_answer in(1,2,3,4)) order by survey_no;
+
+select DECODE(to_char(survey_answer, 
