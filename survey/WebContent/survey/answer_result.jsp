@@ -19,12 +19,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+td{
+padding: 0px;
+}
+</style>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	
-	<table border="1">
+	<table border="1" style="text-align: center;">
 		<tr>
 			<td>설문번호</td>
 			<td>설문내용</td>
@@ -49,21 +54,22 @@
 			<td><%=dto.getSelect3() %></td>
 			<td><%=dto.getSelect4() %></td>
 		</tr>
-		<tr>
-			<td colspan="2">응답자수</td>
-			<td><%=values[0]%></td>
-			<td><%=values[1]%></td>
-			<td><%=values[2]%></td>
-			<td><%=values[3]%></td>
+		<tr style="padding: 0px;">
+			<td colspan="2" style="padding: 0px;">응답자수</td>
+		<%for(int k=0; k<values.length; k++){%>
+			<td style="padding:0px; text-align: center; vertical-align: bottom;">
+				<%=values[k]%>
+				<%for(int j=0; j<values[k]; j++){%>
+					<div style="padding: 0px; height: 10px; background-color: blue; border-top: 1px solid black;"></div>
+				<%}%>
+			</td>
+		<%}%>
 		</tr>
 <%}
 %>
-	
-	
-	
 	</table>
 	
-
+<a href="survey.jsp">[설문]</a>
 
 </body>
 </html>

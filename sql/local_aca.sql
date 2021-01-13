@@ -188,9 +188,10 @@ from survey a order by a.no;
 
 
 
-select a.no, a.question, a.select1, a.select2, a.select3, a.select4, b.* 
+select a.no, a.question, a.select1, a.select2, a.select3, a.select4, b.c1, b.c2, b.c3, b.c4  
 from survey a,
-(select * from survey_answer pivot(count(no) for survey_answer in(1,2,3,4))) b 
+(select * from view_ans 
+pivot(count(*) for answer in('c1'as c1,'c2'as c2,'c3'as c3,'c4'as c4)) order by survey_no) b 
 where b.survey_no=a.no
 order by a.no;
 
@@ -206,8 +207,30 @@ pivot(count(*) for survey_answer in('1','2','3','4');
 select * from survey_answer 
 pivot(count(no) for survey_answer in(1,2,3,4)) order by survey_no;
 
+select survey_no, decode(survey_answer, 1, 'c1',2,'c2',3,'c3',4,'c4') from survey_answer;
 
-select * from survey_answer 
-pivot(count(no) for survey_answer in(1,2,3,4)) order by survey_no;
+select * from view_ans 
+pivot(count(*) for answer in('c1'as c1,'c2'as c2,'c3'as c3,'c4'as c4)) order by survey_no;
 
-select DECODE(to_char(survey_answer, 
+drop view view_ans;
+create or replace view view_ans
+as
+select survey_no, decode(survey_answer, 1, 'c1',2,'c2',3,'c3',4,'c4')answer from survey_answer;
+
+select * from view_ans;
+
+
+create or replace view view_ansCount
+as
+select * from (select survey_no, decode(survey_answer, 1, 'c1',2,'c2',3,'c3',4,'c4')answer from survey_answer) 
+pivot(count(*) for answer in('c1'as c1,'c2'as c2,'c3'as c3,'c4'as c4)) order by survey_no;
+
+select * from view_anscount;
+
+select a.no, a.question, a.select1, a.select2, a.select3, a.select4, b.c1, b.c2, b.c3, b.c4  
+from survey a, view_anscount b 
+where b.survey_no=a.no
+order by a.no;
+
+
+
