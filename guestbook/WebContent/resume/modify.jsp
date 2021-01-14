@@ -2,11 +2,16 @@
 <%@page import="resume.ResumeDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%request.setCharacterEncoding("utf-8"); %>
 <%
 	String no = request.getParameter("no");
+	
+	String pic = request.getParameter("pic");
 	ResumeDAO dao = new ResumeDAO();
 	ResumeDTO dto = dao.getSelect(no);
+	if(pic!=null) dto.setPic(pic);	
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -31,7 +36,7 @@
 			<table border="1" width="600">
 				<tr>
 					<td rowspan="3" width="100">
-					<img src="<%=request.getContextPath()%>/upload/img/<%=dto.getPic()%>" style="width: 100px; height:100px;">
+					<img src="<%=request.getContextPath()%>/upload/img/<%=dto.getPic()%>" id="curPic" style="width: 100px; height:100px;">
 					</td>
 					<td width="100">성명</td>
 					<td><%=dto.getName() %></td>
@@ -47,7 +52,7 @@
 				<tr>
 					<td align="center">
 					<label for="input-pic" id="picbutton">사진 변경</label>
-					<input type="file" name="pic" id="input-pic" style="display: none">
+					<input type="file" name="pic" id="input-pic" style="display: none" onchange="changePic();"/>
 					</td>
 					<td>주소</td>
 					<td><input type="text" name="address" value="<%=dto.getAddress() %>"></td>
@@ -110,8 +115,15 @@
 				</tr>
 			</table>
 			<input type="submit" value="수정하기">
-			<input type="button" value="이전으로" onclick="location.href='view.jsp?no=<%=no %>'">
+			<input type="button" value="이전으로" onclick="location.href='view.do?no=<%=no %>'">
 		</form>
 	</div>
 </body>
+<script>
+function changePic(){
+	//var path = 'c:/fakepath/';
+	//var newPic = document.getElementById('input-pic').value.substr(path.length);
+	//document.getElementById('curPic').value = newPic;
+}
+</script>
 </html>
