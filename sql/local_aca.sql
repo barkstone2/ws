@@ -232,5 +232,31 @@ from survey a, view_anscount b
 where b.survey_no=a.no
 order by a.no;
 
+/*
+21/01/14 방명록 테이블
+*/
+
+drop table guestbook;
+
+create table guestbook(
+no number not null,
+name nvarchar2(50) not null,
+email nvarchar2(50) not null,
+passwd nvarchar2(50) not null,
+content clob not null,
+write_date timestamp default current_timestamp
+);
+
+drop sequence seq_gBook;
+
+create sequence seq_gBook
+start with 1
+increment by 1
+nomaxvalue nocache;
+
+
+
+
+
 
 
