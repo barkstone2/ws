@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<h2>회원가입</h2>
+<form name="wForm">
+	아이디 : <input type="text" name="id"><br>
+	비밀번호 : <input type="text" name="pw"><br>
+	비밀번호확인 : <input type="text" name="pwc"><br>
+	이름 : <input type="text" name="name"><br>
+	주소 : <input type="text" name="addr"> [우편번호검색]<br>
+	기본주소 : <input type="text" name="addr2"><br>
+	상세주소 : <input type="text" name="addr3"><br>
+	<input type="button" value="가입하기" onclick="kkk();">
+</form>
+
+<script>
+function kkk(){
+	if(wForm.id.value==''){
+		alert('아이디를 입력하세요.');
+	}else if(wForm.pw.value==''){
+		alert('비밀번호를 입력하세요.');
+	}else if(wForm.pwc.value==''){
+		alert('비밀번호 확인을 입력하세요.');
+	}else if(wForm.name.value==''){
+		alert('이름을 입력하세요.');
+	}else if(wForm.addr.value==''){
+		alert('주소를 입력하세요.');
+	}else if(wForm.addr2.value==''){
+		alert('기본주소를 입력하세요.');
+	}else if(wForm.addr3.value==''){
+		alert('상세주소를 입력하세요.');
+	}
+}
+</script>
+
+</body>
+</html>
