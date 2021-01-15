@@ -201,9 +201,10 @@ identified by 1234;
 
 grant connect, resource, dba to aca;
 
+create user model2
+identified by 1234;
 
-
-
+grant connect, resource, dba to model2;
 
 
 
