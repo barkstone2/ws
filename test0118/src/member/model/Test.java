@@ -1,49 +1,38 @@
 package member.model;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.util.Arrays;
+
 public class Test {
 	public static void main(String[] args) {
-		int a[] = new int[1000000000];
-		int sw = 1;
 		
-		long startTime = System.currentTimeMillis();
+		byte[] inSrc = {0,1,2,3,4,5,6,7,8,9};
+		byte[] outSrc = null;
+		byte[] temp = new byte[4];
 		
-		int value = 300;
-		if(sw==1)
-			value = 100;
-		else if(sw==2)
-			value = 200;
+		ByteArrayInputStream input = null;
+		ByteArrayOutputStream output = null;
 		
-//		a = getValue(a, sw);
-//		for(int i=0; i<a.length; i++) 
-//			if(sw==1)
-//				a[i] = getValue(sw);
-//			else if(sw==2)
-//				a[i] = getValue(sw);
-//			else 
-//				a[i] = getValue(sw);
+		input = new ByteArrayInputStream(inSrc);
+		output = new ByteArrayOutputStream();
 		
-		for(int i=0; i<a.length; i++)
-			a[i] = value;
+		System.out.println("Input Source :"+Arrays.toString(inSrc));
 		
-		long endTime = System.currentTimeMillis();
-		System.out.println(endTime-startTime);
-	
+		try {
+			while(input.available() > 0) {
+				System.out.println(input.available());
+				input.read(temp);
+				output.write(temp);
+				outSrc = output.toByteArray();
+				printArrays(temp, outSrc);
+			}
+		}catch (Exception e) {}
 	}
 	
-	public static int[] getValue(int[] a, int sw){
-		int value = 300;
-		if(sw==1)
-			value = 100;
-		else if(sw==2)
-			value = 200;
-		for(int i=0; i<a.length; i++) 
-		if(sw==1)
-			a[i] = value;
-		else if(sw==2)
-			a[i] = value;
-		else 
-			a[i] = value;
-		return a;
+	static void printArrays(byte[] temp, byte[] outSrc) {
+		System.out.println("temp		  :"+Arrays.toString(temp));
+		System.out.println("Output Source :"+Arrays.toString(outSrc));
 	}
 	
 }
