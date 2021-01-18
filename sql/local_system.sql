@@ -207,6 +207,10 @@ identified by 1234;
 grant connect, resource, dba to model2;
 
 
+create user test0118
+identified by 1234;
+
+grant connect, resource, dba to test0118;
 
 
 
