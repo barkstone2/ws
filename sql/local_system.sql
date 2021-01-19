@@ -212,5 +212,8 @@ identified by 1234;
 
 grant connect, resource, dba to test0118;
 
+create user jspStudy
+identified by 1234;
 
+grant connect, resource, dba to jspStudy;
 

@@ -16,12 +16,16 @@ body, html{
 header{
 	width: 100%;
 	height: 20%;
-	background-color: yellow;
+	--background-color: yellow;
 	display: flex;
 	align-items: center;
+	border-bottom: 1px solid black;
+	min-height: 170px;
 }
 	.logo{
-		background-color: white;
+		margin-left: 20px;
+		border: 1px solid black;
+		--background-color: white;
 		width: 150px;
 		height: 150px;
 		min-width: 150px;
@@ -33,6 +37,7 @@ header{
 		display:flex;
 		justify-content: center;
 		align-items: center;
+		min-width: 1070px;
 	}
 	.menu {
 		display: flex;
@@ -45,37 +50,40 @@ header{
 		}
 		#mainMenu{
 			width: 70%;
-			background-color: green;
+			min-width:765px;
+			--background-color: green;
 		}
 		#userMenu{
-			width:30%;
-			background-color: blue;
+			width:310px;
+			max-width: 310px;
+			--background-color: blue;
 		}
 main{
 	width: 100%;
 	height: 60%;
-	background-color: gray;
+	--background-color: gray;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border-bottom: 1px solid black;
+	min-height:400px;
 }
 footer{
 	width: 100%;
 	height: 20%;
-	background-color: red;
+	--background-color: red;
 }
-
 </style>
 </head>
 <body>
-	
 	<header>
 		<jsp:include page="../include/inc_menu.jsp"></jsp:include>
 	</header>
-	
 	<main>
-		
 		<jsp:include page="${menu_gubun}"></jsp:include>
 		<%-- <c:choose>
-			<c:when test="${menu_gubun == 'index1'}">
-				<jsp:include page="./a.jsp"></jsp:include>
+			<c:when test="${menu_gubun == 'index'}">
+				<jsp:include page="../main/main_sub.jsp"></jsp:include>
 			</c:when>
 			<c:when test="${menu_gubun == 'index2'}">
 				<jsp:include page="./b.jsp"></jsp:include>
@@ -91,11 +99,6 @@ footer{
 		<c:if test="${menu_gubun != 'index'}">
 		<jsp:include page="./b.jsp"></jsp:include>
 		</c:if> --%>
-		${menu_gubun}<br>
-		
-		
-		${aaa}<br>
-		${bbb}<br>
 	</main>
 	
 	<footer>

@@ -22,12 +22,12 @@ public class IndexController extends HttpServlet {
 
 	protected void doProc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		request.setAttribute("menu_gubun", "./a.jsp");
-		request.setAttribute("aaa", "111");
-		request.setAttribute("bbb", "222");
+		
 		String path = request.getContextPath();
 		String url = request.getRequestURL().toString();
 		String page = "/main/main.jsp";
+		request.setAttribute("menu_gubun", "/main/main_sub.jsp");
+		
 		
 		RequestDispatcher rd = request.getRequestDispatcher(page);
 		rd.forward(request, response);
