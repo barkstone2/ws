@@ -1,3 +1,7 @@
+create user jspStudy
+identified by 1234;
+
+grant connect, resource, dba to jspStudy;
 
 create table member (
 no number not null,

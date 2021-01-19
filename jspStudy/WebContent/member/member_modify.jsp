@@ -103,9 +103,6 @@
 		<div>
 			<input type="button" value="수정하기" onclick="move('modify','','');">
 		</div>
-		<div>
-			<input type="button" value="돌아가기" onclick="move('view','','${dto.no}');">
-		</div>
 	</div>
 </form>
 <script>

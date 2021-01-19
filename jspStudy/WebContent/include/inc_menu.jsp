@@ -58,8 +58,8 @@
 							${cookName}님 환영합니다.
 						</div>
 						<div>
-							<a href="${path}/member_servlet/modify.do?no=${cookNo}">[회원정보수정]</a>
-							<a href="${path}/member_servlet/delete.do?no=${cookNo}">[회원탈퇴]</a>
+							<a href="${path}/member_servlet/modify.do">[회원정보수정]</a>
+							<a href="${path}/member_servlet/delete.do">[회원탈퇴]</a>
 							<a href="${path}/member_servlet/logout.do">[로그아웃]</a>
 						</div>
 					</div>

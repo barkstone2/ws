@@ -99,9 +99,6 @@
 		<div>
 			<input type="button" value="삭제하기" onclick="move('delete','','');">
 		</div>
-		<div>
-			<input type="button" value="돌아가기" onclick="move('view','','${dto.no}');">
-		</div>
 	</div>
 </form>
 <script>

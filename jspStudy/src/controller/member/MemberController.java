@@ -66,8 +66,7 @@ public class MemberController extends HttpServlet {
 			//response.sendRedirect(temp);
 			//return;
 		}else if(url.indexOf("login.do") != -1) {
-			int cookNo = session.getAttribute("cookNo")!=""?(Integer)session.getAttribute("cookNo"):0;
-			
+			int cookNo = session.getAttribute("cookNo")!=null?(Integer)session.getAttribute("cookNo"):0;
 			gubun = "/member/member_login.jsp";
 		}else if(url.indexOf("loginProc.do") != -1) {
 			dao = new MemberDAO();
@@ -113,9 +112,9 @@ public class MemberController extends HttpServlet {
 			//gubun = "/main/main_sub.jsp";
 		}else if(url.indexOf("view.do") != -1) {
 			dao = new MemberDAO();
-			int cookNo = session.getAttribute("cookNo")!=""?(Integer)session.getAttribute("cookNo"):0;
+			int cookNo = session.getAttribute("cookNo")!=null?(Integer)session.getAttribute("cookNo"):0;
 			String no_ = request.getParameter("no");
-			int no = no_!=""?Integer.parseInt(no_):0;
+			int no = no_!=null?Integer.parseInt(no_):0;
 			if(cookNo!=no) {
 				msg = "권한이 없습니다.";
 				reUrl = path + "/member_servlet/list.do";
@@ -127,40 +126,53 @@ public class MemberController extends HttpServlet {
 			}
 		}else if(url.indexOf("modify.do") != -1) {
 			dao = new MemberDAO();
-			int cookNo = session.getAttribute("cookNo")!=""?(Integer)session.getAttribute("cookNo"):0;
+			int cookNo = session.getAttribute("cookNo")!=null?(Integer)session.getAttribute("cookNo"):0;
 			String no_ = request.getParameter("no");
-			int no = no_!=""?Integer.parseInt(no_):0;
-			if(cookNo!=no) {
-				msg = "권한이 없습니다.";
-				reUrl = path + "/member_servlet/list.do";
-				page = "/message.jsp";
-			}else {
-				MemberDTO dto = dao.getView(no);
+			int no = no_!=null?Integer.parseInt(no_):0;
+			if(no==0&&cookNo!=0) {
+				MemberDTO dto = dao.getView(cookNo);
 				request.setAttribute("dto", dto);
 				gubun = "/member/member_modify.jsp";
+			}else {
+				if(cookNo!=no) {
+					msg = "권한이 없습니다.";
+					reUrl = path + "/member_servlet/list.do";
+					page = "/message.jsp";
+				}else {
+					MemberDTO dto = dao.getView(no);
+					request.setAttribute("dto", dto);
+					gubun = "/member/member_modify.jsp";
+				}
 			}
+			
 		}else if(url.indexOf("delete.do") != -1) {
 			dao = new MemberDAO();
-			int cookNo = session.getAttribute("cookNo")!=""?(Integer)session.getAttribute("cookNo"):0;
+			int cookNo = session.getAttribute("cookNo")!=null?(Integer)session.getAttribute("cookNo"):0;
 			String no_ = request.getParameter("no");
-			int no = no_!=""?Integer.parseInt(no_):0;
-			if(cookNo!=no) {
-				msg = "권한이 없습니다.";
-				reUrl = path + "/member_servlet/list.do";
-				page = "/message.jsp";
-			}else {
-				MemberDTO dto = dao.getView(no);
+			int no = no_!=null?Integer.parseInt(no_):0;
+			if(no==0&&cookNo!=0) {
+				MemberDTO dto = dao.getView(cookNo);
 				request.setAttribute("dto", dto);
 				gubun = "/member/member_delete.jsp";
+			}else {
+				if(cookNo!=no) {
+					msg = "권한이 없습니다.";
+					reUrl = path + "/member_servlet/list.do";
+					page = "/message.jsp";
+				}else {
+					MemberDTO dto = dao.getView(no);
+					request.setAttribute("dto", dto);
+					gubun = "/member/member_delete.jsp";
+				}
 			}
 		}else if(url.indexOf("modifyProc.do") != -1) {
 			dao = new MemberDAO();
 			String no_ = request.getParameter("no");
-			int no = no_!=""?Integer.parseInt(no_):0;
+			int no = no_!=null?Integer.parseInt(no_):0;
 			String pw = request.getParameter("pw");
 			String gender = request.getParameter("gender");
 			String bornYear_ = request.getParameter("bornYear");
-			int bornYear = bornYear_!=""?Integer.parseInt(bornYear_):0;
+			int bornYear = bornYear_!=null?Integer.parseInt(bornYear_):0;
 			MemberDTO dto = new MemberDTO();
 			dto.setBornYear(bornYear);
 			dto.setGender(gender);
@@ -178,7 +190,7 @@ public class MemberController extends HttpServlet {
 		}else if(url.indexOf("deleteProc.do") != -1) {
 			dao = new MemberDAO();
 			String no_ = request.getParameter("no");
-			int no = no_!=""?Integer.parseInt(no_):0;
+			int no = no_!=null?Integer.parseInt(no_):0;
 			String pw = request.getParameter("pw");
 			MemberDTO dto = new MemberDTO();
 			dto.setNo(no);
