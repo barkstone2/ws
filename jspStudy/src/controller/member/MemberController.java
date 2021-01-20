@@ -3,7 +3,6 @@ package controller.member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -55,39 +54,49 @@ public class MemberController extends HttpServlet {
 			String bAddr = request.getParameter("bAddr");
 			String sAddr = request.getParameter("sAddr");
 			String refAddr = request.getParameter("refAddr");
+			int idCheck = dao.idCheck(id);
+			reUrl = "/member_servlet/chuga.do";
 			
-			int idCheck = dao.idCheck(id); 
-			if(idCheck>0) {
+			if(id.contains(" ")||id.contains("\t")) {
+				msg = "아이디에 공백을 입력할 수 없습니다.";
+			}else if(pw.contains(" ")||id.contains("\t")) {
+				msg = "비밀번호에 공백을 입력할 수 없습니다.";
+			}else if(pwc.contains(" ")||id.contains("\t")) {
+				msg = "비밀번호 확인에 공백을 입력할 수 없습니다.";
+			}else if(!(gender.equals("남자")||gender.equals("여자"))) {
+				msg = "잘못된 성별 값입니다.";
+			}else if(!pw.equals(pwc)) {
+				msg = "비밀번호가 서로 일치하지 않습니다.";
+			}else if(idCheck>0) {
 				msg = "이미 등록된 아이디입니다.";
-				reUrl = path + "/member_servlet/chuga.do";
-				page = "/message.jsp";
-				gubun = "/main/main_sub.jsp";
 			}else {
 				dao = new MemberDAO();
 				MemberDTO dto = new MemberDTO(id, pw, name, gender, bornYear, postcode, bAddr, sAddr, refAddr);
 				int result = dao.setInsert(dto);
 				//String temp = "";
 				if(result>0) {
+					int cookNo = session.getAttribute("cookNo")!=null?(Integer)session.getAttribute("cookNo"):0;
+					if(cookNo!=0) {
+						reUrl = "/index.do";
+					}else {
+						reUrl = "/member_servlet/login.do";
+					}
 					//temp = path+"/member_servlet/login.do";
 					msg = "회원가입 성공";
-					reUrl = path + "/member_servlet/login.do";
-					page = "/message.jsp";
-					gubun = "/main/main_sub.jsp";
 				}else {
 					//temp = path+"/member_servlet/chuga.do";
 					msg = "회원가입 실패";
-					reUrl = path + "/member_servlet/chuga.do";
-					gubun = "/member/member_chuga.jsp";
-					page = "/message.jsp";
+					reUrl = "/member_servlet/chuga.do";
 				}
 			}
+			page = "/message.jsp";
 			//response.sendRedirect(temp);
 			//return;
 		}else if(url.indexOf("login.do") != -1) {//로그인 페이지 이동
 			int cookNo = session.getAttribute("cookNo")!=null?(Integer)session.getAttribute("cookNo"):0;
 			if(cookNo!=0) {
 				msg = "이미 로그인되어 있습니다.";
-				reUrl = path + "/index.do";
+				reUrl = "/index.do";
 				page = "/message.jsp";
 			}else {
 				gubun = "/member/member_login.jsp";
@@ -103,26 +112,24 @@ public class MemberController extends HttpServlet {
 			//String temp = "";
 			if(result==1) {
 				msg = "로그인 성공";
-				reUrl = path + "/index.do";
-				page = "/message.jsp";
+				reUrl = "/index.do";
 				session.setAttribute("cookId", id);
 				session.setAttribute("cookNo", dto.getNo());
 				session.setAttribute("cookName", dto.getName());
 				if(id.equals("admin")) {
 					session.setAttribute("adminCheck", 1);
 				}
-				//temp = path + "/index.do";
+				//temp = "/index.do";
 			}else if(result==0) {
 				msg = "등록되지 않은 ID입니다.";
-				reUrl = path + "/member_servlet/login.do";
-				page = "/message.jsp";
+				reUrl = "/member_servlet/login.do";
 				//temp = path+"/member_servlet/login.do";
 			}else {
 				msg = "비밀번호가 일치하지 않습니다.";
-				reUrl = path + "/member_servlet/login.do";
-				page = "/message.jsp";
+				reUrl = "/member_servlet/login.do";
 				//temp = path+"/member_servlet/login.do";
 			}
+			page = "/message.jsp";
 			//response.sendRedirect(temp);
 			//return;
 		}else if(url.indexOf("list.do") != -1) {//리스트 페이지 이동
@@ -133,7 +140,7 @@ public class MemberController extends HttpServlet {
 		}else if(url.indexOf("logout.do") != -1) {//로그아웃 처리
 			session.invalidate();
 			msg = "로그아웃되었습니다.";
-			reUrl = path + "/index.do";
+			reUrl = "/index.do";
 			page = "/message.jsp";
 			//gubun = "/main/main_sub.jsp";
 		}else if(url.indexOf("view.do") != -1) {//회원 상세보기 페이지 이동
@@ -144,7 +151,7 @@ public class MemberController extends HttpServlet {
 			int no = no_!=null?Integer.parseInt(no_):0;
 			if(cookNo!=no&&adminCheck==0) {
 				msg = "권한이 없습니다.";
-				reUrl = path + "/member_servlet/list.do";
+				reUrl = "/member_servlet/list.do";
 				page = "/message.jsp";
 			}else {
 				MemberDTO dto = dao.getView(no);
@@ -164,7 +171,7 @@ public class MemberController extends HttpServlet {
 			}else {
 				if(cookNo!=no&&adminCheck==0) {
 					msg = "권한이 없습니다.";
-					reUrl = path + "/member_servlet/list.do";
+					reUrl = "/member_servlet/list.do";
 					page = "/message.jsp";
 				}else {
 					MemberDTO dto = dao.getView(no);
@@ -185,7 +192,7 @@ public class MemberController extends HttpServlet {
 			}else {
 				if(cookNo!=no&&adminCheck==0) {
 					msg = "권한이 없습니다.";
-					reUrl = path + "/member_servlet/list.do";
+					reUrl = "/member_servlet/list.do";
 					page = "/message.jsp";
 				}else {
 					MemberDTO dto = dao.getView(no);
@@ -222,16 +229,16 @@ public class MemberController extends HttpServlet {
 			if(result>0) {
 				msg = "정상적으로 수정됐습니다.";
 				if(adminCheck==1) {
-					reUrl = path + "/member_servlet/view.do?no="+no;
+					reUrl = "/member_servlet/view.do?no="+no;
 				}else {
-					reUrl = path + "/member_servlet/modify.do";
+					reUrl = "/member_servlet/modify.do";
 				}
 			}else {
 				msg = "비밀번호가 일치하지 않습니다.";
 				if(adminCheck==1) {
-					reUrl = path + "/member_servlet/modify.do?no="+no;
+					reUrl = "/member_servlet/modify.do?no="+no;
 				}else {
-					reUrl = path + "/member_servlet/modify.do";
+					reUrl = "/member_servlet/modify.do";
 				}
 			}
 			page = "/message.jsp";
@@ -248,17 +255,17 @@ public class MemberController extends HttpServlet {
 			if(result>0) {
 				msg = "정상적으로 삭제됐습니다.";
 				if(adminCheck==1) {
-					reUrl = path + "/member_servlet/list.do";
+					reUrl = "/member_servlet/list.do";
 				}else {
 					session.invalidate();
-					reUrl = path + "/index.do";
+					reUrl = "/index.do";
 				}
 			}else {
 				msg = "비밀번호가 일치하지 않습니다.";
 				if(adminCheck==1) {
-					reUrl = path + "/member_servlet/delete.do?no="+no;
+					reUrl = "/member_servlet/delete.do?no="+no;
 				}else {
-					reUrl = path + "/member_servlet/delete.do";
+					reUrl = "/member_servlet/delete.do";
 				}
 			}
 			page = "/message.jsp";
@@ -270,8 +277,7 @@ public class MemberController extends HttpServlet {
 			out.println(result);
 			return;
 		}else if(url.indexOf("id_check_win.do") != -1) {
-			response.sendRedirect(path+"/member/id_check.jsp");
-			return;
+			page = "/member/id_check.jsp";
 		}else if(url.indexOf("id_check_win_open_Proc.do") != -1) {
 			dao = new MemberDAO();
 			String inputId = request.getParameter("id");
@@ -287,7 +293,17 @@ public class MemberController extends HttpServlet {
 			page = "/member/id_check.jsp";
 		}
 		
-		request.setAttribute("reUrl", reUrl);
+		/*
+		 * 입력값 invalid check.
+		 * id - 공백체크, 영어 알파벳(소문자)인지 체크
+		 * pw - pwc와 같은지 체크, 공백 체크, 영어, 숫자만 가능.
+		 * pwc - 위와 동일
+		 * name - 공백 체크
+		 * bornYear - 숫자체크, 공백 체크.
+		 */
+		
+		
+		request.setAttribute("reUrl", path+reUrl);
 		request.setAttribute("msg", msg);
 		request.setAttribute("menu_gubun", gubun);
 		RequestDispatcher rd = request.getRequestDispatcher(page);
