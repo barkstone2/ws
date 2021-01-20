@@ -6,6 +6,8 @@
 	display:flex;
 	margin-bottom: 5px;
 	border-bottom: 1px solid black;
+	align-items: center;
+	height:30px;
 }
 .row > :nth-child(2){
 	margin-left: 15px;

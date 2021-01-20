@@ -18,7 +18,7 @@
 					</a>
 				</div>
 				<div>
-					<a href="#">
+					<a href="${path}/memo_servlet/memo.do">
 						메모장
 					</a>
 				</div>

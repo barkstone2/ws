@@ -5,53 +5,50 @@
 #listLabel{
 	display:flex;
 	justify-content: center;
+	align-items: center;
 }
 #mList{
-	width:1000px;
+	width:900px;
 	height:400px;
 }
 .mlistcon{
 	display:flex;
 	justify-content: center;
+	align-items: center;
 }
 #formTitle {
 	text-align: center;
 }
 .mlistcon, #listLabel {
+	border-bottom: 1px solid black;
+	height:30px;
 	text-align: center;
 }
 .column1{
 	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	width:60px;
 }
 .column2{
 	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	width:120px;
 }
 .column3{
 	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	width:130px;
 }
 .column4{
 	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	width:120px;
 }
 .column5{
 	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	width:100px;
 }
 .column6{
 	border-right: 1px solid black;
-	border-bottom: 1px solid black;
 	width:120px;
 }
 .column7{
-	border-bottom: 1px solid black;
 	width:260px;
 }
 #memcount{

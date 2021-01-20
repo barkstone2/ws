@@ -22,14 +22,19 @@ public class MemberDAO {
 	public int setInsert(MemberDTO dto) {
 		int result=0;
 		try {
-			String sql = "insert into member (no, id, pw, name, gender, bornYear, regi_date) "
-					+ "values(seq_member.nextval, ?,?,?,?,?,default)";
+			String sql = "insert into member "
+					+ "(no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr) "
+					+ "values(seq_member.nextval, ?,?,?,?,?,default,?,?,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getId());
 			pstmt.setString(2, dto.getPw());
 			pstmt.setString(3, dto.getName());
 			pstmt.setString(4, dto.getGender());
 			pstmt.setInt(5, dto.getBornYear());
+			pstmt.setString(6, dto.getPostcode());
+			pstmt.setString(7, dto.getbAddr());
+			pstmt.setString(8, dto.getsAddr());
+			pstmt.setString(9, dto.getRefAddr());
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -43,7 +48,9 @@ public class MemberDAO {
 	public int getLogin(String id, String pw) {
 		int result = 0; // 등록되지 않은 ID
 		try {
-			String sql = "select * from member where id=? and pw=?";
+			String basicSql = "select no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr "
+					+ "from member";
+			String sql = basicSql+ " where id=? and pw=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			pstmt.setString(2, pw);
@@ -51,7 +58,7 @@ public class MemberDAO {
 			if(rs.next()) {
 				result = 1; // 로그인 성공
 			}else {
-				sql = "select * from member where id=?";
+				sql = basicSql +" where id=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, id);
 				rs = pstmt.executeQuery();
@@ -70,7 +77,8 @@ public class MemberDAO {
 	public MemberDTO getSelect(String id) {
 		MemberDTO dto = null;
 		try {
-			String sql = "select * from member where id=?";
+			String sql = "select no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr "
+					+ "from member where id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
 			rs = pstmt.executeQuery();
@@ -82,7 +90,11 @@ public class MemberDAO {
 						rs.getString("name"), 
 						rs.getString("gender"), 
 						rs.getInt("bornYear"), 
-						rs.getTimestamp("regi_date")
+						rs.getTimestamp("regi_date"),
+						rs.getString("postcode"),
+						rs.getString("bAddr"),
+						rs.getString("sAddr"),
+						rs.getString("refAddr")
 						);
 			}
 		}catch (Exception e) {
@@ -96,7 +108,8 @@ public class MemberDAO {
 	public MemberDTO getView(int no) {
 		MemberDTO dto = null;
 		try {
-			String sql = "select * from member where no=?";
+			String sql = "select no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr "
+					+ "from member where no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
@@ -108,7 +121,11 @@ public class MemberDAO {
 						rs.getString("name"), 
 						rs.getString("gender"), 
 						rs.getInt("bornYear"), 
-						rs.getTimestamp("regi_date")
+						rs.getTimestamp("regi_date"),
+						rs.getString("postcode"),
+						rs.getString("bAddr"),
+						rs.getString("sAddr"),
+						rs.getString("refAddr")
 						);
 			}
 		}catch (Exception e) {
@@ -118,7 +135,6 @@ public class MemberDAO {
 		}
 		return dto;
 	}
-	
 	
 	public ArrayList<MemberDTO> getListAll(){
 		ArrayList<MemberDTO> list = new ArrayList<>();
@@ -149,12 +165,17 @@ public class MemberDAO {
 	public int setUpdate(MemberDTO dto) {
 		int result = 0; // 비밀번호 불일치
 		try {
-			String sql = "update member set gender=?, bornYear=? where no=? and pw=?";
+			String sql = "update member set gender=?, bornYear=?, postcode=?, bAddr=?, sAddr=?, refAddr=?"
+					+ " where no=? and pw=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, dto.getGender());
 			pstmt.setInt(2, dto.getBornYear());
-			pstmt.setInt(3, dto.getNo());
-			pstmt.setString(4, dto.getPw());
+			pstmt.setString(3, dto.getPostcode());
+			pstmt.setString(4, dto.getbAddr());
+			pstmt.setString(5, dto.getsAddr());
+			pstmt.setString(6, dto.getRefAddr());
+			pstmt.setInt(7, dto.getNo());
+			pstmt.setString(8, dto.getPw());
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -180,5 +201,22 @@ public class MemberDAO {
 		return result;
 	}
 	
+	public int idCheck(String id) {
+		int result = 0;
+		try {
+			String sql = "select id from member where id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = 1;
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
 	
 }

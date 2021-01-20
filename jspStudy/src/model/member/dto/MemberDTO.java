@@ -11,18 +11,25 @@ public class MemberDTO {
 	private String gender;
 	private int bornYear;
 	private Timestamp regi_date;
+	private String postcode;
+	private String bAddr;
+	private String sAddr;
+	private String refAddr;
 	
 	public MemberDTO() {
 	}
-
-	public MemberDTO(String id, String pw, String pwc,String name, String gender, int bornYear) {
-		super();
+	
+	public MemberDTO(String id, String pw, String name, String gender, int bornYear, String postcode,
+			String bAddr, String sAddr, String refAddr) {
 		this.id = id;
 		this.pw = pw;
-		this.pwc = pwc;
 		this.name = name;
 		this.gender = gender;
 		this.bornYear = bornYear;
+		this.postcode = postcode;
+		this.bAddr = bAddr;
+		this.sAddr = sAddr;
+		this.refAddr = refAddr;
 	}
 
 	public MemberDTO(int no, String id, String pw, String name, String gender, int bornYear,
@@ -34,6 +41,53 @@ public class MemberDTO {
 		this.gender = gender;
 		this.bornYear = bornYear;
 		this.regi_date = regi_date;
+	}
+
+	public MemberDTO(int no, String id, String pw, String name, String gender, int bornYear,
+			Timestamp regi_date, String postcode, String bAddr, String sAddr, String refAddr) {
+		this.no = no;
+		this.id = id;
+		this.pw = pw;
+		this.name = name;
+		this.gender = gender;
+		this.bornYear = bornYear;
+		this.regi_date = regi_date;
+		this.postcode = postcode;
+		this.bAddr = bAddr;
+		this.sAddr = sAddr;
+		this.refAddr = refAddr;
+	}
+
+	public String getPostcode() {
+		return postcode;
+	}
+
+	public void setPostcode(String postcode) {
+		this.postcode = postcode;
+	}
+
+	public String getbAddr() {
+		return bAddr;
+	}
+
+	public void setbAddr(String bAddr) {
+		this.bAddr = bAddr;
+	}
+
+	public String getsAddr() {
+		return sAddr;
+	}
+
+	public void setsAddr(String sAddr) {
+		this.sAddr = sAddr;
+	}
+
+	public String getRefAddr() {
+		return refAddr;
+	}
+
+	public void setRefAddr(String refAddr) {
+		this.refAddr = refAddr;
 	}
 
 	public int getNo() {
