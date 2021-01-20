@@ -3,6 +3,7 @@ package controller.member;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -57,18 +58,20 @@ public class MemberController extends HttpServlet {
 			int idCheck = dao.idCheck(id);
 			reUrl = "/member_servlet/chuga.do";
 			
-			if(id.contains(" ")||id.contains("\t")) {
-				msg = "아이디에 공백을 입력할 수 없습니다.";
-			}else if(pw.contains(" ")||id.contains("\t")) {
-				msg = "비밀번호에 공백을 입력할 수 없습니다.";
-			}else if(pwc.contains(" ")||id.contains("\t")) {
-				msg = "비밀번호 확인에 공백을 입력할 수 없습니다.";
+			if(Pattern.matches("^[^0-9a-z]*$", id)) {
+				msg = "아이디를 잘못 입력하셨습니다. 다시 확인해주세요.";
+			}else if(Pattern.matches("^[^0-9a-z]*$", pw)) {
+				msg = "비밀번호를 잘못 입력하셨습니다. 다시 확인해주세요.";
+			}else if(Pattern.matches("^[^0-9a-z]*$", pwc)) {
+				msg = "비밀번호 확인을 잘못 입력하셨습니다. 다시 확인해주세요.";
 			}else if(!(gender.equals("남자")||gender.equals("여자"))) {
 				msg = "잘못된 성별 값입니다.";
 			}else if(!pw.equals(pwc)) {
 				msg = "비밀번호가 서로 일치하지 않습니다.";
 			}else if(idCheck>0) {
 				msg = "이미 등록된 아이디입니다.";
+			}else if(!Pattern.matches("\\d{4}$", bornYear_)){
+				msg = "태어난 년도를 잘못 입력하셨습니다. 다시 확인해주세요.";
 			}else {
 				dao = new MemberDAO();
 				MemberDTO dto = new MemberDTO(id, pw, name, gender, bornYear, postcode, bAddr, sAddr, refAddr);
