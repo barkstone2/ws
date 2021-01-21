@@ -19,12 +19,15 @@ primary key(id),
 unique(no)
 );
 
-alter table member add(postcode nvarchar2(50) not null);
+alter table member add(postcode nvarchar2(50) default 0 not null);
+alter table member add(bAddr nvarchar2(100) default 0 not null);
+alter table member add(sAddr nvarchar2(100) default 0 not null);
+alter table member add(refAddr nvarchar2(100) default 0 not null);
 
 create sequence seq_member;
 select * from member;
 
-drop table memo;
+
 create table memo(
 no number not null,
 id nvarchar2(50) not null,
