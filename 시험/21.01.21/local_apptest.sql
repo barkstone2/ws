@@ -14,7 +14,3 @@ insert into member values
 ('kim', '0987', to_date('2020-07-01 13:00:00', 'YYYY-MM-DD HH24:MI:SS'));
 
 commit;
-
-select * from member where id='hong' and passwd='1234';
-select id, passwd, changeDate from member where id='hong' and passwd='1234';
-select * from member where id='hong';

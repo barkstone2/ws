@@ -13,7 +13,7 @@
 	if(!Pattern.matches(pattern, passwd)){
 		out.println("<script>alert('비밀번호에는 숫자와 영어 소문자만 입력할 수 있습니다.\\n다시 입력하세요.');location.href='change.jsp';</script>");
 	}else if(!Pattern.matches(pattern, passwdChk)){
-		out.println("<script>alert('비밀번호에는 숫자와 영어 소문자만 입력할 수 있습니다.\\n다시 입력하세요.');location.href='change.jsp';</script>");
+		out.println("<script>alert('비밀번호 확인에는 숫자와 영어 소문자만 입력할 수 있습니다.\\n다시 입력하세요.');location.href='change.jsp';</script>");
 	}else if(!passwd.equals(passwdChk)){
 		out.println("<script>alert('비밀번호가 일치하지 않습니다.');location.href='change.jsp';</script>");
 	}else{

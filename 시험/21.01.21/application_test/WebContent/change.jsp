@@ -15,7 +15,9 @@
 <title>비밀번호 수정</title>
 </head>
 <body>
-	<h2><%=cookId %>님 환영합니다. <a href="#">[로그아웃]</a></h2>
+	<h2>
+		<%=cookId %>님 환영합니다. <a href="logout.jsp">[로그아웃]</a>
+	</h2>
 	<h2>비밀번호 수정 페이지입니다.</h2>
 	<form name="changeForm" method="post" action="changeProc.jsp">
 		<table border="1" width="400">
