@@ -3,46 +3,53 @@
 <%@include file="../include/inc_header.jsp" %>
 		<div class="logo">
 			<img src="">${path}
-			${menu_gubun}
+			${menu_gubun}<br>
+			<%-- <c:set var="aaa" value="010-1111-2222"/>
+			${fn:length(aaa)}<br>
+			${fn:substring(aaa,0,3)}<br>
+			${fn:substring(aaa,4,8)}<br>
+			${fn:substring(aaa,9,13)}<br> --%>
+			${fn:indexOf(fn:substringAfter(menu_gubun,'/'),'/')} /
+			${fn:substringBefore(fn:substringAfter(menu_gubun,'/'),'/')}
 		</div>
 		<div id="menu">
 			<nav id="mainMenu" class="menu">
-				<div>
+				<div id="menuMove_main">
 					<a href="${path}">
 						Home
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_member">
 					<a href="${path}/member_servlet/list.do">
 						회원관리
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_memo">
 					<a href="${path}/memo_servlet/memo.do">
 						메모장
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_guestbook">
 					<a href="#">
 						방명록
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_survey">
 					<a href="#">
 						설문조사
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_board">
 					<a href="#">
 						게시판
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_shop">
 					<a href="#">
 						쇼핑몰
 					</a>
 				</div>
-				<div>
+				<div id="menuMove_admin">
 					<a href="#">
 						관리자
 					</a>
@@ -92,4 +99,28 @@ if(cookId==''){
 	document.getElementById('yeslogin').style.display='block';
 	document.getElementById('nologin').style.display='none';
 }
+</script>
+
+<script>
+var selectedMenu = '${fn:substringBefore(fn:substringAfter(menu_gubun,'/'),'/')}';
+var toChangeDivId = 'menuMove_'+selectedMenu;
+document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+/* 
+if(selectedMenu.indexOf('member')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('memo')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('guestbook')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('survey')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('board')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('shop')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('admin')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+}else if(selectedMenu.indexOf('main')!=-1){
+	document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
+} */
 </script>
