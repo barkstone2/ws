@@ -122,13 +122,13 @@
 	</div>
 	<div id="btn">
 		<div>
-			<input type="button" value="수정하기" onclick="move('modify','','${dto.no}');">
+			<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${dto.no}');">
 		</div>
 		<div>
-			<input type="button" value="삭제하기" onclick="move('delete','','${dto.no}');">
+			<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${dto.no}');">
 		</div>
 		<div>
-			<input type="button" value="목록으로" onclick="move('list','','');">
+			<input type="button" value="목록으로" onclick="move('list','${pageNumber}','');">
 		</div>
 	</div>
 </div>

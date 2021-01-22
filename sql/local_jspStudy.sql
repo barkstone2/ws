@@ -40,3 +40,10 @@ create sequence seq_memo;
 
 
 select id from member where id='test';
+
+select * from 
+(select rownum rn, a.* from 
+(select * from member order by no desc) a) where rn between 2 and 4;
+
+select * from memo order by no desc;
+commit;

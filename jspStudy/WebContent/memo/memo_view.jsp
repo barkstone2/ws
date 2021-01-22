@@ -38,11 +38,11 @@
 
 <div style="width:400px;">
 	<div id="formTitle">
-		<h2>회원정보 상세보기</h2>
+		<h2>메모 상세보기</h2>
 	</div>
 	<div class="row">
 		<div class="label">
-			회원번호
+			순번
 		</div>
 		<div>
 			${dto.no}
@@ -50,7 +50,7 @@
 	</div>
 	<div class="row">
 		<div class="label">
-			아이디
+			작성자
 		</div>
 		<div>
 			${dto.id}
@@ -58,88 +58,28 @@
 	</div>
 	<div class="row">
 		<div class="label">
-			비밀번호
+			내용
 		</div>
 		<div>
-			${dto.pw}
+			${dto.content}
 		</div>
 	</div>
 	<div class="row">
 		<div class="label">
-			이름
-		</div>
-		<div>
-			${dto.name}
-		</div>
-	</div>
-	<div class="row">
-		<div class="label">
-			성별
-		</div>
-		<div>
-			${dto.gender}
-		</div>
-	</div>
-	<div class="row">
-		<div class="label">
-			태어난년도
-		</div>
-		<div>
-			${dto.bornYear}
-		</div>
-	</div>
-	<div class="row">
-		<div class="label">
-			가입일
+			작성일
 		</div>
 		<div>
 			${dto.regi_date}
 		</div>
 	</div>
-	<div class="row">
-		<div class="label">
-			우편번호
-		</div>
-		<div>
-			${dto.postcode}
-		</div>
-	</div>
-	<div class="row">
-		<div class="label">
-			기본주소
-		</div>
-		<div>
-			${dto.bAddr}
-		</div>
-	</div>
-	<div class="row">
-		<div class="label">
-			상세주소
-		</div>
-		<div>
-			${dto.sAddr}
-		</div>
-	</div>
-	<div id="btn">
-		<div>
-			<input type="button" value="수정하기" onclick="move('modify','','${dto.no}');">
-		</div>
-		<div>
-			<input type="button" value="삭제하기" onclick="move('delete','','${dto.no}');">
-		</div>
-		<div>
-			<input type="button" value="목록으로" onclick="move('list','','');">
-		</div>
+	<div>
+		<input type="button" value="목록으로" onclick="move('list','${pageNumber}','');">
 	</div>
 </div>
 <script>
 function move(value1, value2, value3){
 	if(value1=='list'){
-		location.href='${path}/member_servlet/list.do?pageNumber='+value2;
-	}else if(value1=='modify'){
-		location.href='${path}/member_servlet/modify.do?no='+value3;
-	}else if(value1=='delete'){
-		location.href='${path}/member_servlet/delete.do?no='+value3;
+		location.href='${path}/memo_servlet/memo.do?pageNumber='+value2;
 	}
 }
 </script>

@@ -161,6 +161,36 @@ public class MemberDAO {
 		}
 		return list;
 	}
+	public ArrayList<MemberDTO> getListAll2(int startRecord, int endRecord){
+		ArrayList<MemberDTO> list = new ArrayList<>();
+		String basicSql = "select no, id, pw, name, gender, bornYear, regi_date from member order by no desc";
+		try {
+			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where rn between ? and ?"; 
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startRecord);
+			pstmt.setInt(2, endRecord);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				MemberDTO dto = new MemberDTO(
+						rs.getInt("no"),
+						rs.getString("id"),
+						rs.getString("pw"),
+						rs.getString("name"),
+						rs.getString("gender"),
+						rs.getInt("bornYear"),
+						rs.getTimestamp("regi_date")
+						);
+				list.add(dto);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return list;
+	}
+	
+	
 	
 	public int setUpdate(MemberDTO dto) {
 		int result = 0; // 비밀번호 불일치
@@ -218,5 +248,21 @@ public class MemberDAO {
 		}
 		return result;
 	}
+
+	public int getTotalCount() {
+		int result = 0;
+		try {
+			String sql = "select count(*) from member";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
 	
 }

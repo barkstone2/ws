@@ -39,7 +39,8 @@
 }
 #mList{
 	width:700px;
-	height:200px;
+	height:400px;
+	min-height: 400px;
 }
 .mlistcon{
 	display:flex;
@@ -81,6 +82,14 @@
 #btn > div {
 	padding: 10px;
 }
+#pager {
+	--display:flex;
+	justify-content: center;
+	padding: 10px;
+}
+#pager > div{
+	padding: 5px;
+}
 </style>
 <div>
 	<form name="regForm" method="post" action="${path}/memo_servlet/memoProc.do" style="width:700px;">
@@ -107,7 +116,7 @@
 	</form>
 	<div id="mList">
 		<div id="memcount">
-			* ${list.size()}개의 메모가 존재합니다.
+			* ${totalConCount}개의 메모가 존재합니다.
 		</div>
 		<div id="listLabel">
 			<div class="column1">
@@ -123,7 +132,7 @@
 				작성일
 			</div>
 		</div>
-	<c:if test="${list.size()==0}">
+	<c:if test="${totalConCount==0}">
 		<div style="text-align:center;">
 			등록된 메모가 없습니다.
 		</div>
@@ -134,16 +143,45 @@
 				${dto.no}
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','','${dto.no}');">${dto.id}</a>
+				${dto.id}
 			</div>
 			<div class="column3">
-				${dto.content}
+				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');">${dto.content}</a>
 			</div>
 			<div class="column4">
 				${dto.regi_date}
 			</div>
 		</div>
 	</c:forEach>
+		<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
+			<div><a href="#" onclick="move('list','1','');">[첫페이지]</a></div>
+			<c:if test="${startPage>pageNavLength}">
+				<div><a href="#" onclick="move('list','${startPage-pageNavLength}','');">[이전${pageNavLength}개]</a></div>
+			</c:if>
+			<c:if test="${startPage<=pageNavLength}">
+				<div>[이전${pageNavLength}개]</div>
+			</c:if>
+			<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
+				<c:if test="${i==pageNumber}">
+					<div>[${i}]</div>
+				</c:if>
+				<c:if test="${i!=pageNumber}">
+					<div><a href="#" onclick="move('list','${i}','');">${i}</a></div>
+				</c:if>
+			</c:forEach>
+			<c:if test="${lastPage<totalPage}">
+				<div><a href="#" onclick="move('list','${startPage+pageNavLength}','');">[다음${pageNavLength}개]</a></div>
+			</c:if>
+			<c:if test="${lastPage>=totalPage}">
+				<div>[다음${pageNavLength}개]</div>
+			</c:if>
+			<div><a href="#" onclick="move('list','${totalPage}','');">[끝페이지]</a></div>
+			<div style="display:none;" id="pagerInfo">
+				conPerPage:${conPerPage} / pageNavLength:${pageNavLength} / totalConCount:${totalConCount}
+				/ jj:${jj} / startRecord:${startRecord} <br>
+				endRecord:${endRecord} / totalPage:${totalPage} / startPage:${startPage} / lastPage:${lastPage} / pageNumber:${pageNumber} 
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -153,6 +191,13 @@
 function reg(){
 	if(confirm('등록하시겠습니까?')){
 		regForm.submit();
+	}
+}
+function move(value1, value2, value3){
+	if(value1=='list'){
+		location.href='${path}/memo_servlet/memo.do?pageNumber='+value2;
+	}else if(value1=='view'){
+		location.href='${path}/memo_servlet/memo_view.do?pageNumber='+value2+'&no='+value3;
 	}
 }
 </script>

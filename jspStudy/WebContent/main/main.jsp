@@ -20,7 +20,7 @@ header{
 	display: flex;
 	align-items: center;
 	border-bottom: 1px solid black;
-	min-height: 170px;
+	min-height: 190px;
 }
 	.logo{
 		margin-left: 20px;
@@ -66,7 +66,7 @@ main{
 	justify-content: center;
 	align-items: center;
 	border-bottom: 1px solid black;
-	min-height:400px;
+	min-height:550px;
 }
 footer{
 	width: 100%;

@@ -61,11 +61,14 @@ public class MemoDAO {
 		return dto;
 	}
 	
-	public ArrayList<MemoDTO> getListAll(){
+	public ArrayList<MemoDTO> getListAll(int startRecord, int endRecord){
 		ArrayList<MemoDTO> list = new ArrayList<>();
 		try {
-			String sql = "select no, id, content, regi_date from memo order by no";
+			String basicSql = "select no, id, content, regi_date from memo order by no desc";
+			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where rn between ? and ?"; 
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, startRecord);
+			pstmt.setInt(2, endRecord);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				MemoDTO dto = new MemoDTO(
@@ -82,6 +85,21 @@ public class MemoDAO {
 			db.quitConn(rs, pstmt, conn);
 		}
 		return list;
+	}
+	
+	public int getTotalCount() {
+		int result = 0;
+		try {
+			String sql = "select count(*) from memo";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	

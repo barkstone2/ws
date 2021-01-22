@@ -9,7 +9,8 @@
 }
 #mList{
 	width:900px;
-	height:400px;
+	height:550px;
+	min-height: 550px;
 }
 .mlistcon{
 	display:flex;
@@ -62,13 +63,21 @@
 #btn > div {
 	padding: 10px;
 }
+#pager {
+	--display:flex;
+	justify-content: center;
+	padding: 10px;
+}
+#pager > div{
+	padding: 5px;
+}
 </style>
 <div id="mList">
 	<div id="formTitle">
 		<h2>회원목록</h2>
 	</div>
 	<div id="memcount">
-		* ${list.size()}명의 회원이 존재합니다.
+		* ${totalConCount}명의 회원이 존재합니다.
 	</div>
 	<div id="listLabel">
 		<div class="column1">
@@ -93,7 +102,7 @@
 			가입일
 		</div>
 	</div>
-<c:if test="${list.size()==0}">
+<c:if test="${totalConCount==0}">
 	<div style="height:300px; text-align:center; line-height: 300px;">
 		등록된 회원이 없습니다.
 	</div>
@@ -104,7 +113,7 @@
 			${dto.no}
 		</div>
 		<div class="column2">
-			<a href="#" onclick="move('view','','${dto.no}');">${dto.id}</a>
+			<a href="#" onclick="move('view','${pageNumber}','${dto.no}');">${dto.id}</a>
 		</div>
 		<div class="column3">
 			${dto.pw}
@@ -123,6 +132,35 @@
 		</div>
 	</div>
 </c:forEach>
+	<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
+		<div><a href="#" onclick="move('list','1','');">[첫페이지]</a></div>
+		<c:if test="${startPage>pageNavLength}">
+			<div><a href="#" onclick="move('list','${startPage-pageNavLength}','');">[이전${pageNavLength}개]</a></div>
+		</c:if>
+		<c:if test="${startPage<=pageNavLength}">
+			<div>[이전${pageNavLength}개]</div>
+		</c:if>
+		<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
+			<c:if test="${i==pageNumber}">
+				<div>[${i}]</div>
+			</c:if>
+			<c:if test="${i!=pageNumber}">
+				<div><a href="#" onclick="move('list','${i}','');">${i}</a></div>
+			</c:if>
+		</c:forEach>
+		<c:if test="${lastPage<totalPage}">
+			<div><a href="#" onclick="move('list','${startPage+pageNavLength}','');">[다음${pageNavLength}개]</a></div>
+		</c:if>
+		<c:if test="${lastPage>=totalPage}">
+			<div>[다음${pageNavLength}개]</div>
+		</c:if>
+		<div><a href="#" onclick="move('list','${totalPage}','');">[끝페이지]</a></div>
+		<div style="display:none;" id="pagerInfo">
+			conPerPage:${conPerPage} / pageNavLength:${pageNavLength} / totalConCount:${totalConCount}
+			/ jj:${jj} / startRecord:${startRecord} <br>
+			endRecord:${endRecord} / totalPage:${totalPage} / startPage:${startPage} / lastPage:${lastPage} / pageNumber:${pageNumber} 
+		</div>
+	</div>
 	<div id="btn">
 		<div>
 			<input type="button" value="회원가입" onclick="move('chuga','','');">
@@ -140,3 +178,22 @@ function move(value1, value2, value3){
 	}
 }
 </script>
+
+<%-- <%
+String pageNumber_ = "12a45";
+char imsi;
+for (int i=0; i<pageNumber_.length(); i++){
+	imsi = pageNumber_.charAt(i);
+	if(imsi >= '0' && imsi <='9'){
+		out.println(imsi+"숫자다<br>");
+	}else if(imsi >= 'a' && imsi <='z'){
+		out.println(imsi+"영소문자다<br>");
+	}else if(imsi >= 'A' && imsi <='Z'){
+		out.println(imsi+"영대문자다<br>");
+	}else{
+		out.println(imsi+"그냥문자다<br>");
+	}
+}
+%> --%>
+
+
