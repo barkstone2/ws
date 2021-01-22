@@ -30,7 +30,7 @@
 					</a>
 				</div>
 				<div id="menuMove_guestbook">
-					<a href="#">
+					<a href="${path}/guestbook_servlet/list.do">
 						방명록
 					</a>
 				</div>

@@ -128,7 +128,7 @@
 			${dto.bornYear}
 		</div>
 		<div class="column7">
-			${dto.regi_date}
+			${fn:substringBefore(dto.regi_date,".")}
 		</div>
 	</div>
 </c:forEach>

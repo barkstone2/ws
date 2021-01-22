@@ -29,6 +29,7 @@ public class MemberController extends HttpServlet {
 
 	protected void doProc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
 		String url = request.getRequestURL().toString(); //전체주소
 		String uri = request.getRequestURI(); //도메인 주소를 제외한 주소
 		String path = request.getContextPath(); //컨텍스트 경로

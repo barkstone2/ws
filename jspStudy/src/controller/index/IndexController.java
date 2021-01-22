@@ -22,7 +22,7 @@ public class IndexController extends HttpServlet {
 
 	protected void doProc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		
+		response.setContentType("text/html; charset=UTF-8");
 		String path = request.getContextPath();
 		String url = request.getRequestURL().toString();
 		String page = "/main/main.jsp";

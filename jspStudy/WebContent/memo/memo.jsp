@@ -101,7 +101,7 @@
 				작성자
 			</div>
 			<div>
-				<input type="text" name="id">
+				<input type="text" name="id" id="id" value="">
 			</div>
 		</div>
 		<div class="row">
@@ -109,7 +109,7 @@
 				내용
 			</div>
 			<div>
-				<input type="text" name="content" style="width:300px;">
+				<input type="text" name="content" id="content" style="width:300px;" value="">
 				<input type="button" value="등록" onclick="reg();">
 			</div>
 		</div>
@@ -149,7 +149,7 @@
 				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');">${dto.content}</a>
 			</div>
 			<div class="column4">
-				${dto.regi_date}
+				${fn:substringBefore(dto.regi_date,".")}
 			</div>
 		</div>
 	</c:forEach>
@@ -197,7 +197,23 @@ function move(value1, value2, value3){
 	if(value1=='list'){
 		location.href='${path}/memo_servlet/memo.do?pageNumber='+value2;
 	}else if(value1=='view'){
-		location.href='${path}/memo_servlet/memo_view.do?pageNumber='+value2+'&no='+value3;
+		var param = "pageNumber="+value2+"&no="+value3;
+		$.ajax({
+			type: "post",
+			data: param,
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			url: "${path}/memo_servlet/memo_view.do",
+			success: function(result){
+				var results = result.split('/');
+				$("#id").val(results[0]);
+				$("#content").val(results[1]);
+			}
+		});
 	}
 }
+
+
+
+
+
 </script>

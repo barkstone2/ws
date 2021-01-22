@@ -45,5 +45,19 @@ select * from
 (select rownum rn, a.* from 
 (select * from member order by no desc) a) where rn between 2 and 4;
 
-select * from memo order by no desc;
+select count(*) from memo where no > 0;
 commit;
+
+create table guestbook(
+no number not null,
+name nvarchar2(50) not null,
+email nvarchar2(50) not null,
+passwd nvarchar2(50) not null,
+content clob not null,
+regi_date date default sysdate,
+primary key(no)
+);
+
+create sequence seq_guestbook;
+
+select * from guestbook;
