@@ -3,6 +3,8 @@ package controller.memo;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.RequestDispatcher;
@@ -110,15 +112,12 @@ public class MemoController extends HttpServlet {
 				page = "/message.jsp";
 				reUrl = path + "/memo_servlet/memo.do";
 			}else {
-				System.out.println(no);
 				dao = new MemoDAO();
 				MemoDTO dto = dao.getView(no);
 				request.setAttribute("dto", dto);
 				PrintWriter out = response.getWriter();
 				String id = dto.getId();
 				String content = dto.getContent();
-				id = replaceReturn(id);
-				content = replaceReturn(content);
 				out.print(id+"/"+content);
 				return;
 			}

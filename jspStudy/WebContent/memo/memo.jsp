@@ -205,13 +205,24 @@ function move(value1, value2, value3){
 			url: "${path}/memo_servlet/memo_view.do",
 			success: function(result){
 				var results = result.split('/');
-				$("#id").val(results[0]);
-				$("#content").val(results[1]);
+				var id = replaceReturn(results[0]);
+				var content = replaceReturn(results[1]);
+				alert(id);
+				$("#id").val(id);
+				$("#content").val(content);
 			}
 		});
 	}
 }
-
+function replaceReturn(value){
+	value = value.replace(/&amp;/g,"&");
+	value = value.replace(/&lt;/g,"<");
+	value = value.replace(/&gt;/g,">");
+	value = value.replace(/&#47;/g,"/");
+	value = value.replace(/&apos;/g,"'");
+	value = value.replace(/&quot;/g,"\"");
+	return value;
+}
 
 
 
