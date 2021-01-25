@@ -38,7 +38,7 @@
 	align-items: center;
 }
 #mList{
-	width:700px;
+	width:1200px;
 	height:400px;
 	min-height: 400px;
 }
@@ -49,7 +49,7 @@
 }
 .mlistcon, #listLabel {
 	border-bottom: 1px solid black;
-	height:30px;
+	height:45px;
 	text-align: center;
 }
 .column1{
@@ -58,15 +58,22 @@
 }
 .column2{
 	border-right: 1px solid black;
-	width:120px;
+	width:400px;
 }
 .column3{
 	border-right: 1px solid black;
-	width:300px;
+	width:250px;
 }
 .column4{
-	--border-right: 1px solid black;
-	width:200px;
+	border-right: 1px solid black;
+	width:100px;
+}
+.column5{
+	border-right: 1px solid black;
+	width:100px;
+}
+.column6{
+	width:250px;
 }
 #memcount{
 	margin-left: 10px;
@@ -88,51 +95,52 @@
 	padding: 5px;
 }
 </style>
-<div>
-	<form name="regForm" method="post" action="${path}/memo_servlet/memoProc.do" style="width:700px;">
-		<div id="formTitle">
-			<h2>한줄메모장</h2>
-		</div>
-		<div class="row">
-			<div class="label">
-				작성자
-			</div>
-			<div>
-				<input type="hidden" name="no" id="no" value="">
-				<input type="text" name="id" id="id" value="">
-			</div>
-		</div>
-		<div class="row">
-			<div class="label">
-				내용
-			</div>
-			<div>
-				<input type="text" name="content" id="content" style="width:300px;" value="">
-				<input type="button" value="등록" onclick="reg();">
-			</div>
-		</div>
-	</form>
+
+<div style="min-width:750px; min-height: 500px; width:1200px;">
+	<div id="formTitle">
+		<h2>설문조사 목록</h2>
+	</div>
+	<div>
+		<select name="search_option" id="search_option">
+			<option value="">-선택-</option>
+			<option value="question">질문내용</option>
+		</select>
+		<input type="text" name="search_data" id="search_data" value="${search_data}">
+		&nbsp;
+		<input type="date" id="search_date_s" value="${search_date_s}">
+		~
+		<input type="date" id="search_date_e" value="${search_date_e}">
+		<br>
+		<input type="checkbox" id="search_date_check" value="0"><span style="color:blue; font-size: 9px;">(날짜 검색시 체크)</span>
+		<input type="button" value="검색">
+	</div>
 	<div id="mList">
 		<div id="memcount">
-			* ${totalConCount}개의 메모가 존재합니다.
+			* ${totalConCount}개의 설문이 존재합니다.
 		</div>
 		<div id="listLabel">
 			<div class="column1">
 				순번
 			</div>
 			<div class="column2">
-				작성자
+				질문
 			</div>
 			<div class="column3">
-				내용
+				기간
 			</div>
 			<div class="column4">
-				작성일
+				참여수
+			</div>
+			<div class="column5">
+				상태
+			</div>
+			<div class="column6">
+				등록일
 			</div>
 		</div>
 	<c:if test="${totalConCount==0}">
 		<div style="text-align:center;">
-			등록된 메모가 없습니다.
+			등록된 설문이 없습니다.
 		</div>
 	</c:if>
 	<c:forEach var="dto" items="${list}">
@@ -141,13 +149,20 @@
 				${dto.no}
 			</div>
 			<div class="column2">
-				${dto.id}
+				<a href="#" onclick="move('view','${pageNumber}','${dto.no}')">${dto.question}</a>
 			</div>
 			<div class="column3">
-				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');">${dto.content}</a>
+				&nbsp;&nbsp;&nbsp;${dto.start_date} ~<br>
+				${dto.end_date}
 			</div>
 			<div class="column4">
-				${fn:substringBefore(dto.regi_date,".")}
+				${dto.survey_counter}
+			</div>
+			<div class="column5">
+				${dto.status}
+			</div>
+			<div class="column6">
+				${dto.regi_date}
 			</div>
 		</div>
 	</c:forEach>
@@ -180,57 +195,34 @@
 				endRecord:${endRecord} / totalPage:${totalPage} / startPage:${startPage} / lastPage:${lastPage} / pageNumber:${pageNumber} 
 			</div>
 		</div>
+		<div id="btn">
+			<div>
+				<button type="button" onclick="suntaek_list('all');">전체 설문목록</button>
+			</div>
+			<div>
+				<button type="button" onclick="suntaek_list('all');">진행중인 설문목록</button>
+			</div>
+			<div>
+				<button type="button" onclick="suntaek_list('all');">종료된 설문목록</button>
+			</div>
+			<div>
+				<button type="button" id="btnChuga">등록하기</button>
+			</div>
+		</div>
 	</div>
 </div>
 
-
-
 <script>
-function reg(){
-	if(confirm('등록하시겠습니까?')){
-		var no = document.getElementById('no').value;
-		alert(no);
-		if(no==''){
-			regForm.submit();
-		}else{
-			regForm.action = "${path}/memo_servlet/memo_modify.do?no="+no;
-			regForm.submit();
+	$(document).ready(function(){
+		$("#btnChuga").click(function(){
+			goChuga(${pageNumber});
+		});
+	});
+	function move(value1, value2, value3){
+		if(value1=='list'){
+			goList(value2, value3);
+		}else if(value1=='view'){
+			goView(value2, value3);
 		}
 	}
-}
-function move(value1, value2, value3){
-	if(value1=='list'){
-		location.href='${path}/memo_servlet/memo.do?pageNumber='+value2;
-	}else if(value1=='view'){
-		var param = "pageNumber="+value2+"&no="+value3;
-		$.ajax({
-			type: "post",
-			data: param,
-			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-			url: "${path}/memo_servlet/memo_view.do",
-			success: function(result){
-				var results = result.split('/');
-				var id = replaceReturn(results[0]);
-				var content = replaceReturn(results[1]);
-				var no = value3;
-				$("#no").val(no);
-				$("#id").val(id);
-				$("#content").val(content);
-			}
-		});
-	}
-}
-function replaceReturn(value){
-	value = value.replace(/&amp;/g,"&");
-	value = value.replace(/&lt;/g,"<");
-	value = value.replace(/&gt;/g,">");
-	value = value.replace(/&#47;/g,"/");
-	value = value.replace(/&apos;/g,"'");
-	value = value.replace(/&quot;/g,"\"");
-	return value;
-}
-
-
-
-
 </script>

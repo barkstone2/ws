@@ -35,7 +35,7 @@
 					</a>
 				</div>
 				<div id="menuMove_survey">
-					<a href="#">
+					<a href="${path}/survey_servlet/index.do">
 						설문조사
 					</a>
 				</div>

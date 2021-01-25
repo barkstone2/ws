@@ -61,3 +61,34 @@ primary key(no)
 create sequence seq_guestbook;
 
 select * from guestbook;
+
+
+create table survey(
+no number not null,
+question varchar2(4000) not null,
+ans1 nvarchar2(500) not null,
+ans2 nvarchar2(500) not null,
+ans3 nvarchar2(500) not null,
+ans4 nvarchar2(500) not null,
+status nchar(1) default '1' check(status in('0','1'))  not null,
+start_date timestamp default current_timestamp not null,
+end_date timestamp default current_timestamp not null,
+regi_date timestamp default current_timestamp not null,
+primary key(no)
+);
+
+create sequence seq_survey;
+
+
+create table survey_answer(
+answer_no number not null primary key,
+no number not null references survey(no),
+answer number not null,
+regi_date timestamp default current_timestamp not null
+);
+
+select * from survey;
+select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, a.end_date, a.regi_date, 
+(select count(*) from survey_answer where a.no=no) survey_counter
+from survey a order by no desc;
+

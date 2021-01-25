@@ -44,13 +44,13 @@
 		<h2>방명록</h2>
 	</div>
 	<div>
-		<select name="searchType">
+		<select name="searchType" id="searchType">
 			<option value="name">이름</option>
 			<option value="content">내용</option>
 			<option value="all">이름+내용</option>
 		</select>
-		<input type="text" name="searchValue">
-		<input type="button" value="검색">
+		<input type="text" name="searchValue" id="searchValue">
+		<input type="button" value="검색" onclick="search();">
 	</div>
 	<div>
 		<input type="button" value="글쓰기" onclick="move('write','','');">
@@ -140,5 +140,11 @@ function move(value1, value2, value3){
 	}else if(value1=='write'){
 		location.href='${path}/guestbook_servlet/write.do?pageNumber='+value2;
 	}
+}
+	
+function search(){
+	var searchType = document.getElementById("searchType");
+	var searchValue = document.getElementById("searchValue");
+	location.href='${path}/guestbook_servlet/search.do?searchType='+searchType+'&searchValue='+searchValue;
 }
 </script>

@@ -87,6 +87,23 @@ public class MemoDAO {
 		return list;
 	}
 	
+	public int setUpdate(String id, String content, int no) {
+		int result = 0;
+		try {
+			String sql = "update memo set id=?, content=? where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, content);
+			pstmt.setInt(3, no);
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
+	
 	public int getTotalCount() {
 		int result = 0;
 		try {

@@ -9,7 +9,7 @@
 <style>
 body, html{
 	width: 100%;
-	height: 100%;
+	min-height: 100%;
 	margin: 0;
 	padding: 0;
 }
@@ -67,13 +67,16 @@ main{
 	align-items: center;
 	border-bottom: 1px solid black;
 	min-height:550px;
+	padding: 20px;
 }
 footer{
 	width: 100%;
 	height: 20%;
+	min-height:190px;
 	--background-color: red;
 }
 </style>
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 </head>
 <body>
 	<header>
@@ -101,9 +104,7 @@ footer{
 		</c:if> --%>
 	</main>
 	
-	<footer>
-		
-	</footer>		
+	<footer></footer>		
 		
 	
 	

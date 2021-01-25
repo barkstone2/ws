@@ -68,8 +68,6 @@ public class GuestBookDAO {
 		return list;
 	}
 	
-	
-	
 	public int getTotalCount() {
 		int result = 0;
 		try {

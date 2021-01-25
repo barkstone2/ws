@@ -121,6 +121,29 @@ public class MemoController extends HttpServlet {
 				out.print(id+"/"+content);
 				return;
 			}
+		}else if(url.indexOf("memo_modify.do") != -1) {
+			previousPageUrl += "/memo.do";
+			gubun = "/memo/memo.jsp";
+			page = "/message.jsp";
+			reUrl = path + "/memo_servlet/memo.do";
+			
+			String no_ = request.getParameter("no");
+			int no = no_==null||no_.trim().equals("")||!Pattern.matches("^[0-9]*$", no_)?0:Integer.parseInt(no_);
+			String id = request.getParameter("id");
+			String content = request.getParameter("content");
+			if(!referer.contains(previousPageUrl)) {
+				msg = "비정상적인 접근입니다.";
+			}else {
+				id = replaceAll(id);
+				content = replaceAll(content);
+				dao = new MemoDAO();
+				int result = dao.setUpdate(id, content, no);
+				if(result>0) {
+					msg = "메모수정 성공";
+				}else {
+					msg = "메모수정 실패";
+				}
+			}
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);
