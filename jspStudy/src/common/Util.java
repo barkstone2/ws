@@ -37,4 +37,18 @@ public class Util {
 			return Integer.parseInt(defaultPageNumber);
 		}
 	}
+	
+	public boolean searchCheck(String list_gubun, String search_option, String search_data, 
+			String search_date_s, String search_date_e) {
+		boolean result = false;
+		if(list_gubun!=null&&!list_gubun.equals("")) {
+			result = true;
+		}else if(search_option!=null&&!search_option.equals("")&&search_data!=null&&!search_data.equals("")) {
+			result = true;
+		}else if(search_date_s!=null&&!search_date_s.equals("")&&search_date_e!=null&&!search_date_e.equals("")) {
+			result = true;
+		}
+		return result;
+	}
+	
 }

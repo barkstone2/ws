@@ -111,8 +111,8 @@
 		~
 		<input type="date" id="search_date_e" value="${search_date_e}">
 		<br>
-		<input type="checkbox" id="search_date_check" value="0"><span style="color:blue; font-size: 9px;">(날짜 검색시 체크)</span>
-		<input type="button" value="검색">
+		<input type="checkbox" id="search_date_check" value=""><span style="color:blue; font-size: 9px;">(날짜 검색시 체크)</span>
+		<input type="button" value="검색" onclick="searchList();">
 	</div>
 	<div id="mList">
 		<div id="memcount">
@@ -200,10 +200,10 @@
 				<button type="button" onclick="suntaek_list('all');">전체 설문목록</button>
 			</div>
 			<div>
-				<button type="button" onclick="suntaek_list('all');">진행중인 설문목록</button>
+				<button type="button" onclick="suntaek_list('doing');">진행중인 설문목록</button>
 			</div>
 			<div>
-				<button type="button" onclick="suntaek_list('all');">종료된 설문목록</button>
+				<button type="button" onclick="suntaek_list('ended');">종료된 설문목록</button>
 			</div>
 			<div>
 				<button type="button" id="btnChuga">등록하기</button>
@@ -220,9 +220,34 @@
 	});
 	function move(value1, value2, value3){
 		if(value1=='list'){
+			$("#span_pageNumber").text(value2);
 			goList(value2, value3);
 		}else if(value1=='view'){
+			$("#span_pageNumber").text(value2);
+			$("#span_no").text(value3);
 			goView(value2, value3);
 		}
+	}
+	function suntaek_list(value1){
+		if(value1=='all'){
+			$("#span_list_gubun").text(value1);
+		}else if(value1=='doing'){
+			$("#span_list_gubun").text(value1);
+		}else if(value1=='ended'){
+			$("#span_list_gubun").text(value1);
+		}
+		goList();
+	}
+	function searchList(){
+		$("#span_search_option").text(document.getElementById('search_option').value);
+		$("#span_search_data").text(document.getElementById('search_data').value);
+		$("#span_search_date_s").text(document.getElementById('search_date_s').value);
+		$("#span_search_date_e").text(document.getElementById('search_date_e').value);
+		if($("input:checkbox[id=search_date_check]").is(":checked") == true){
+			$("#span_search_date_check").text('1');
+		}else{
+			$("#span_search_date_check").text('0');
+		}
+		goList();
 	}
 </script>

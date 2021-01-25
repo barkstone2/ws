@@ -25,7 +25,15 @@
 	width:50%;
 	display:flex;
 	border-right:1px solid black;
-	
+}
+#btn{
+ 	width:900px;
+ 	display:flex;
+ 	padding:10px;
+ 	justify-content:center;
+}
+#btn > div {
+	padding: 10px;
 }
 </style>
 <form style="width:900px; border:1px solid black" method="post" action="${path}/survey_servlet/answer.do">
@@ -50,6 +58,7 @@
 		질문
 		</div>
 		<div class="ans">
+			<input type="hidden" name="no" value="${dto.no}">
 			${dto.question}
 		</div>
 	</div>
@@ -90,18 +99,24 @@
 		</div>
 	</div>	
 </form>
-<div style="width:900px; display:flex; padding:10px; justify-content:center;">
+<div id="btn">
 	<div>
-		<input type="button" value="제출하기">
+		<input type="button" value="제출하기" id="btnAnswer">
 	</div>
 	<div>
 		<input type="button" value="목록으로" id="btnList">
+	</div>
+	<div>
+		<input type="button" value="결과보기" id="btnResult">
 	</div>
 </div>
 <script>
 	$(document).ready(function(){
 		$("#btnList").click(function(){
 			goList('${pageNumber}','');
+		});
+		$("#btnAnswer").click(function(){
+			goAnswer();
 		});
 	});
 </script>

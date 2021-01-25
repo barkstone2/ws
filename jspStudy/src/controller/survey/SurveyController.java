@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import common.Util;
 import model.survey.dao.SurveyDAO;
+import model.survey.dto.SurveyAnswerDTO;
 import model.survey.dto.SurveyDTO;
 
 @WebServlet("/survey_servlet/*")
@@ -146,6 +147,7 @@ public class SurveyController extends HttpServlet {
 			dao = new SurveyDAO();
 			int conPerPage = 5;
 			int pageNavLength = 5;
+			
 			int totalConCount = dao.getTotalCount();
 			int jj = totalConCount - conPerPage * (pageNumber -1);
 			
@@ -176,9 +178,19 @@ public class SurveyController extends HttpServlet {
 			String search_date_s = request.getParameter("search_date_s");
 			String search_date_e = request.getParameter("search_date_e");
 			
-			ArrayList<SurveyDTO> list = dao.getListAll(startRecord, endRecord);
-			//ArrayList<SurveyDTO> list = dao.getListAll(startRecord, endRecord, 
-			//list_gubun,search_option,search_data,search_date_s,search_date_e);
+			if(util.searchCheck(list_gubun, search_option, search_data, search_date_s, search_date_e)) {
+				totalConCount = dao.getSearchCount(list_gubun, search_option, search_data, search_date_s, search_date_e);
+				jj = totalConCount - conPerPage * (pageNumber -1);
+				totalPage = (int)Math.ceil((totalConCount / (double)conPerPage));
+				if(lastPage>totalPage)lastPage=totalPage;
+				request.setAttribute("totalConCount", totalConCount);
+				request.setAttribute("jj", jj);
+				request.setAttribute("totalPage", totalPage);
+				request.setAttribute("lastPage", lastPage);
+			}
+			//ArrayList<SurveyDTO> list = dao.getListAll(startRecord, endRecord);
+			ArrayList<SurveyDTO> list = dao.getListAll(startRecord, endRecord, 
+			list_gubun,search_option,search_data,search_date_s,search_date_e);
 			request.setAttribute("list", list);
 		}else if(url.indexOf("view.do") != -1) {
 			page = "/survey/survey_view.jsp";
@@ -187,6 +199,18 @@ public class SurveyController extends HttpServlet {
 			int no = util.numberCheck(no_, 0);
 			SurveyDTO dto = dao.getView(no);
 			request.setAttribute("dto", dto);
+		}else if(url.indexOf("answer.do") != -1) {
+			page = "/survey_servlet/list.do";
+			dao = new SurveyDAO();
+			String no_ = request.getParameter("no");
+			int no = util.numberCheck(no_, 0);
+			String answer_ = request.getParameter("answer");
+			int answer = util.numberCheck(answer_, 0);
+			SurveyAnswerDTO dto = new SurveyAnswerDTO();
+			dto.setNo(no);
+			dto.setAnswer(answer);
+			
+			dao.setAnswer(dto);
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

@@ -8,10 +8,10 @@
 		pageNumber : <span id="span_pageNumber">${pageNumber}</span><br>
 		no : <span id="span_no">${no}</span><br>
 		search_option : <span id="span_search_option">${search_option}</span><br>
-		search_data : <span id="search_data">${search_data}</span><br>
-		search_date_check : <span id="search_date_check">${search_date_check}</span><br>
-		search_date_s : <span id="search_date_s">${search_date_s}</span><br>
-		search_date_e : <span id="search_date_e">${search_date_e}</span><br>
+		search_data : <span id="span_search_data">${search_data}</span><br>
+		search_date_check : <span id="span_search_date_check">${search_date_check}</span><br>
+		search_date_s : <span id="span_search_date_s">${search_date_s}</span><br>
+		search_date_e : <span id="span_search_date_e">${search_date_e}</span><br>
 	</div>
 	<div id="result"></div>
 </div>
@@ -19,7 +19,7 @@
 <c:if test="${menu_gubun=='/survey/index.jsp'}">
 	<script>
 	$(document).ready(function(){
-		goList('','');
+		goList();
 	});
 	</script>
 </c:if>
@@ -53,9 +53,9 @@ function goChugaProc(){
 			});
 	}
 }
-function goList(value1, value2){
-	var param = "pageNumber="+value1+"&no="+value2;
-	var param2 = {
+function goList(){
+	//var param = "pageNumber="+pageNumber+"&no="+no;
+	var param = {
 			"list_gubun" : $("#span_list_gubun").text(),
 			"pageNumber" : $("#span_pageNumber").text(),
 			"search_option" : $("#span_search_option").text(),
@@ -70,7 +70,7 @@ function goList(value1, value2){
 			url: "${path}/survey_servlet/list.do",
 			success: function(data){
 				$("#result").html(data);
-				/* if($("#span_search_date_check").text()=="0"){
+				/* if($("#span_search_date_check").text()=="1"){
 					$("input[id=search_date_check]:checkbox").prop("checked", true);
 				}else{
 					$("input[id=search_date_check]:checkbox").prop("checked", false);
@@ -84,6 +84,16 @@ function goView(value1, value2){
 			type: "post",
 			data: param,
 			url: "${path}/survey_servlet/view.do",
+			success: function(data){
+				$("#result").html(data);
+			}
+		});
+}
+function goAnswer(){
+	$.ajax({
+			type: "post",
+			data: $('form').serialize(),
+			url: "${path}/survey_servlet/answer.do",
 			success: function(data){
 				$("#result").html(data);
 			}
