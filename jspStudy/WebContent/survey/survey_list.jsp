@@ -103,16 +103,16 @@
 	<div>
 		<select name="search_option" id="search_option">
 			<option value="">-선택-</option>
-			<option value="question">질문내용</option>
+			<option value="question" id="op_question">질문내용</option>
 		</select>
 		<input type="text" name="search_data" id="search_data" value="${search_data}">
 		&nbsp;
-		<input type="date" id="search_date_s" value="${search_date_s}">
+		<input type="date" id="search_date_s" value="">
 		~
-		<input type="date" id="search_date_e" value="${search_date_e}">
+		<input type="date" id="search_date_e" value="">
 		<br>
 		<input type="checkbox" id="search_date_check" value=""><span style="color:blue; font-size: 9px;">(날짜 검색시 체크)</span>
-		<input type="button" value="검색" onclick="searchList();">
+		<input type="button" value="검색" onclick="search();">
 	</div>
 	<div id="mList">
 		<div id="memcount">
@@ -146,7 +146,7 @@
 	<c:forEach var="dto" items="${list}">
 		<div class="mlistcon">
 			<div class="column1">
-				${dto.no}
+				${jj}
 			</div>
 			<div class="column2">
 				<a href="#" onclick="move('view','${pageNumber}','${dto.no}')">${dto.question}</a>
@@ -165,6 +165,7 @@
 				${dto.regi_date}
 			</div>
 		</div>
+		<c:set var="jj" value="${jj = jj-1}"/>
 	</c:forEach>
 		<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
 			<div><a href="#" onclick="move('list','1','');">[첫페이지]</a></div>
@@ -215,39 +216,32 @@
 <script>
 	$(document).ready(function(){
 		$("#btnChuga").click(function(){
-			goChuga(${pageNumber});
+			goChuga();
 		});
 	});
 	function move(value1, value2, value3){
 		if(value1=='list'){
 			$("#span_pageNumber").text(value2);
-			goList(value2, value3);
+			goList();
 		}else if(value1=='view'){
 			$("#span_pageNumber").text(value2);
 			$("#span_no").text(value3);
-			goView(value2, value3);
+			goView();
 		}
 	}
-	function suntaek_list(value1){
-		if(value1=='all'){
-			$("#span_list_gubun").text(value1);
-		}else if(value1=='doing'){
-			$("#span_list_gubun").text(value1);
-		}else if(value1=='ended'){
-			$("#span_list_gubun").text(value1);
-		}
-		goList();
-	}
-	function searchList(){
-		$("#span_search_option").text(document.getElementById('search_option').value);
-		$("#span_search_data").text(document.getElementById('search_data').value);
-		$("#span_search_date_s").text(document.getElementById('search_date_s').value);
-		$("#span_search_date_e").text(document.getElementById('search_date_e').value);
+	function search(){
+		$("#span_search_option").text($('#search_option').val());
+		$("#span_search_data").text($('#search_data').val());
+		
 		if($("input:checkbox[id=search_date_check]").is(":checked") == true){
 			$("#span_search_date_check").text('1');
+			$("#span_search_date_s").text($('#search_date_s').val());
+			$("#span_search_date_e").text($('#search_date_e').val());
 		}else{
 			$("#span_search_date_check").text('0');
+			$("#span_search_date_s").text('');
+			$("#span_search_date_e").text('');
 		}
-		goList();
+		suntaek_page('1');
 	}
 </script>

@@ -59,7 +59,7 @@ header{
 			--background-color: blue;
 		}
 main{
-	width: 100%;
+	max-width: 100%;
 	height: 60%;
 	--background-color: gray;
 	display: flex;

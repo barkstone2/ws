@@ -104,6 +104,9 @@
 		<input type="button" value="제출하기" id="btnAnswer">
 	</div>
 	<div>
+		<input type="button" value="수정하기" id="btnModify">
+	</div>
+	<div>
 		<input type="button" value="목록으로" id="btnList">
 	</div>
 	<div>
@@ -113,10 +116,17 @@
 <script>
 	$(document).ready(function(){
 		$("#btnList").click(function(){
-			goList('${pageNumber}','');
+			goList();
 		});
 		$("#btnAnswer").click(function(){
-			goAnswer();
+			if(${dto.status}=='0'){
+				alert('종료된 설문입니다.');				
+			}else{
+				goAnswer();
+			}
+		});
+		$("#btnModify").click(function(){
+			goModify();
 		});
 	});
 </script>

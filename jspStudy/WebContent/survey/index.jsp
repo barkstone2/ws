@@ -3,7 +3,7 @@
 <%@include file="../include/inc_header.jsp" %>
 <div>
 	<input type="text" name="a" style="display:;"><br>
-	<div style="display:;">
+	<div style="display:none;">
 		list_gubun : <span id="span_list_gubun">${list_gubun}</span><br>
 		pageNumber : <span id="span_pageNumber">${pageNumber}</span><br>
 		no : <span id="span_no">${no}</span><br>
@@ -25,8 +25,8 @@
 </c:if>
 
 <script>
-function goChuga(value1){
-	var param = "pageNumber="+value1;
+function goChuga(){
+	var param = {"pageNumber" : $("#span_pageNumber").text()};
 	$.ajax({
 			type: "post",
 			data: param,
@@ -70,16 +70,31 @@ function goList(){
 			url: "${path}/survey_servlet/list.do",
 			success: function(data){
 				$("#result").html(data);
-				/* if($("#span_search_date_check").text()=="1"){
-					$("input[id=search_date_check]:checkbox").prop("checked", true);
+				if($("#span_search_date_check").text()=="1"){
+					//$("input[id=search_date_check]:checkbox").prop("checked", true);
+					$("#search_date_check").prop("checked", true);
 				}else{
 					$("input[id=search_date_check]:checkbox").prop("checked", false);
-				} */
+				}
+				if($("#span_search_option").text()=="question"){
+					$("#op_question").prop("selected", true);
+				}
+				$("#search_data").val($("#span_search_data").text());
+				$("#search_date_s").val($("#span_search_date_s").text());
+				$("#search_date_e").val($("#span_search_date_e").text());
 			}
 		});
 }
-function goView(value1, value2){
-	var param = "pageNumber="+value1+"&no="+value2;
+function suntaek_list(value1){
+	$("#span_list_gubun").text(value1);
+	$("#span_pageNumber").text(1);
+	goList();
+}
+function goView(){
+	var param = {
+			"pageNumber" : $("#span_pageNumber").text(),
+			"no" : $("#span_no").text()
+			};
 	$.ajax({
 			type: "post",
 			data: param,
@@ -95,14 +110,52 @@ function goAnswer(){
 			data: $('form').serialize(),
 			url: "${path}/survey_servlet/answer.do",
 			success: function(data){
-				$("#result").html(data);
+				alert('설문 제출 성공');
+				goList();
+				//$("#result").html(data);
+			},
+			error: function(){
+				alert('설문 제출 실패');
 			}
 		});
+}
+function goModify(){
+	var param = {
+			"pageNumber" : $("#span_pageNumber").text(),
+			"no" : $("#span_no").text()
+			};
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/survey_servlet/modify.do",
+		success: function(data){
+			$("#result").html(data);
+		}
+	});
+}
+
+function goModifyProc(){
+	if(confirm('수정하시겠습니까?')){
+		$.ajax({
+				type: "post",
+				data: $('form').serialize(),
+				url: "${path}/survey_servlet/modifyProc.do",
+				success: function(data){
+					alert('수정 성공');
+					$("#result").html(data);
+				},
+				error: function(){
+					alert('수정 실패');
+				}
+			});
+	}
 }
 
 function suntaek_page(value1){
 	$("#span_pageNumber").text(value1);
+	goList();
 }
+
 
 </script>
 

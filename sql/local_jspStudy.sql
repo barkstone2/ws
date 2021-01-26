@@ -102,5 +102,23 @@ select * from survey;
 select * from 
 (select rownum rn, a.* 
 from (select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, a.end_date, a.regi_date, 
-(select count(*) from survey_answer where a.no=no) survey_counter from survey a order by no desc) a) 
+(select count(*) from survey_answer where a.no=no) survey_counter from survey a where order by no desc) a) 
 where rn between 1 and 15 and question like '%테스트%';
+
+
+select rownum , a.* 
+from (select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, a.end_date, a.regi_date, 
+(select count(*) from survey_answer where a.no=no) survey_counter from survey a order by no desc) a 
+where question like '%테스트%' and rownum between 1 and 10;
+
+
+select count(*) from survey where current_timestamp between start_date and end_date;
+
+select rownum rn, a.* 
+from (select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, a.end_date, a.regi_date, 
+(select count(*) from survey_answer where a.no=no) survey_counter 
+from survey a) a where no > 0 and start_date>=to_timestamp('2021-01-24 00:00:00.0') 
+and end_date<=to_timestamp('2021-01-28 23:59:59.9') order by no desc
+
+select * from survey where end_date<=to_timestamp('2021-01-28 23:59:59.9');
+select * from survey order by end_date desc, regi_date desc;

@@ -38,17 +38,66 @@ public class Util {
 		}
 	}
 	
-	public boolean searchCheck(String list_gubun, String search_option, String search_data, 
-			String search_date_s, String search_date_e) {
-		boolean result = false;
-		if(list_gubun!=null&&!list_gubun.equals("")) {
-			result = true;
-		}else if(search_option!=null&&!search_option.equals("")&&search_data!=null&&!search_data.equals("")) {
-			result = true;
-		}else if(search_date_s!=null&&!search_date_s.equals("")&&search_date_e!=null&&!search_date_e.equals("")) {
-			result = true;
+	public String list_gubunCheck(String list_gubun) {
+		if(list_gubun == null || list_gubun.trim().equals("")) {
+			list_gubun = "all";
 		}
+		list_gubun = list_gubun.trim();
+		if(list_gubun.equals("all")) {
+			
+		}else if(list_gubun.equals("doing")) {
+			
+		}else if(list_gubun.equals("ended")) {
+			
+		}else {
+			list_gubun = "all";
+		}
+		return list_gubun;
+	}
+	
+	public String[] searchCheck(String search_option, String search_data, 
+			String search_date_s, String search_date_e, String search_date_check) {
+		String[] result = new String[5];
+		if(search_option == null || search_option.trim().equals("")) {
+			search_option = "";
+		}
+		if(search_option.equals("question")) {
+			
+		}else {
+			search_option = "";
+		}
+		
+		if(search_data == null || search_data.trim().equals("")) {
+			search_data = "";
+		}
+		
+		if(search_option.equals("") || search_data.equals("")) {
+			search_option = "";
+			search_data = "";
+		}
+		
+		if(search_date_s == null || search_date_s.trim().equals("")) {
+			search_date_s = "";
+		}
+		if(search_date_e == null || search_date_e.trim().equals("")) {
+			search_date_e = "";
+		}
+		if(search_date_s.equals("") || search_date_e.equals("")) {
+			search_date_s = "";
+			search_date_e = "";
+			search_date_check = "";
+		}else {
+			search_date_s += " 00:00:00.0";
+			search_date_e += " 23:59:59.9";
+		}
+		result[0] = search_option;
+		result[1] = search_data;
+		result[2] = search_date_s;
+		result[3] = search_date_e;
+		result[4] = search_date_check;
+		
 		return result;
 	}
+	
 	
 }
