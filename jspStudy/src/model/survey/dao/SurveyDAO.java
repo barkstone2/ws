@@ -160,10 +160,11 @@ public class SurveyDAO {
 	public SurveyDTO getView(int no) {
 		SurveyDTO dto = null;
 		String basicSql = "select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, "
-				+ "a.end_date, a.regi_date, (select count(*) from survey_answer where a.no=no) survey_counter "
-				+ "from survey a order by no desc";
+				+ "a.end_date, a.regi_date, (select count(*) from survey_answer where a.no=no) survey_counter, "
+				+ "b.ans1c, b.ans2c, b.ans3c, b.ans4c "
+				+ "from survey a, v_ansCount b where a.no=b.no(+)";
 		try {
-			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where no=?"; 
+			String sql = "select rownum rn, tb.* from ("+basicSql+") tb where tb.no=?"; 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
 			rs = pstmt.executeQuery();
@@ -181,6 +182,10 @@ public class SurveyDAO {
 						rs.getTimestamp("regi_date")
 						);
 				dto.setSurvey_counter(rs.getInt("survey_counter"));
+				dto.setAns1c(rs.getInt("ans1c"));
+				dto.setAns2c(rs.getInt("ans2c"));
+				dto.setAns3c(rs.getInt("ans3c"));
+				dto.setAns4c(rs.getInt("ans4c"));
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -191,7 +196,7 @@ public class SurveyDAO {
 	}
 	
 	public int setAnswer(SurveyAnswerDTO dto) {
-		int result=0;
+		int result =0;
 		try {
 			String sql = "insert into survey_answer "
 					+ "(answer_no, no, answer, regi_date) "

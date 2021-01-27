@@ -60,6 +60,7 @@ function goList(){
 			"pageNumber" : $("#span_pageNumber").text(),
 			"search_option" : $("#span_search_option").text(),
 			"search_data" : $("#span_search_data").text(),
+			"search_date_check" : $("#span_search_date_check").text(),
 			"search_date_s" : $("#span_search_date_s").text(),
 			"search_date_e" : $("#span_search_date_e").text()
 			};
@@ -105,19 +106,28 @@ function goView(){
 		});
 }
 function goAnswer(){
-	$.ajax({
+	if($('input:radio[name=answer]').is(':checked')){
+		$.ajax({
 			type: "post",
 			data: $('form').serialize(),
 			url: "${path}/survey_servlet/answer.do",
-			success: function(data){
-				alert('설문 제출 성공');
+			success: function(result){
+				if(result>0){
+					alert('설문 제출 성공');
+				}else{
+					alert('설문 제출 실패');
+				}
 				goList();
 				//$("#result").html(data);
 			},
-			error: function(){
+			error: function(result){
 				alert('설문 제출 실패');
+				goList();
 			}
-		});
+		}); 
+	}else{
+		alert('답을 선택해주세요.');
+	}
 }
 function goModify(){
 	var param = {
@@ -150,7 +160,20 @@ function goModifyProc(){
 			});
 	}
 }
-
+function goResult(){
+	var param = {
+			"pageNumber" : $("#span_pageNumber").text(),
+			"no" : $("#span_no").text()
+			};
+	$.ajax({
+			type: "post",
+			data: param,
+			url: "${path}/survey_servlet/result.do",
+			success: function(data){
+				$("#result").html(data);
+			}
+		});
+}
 function suntaek_page(value1){
 	$("#span_pageNumber").text(value1);
 	goList();

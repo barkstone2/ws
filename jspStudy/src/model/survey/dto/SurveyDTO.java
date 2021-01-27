@@ -14,6 +14,10 @@ public class SurveyDTO {
 	private Timestamp end_date;
 	private Timestamp regi_date;
 	private int survey_counter;
+	private int ans1c;
+	private int ans2c;
+	private int ans3c;
+	private int ans4c;
 	
 	public SurveyDTO() {
 	}
@@ -48,6 +52,62 @@ public class SurveyDTO {
 		this.status = status;
 		this.start_date = start_date;
 		this.end_date = end_date;
+	}
+
+
+	
+
+	public int getAns1c() {
+		return ans1c;
+	}
+
+
+
+
+	public void setAns1c(int ans1c) {
+		this.ans1c = ans1c;
+	}
+
+
+
+
+	public int getAns2c() {
+		return ans2c;
+	}
+
+
+
+
+	public void setAns2c(int ans2c) {
+		this.ans2c = ans2c;
+	}
+
+
+
+
+	public int getAns3c() {
+		return ans3c;
+	}
+
+
+
+
+	public void setAns3c(int ans3c) {
+		this.ans3c = ans3c;
+	}
+
+
+
+
+	public int getAns4c() {
+		return ans4c;
+	}
+
+
+
+
+	public void setAns4c(int ans4c) {
+		this.ans4c = ans4c;
 	}
 
 

@@ -50,7 +50,7 @@ public class SurveyController extends HttpServlet {
 		String search_data = request.getParameter("search_data");
 		String search_date_s = request.getParameter("search_date_s");
 		String search_date_e = request.getParameter("search_date_e");
-		String search_date_check = "0";
+		String search_date_check = request.getParameter("search_date_check");
 		String[] searchArray = util.searchCheck(search_option, search_data, search_date_s, search_date_e, search_date_check);
 		
 		search_option = searchArray[0];
@@ -177,7 +177,6 @@ public class SurveyController extends HttpServlet {
 			SurveyDTO dto = dao.getView(no);
 			request.setAttribute("dto", dto);
 		}else if(url.indexOf("answer.do") != -1) {
-			page = "/survey_servlet/list.do";
 			dao = new SurveyDAO();
 			String no_ = request.getParameter("no");
 			int no = util.numberCheck(no_, 0);
@@ -186,8 +185,10 @@ public class SurveyController extends HttpServlet {
 			SurveyAnswerDTO dto = new SurveyAnswerDTO();
 			dto.setNo(no);
 			dto.setAnswer(answer);
-			
-			dao.setAnswer(dto);
+			int result = dao.setAnswer(dto);
+			PrintWriter out = response.getWriter();
+			out.println(result);
+			return;
 		}else if(url.indexOf("modify.do") != -1) {
 			page = "/survey/survey_modify.jsp";
 			dao = new SurveyDAO();
@@ -227,8 +228,13 @@ public class SurveyController extends HttpServlet {
 			SurveyDTO dto = new SurveyDTO(question, ans1, ans2, ans3, ans4, status, start_date, end_date);
 			dto.setNo(no);
 			int result = dao.setUpdate(dto);
-			
-			
+		}else if(url.indexOf("result.do") != -1) {
+			page = "/survey/survey_result.jsp";
+			dao = new SurveyDAO();
+			String no_ = request.getParameter("no");
+			int no = util.numberCheck(no_, 0);
+			SurveyDTO dto = dao.getView(no);
+			request.setAttribute("dto", dto);
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

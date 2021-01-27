@@ -128,5 +128,8 @@
 		$("#btnModify").click(function(){
 			goModify();
 		});
+		$("#btnResult").click(function(){
+			goResult();
+		});
 	});
 </script>
