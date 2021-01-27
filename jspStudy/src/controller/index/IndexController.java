@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/index.do")
+@WebServlet("*.do")
 public class IndexController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,8 +26,14 @@ public class IndexController extends HttpServlet {
 		String path = request.getContextPath();
 		String url = request.getRequestURL().toString();
 		String page = "/main/main.jsp";
-		request.setAttribute("menu_gubun", "/main/main_sub.jsp");
 		
+		if(url.indexOf("index.do") != -1) {
+			request.setAttribute("menu_gubun", "/main/main_sub.jsp");
+		}else if(url.indexOf("util.do") != -1) {
+			request.setAttribute("menu_gubun", "/util/util.jsp");
+		}else if(url.indexOf("calc.do") != -1) {
+			request.setAttribute("menu_gubun", "/util/calc.jsp");
+		}
 		
 		RequestDispatcher rd = request.getRequestDispatcher(page);
 		rd.forward(request, response);

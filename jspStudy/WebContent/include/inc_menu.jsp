@@ -54,6 +54,11 @@
 						관리자
 					</a>
 				</div>
+				<div id="menuMove_util">
+					<a href="${path}/util.do">
+						유틸리티
+					</a>
+				</div>
 			</nav>
 			<nav id="userMenu" class="menu">
 				<div>
