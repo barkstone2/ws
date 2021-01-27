@@ -26,6 +26,11 @@
 	text-align: right;
 	line-height:80px;
 	border: black 1px solid;
+	-ms-user-select: none; 
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 #nowResult{
 	border:none;
@@ -35,6 +40,11 @@
 	resize:none;
 	display:block;
 	text-align: right;
+	-ms-user-select: none; 
+	-moz-user-select: -moz-none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	user-select: none;
 }
 </style>
 	<div>
@@ -85,6 +95,11 @@ var op = '';
 var k = 0;
 var n = 0;
 var nowTemp = '';
+$(".cell").mouseover(function(){
+	$(".cell").css("backgroundColor", 'gray');
+	setTimeout(function(){$(".cell").css("backgroundColor", 'transparent');},100);
+	
+})
 function calc(value1){
 	var clickId = "#"+value1;
 	$(clickId).css("backgroundColor", 'gray');
