@@ -71,6 +71,7 @@ function suntaek_solve(value1){
 	$("#span_list_gubun").text(value1);
 	$("#span_pageNumber").text(1);
 	goSolve();
+	$('html').scrollTop(0);
 }
 function goSolveProc(){
 	if(confirm('제출하시겠습니까?')){
