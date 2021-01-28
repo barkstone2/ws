@@ -170,7 +170,7 @@ public class SurveyController extends HttpServlet {
 			list_gubun,search_option,search_data,search_date_s,search_date_e);
 			request.setAttribute("list", list);
 		}else if(url.indexOf("view.do") != -1) {
-			page = "/survey/survey_view.jsp";
+			page = "/survey/survey_view2.jsp";
 			dao = new SurveyDAO();
 			String no_ = request.getParameter("no");
 			int no = util.numberCheck(no_, 0);
@@ -235,6 +235,66 @@ public class SurveyController extends HttpServlet {
 			int no = util.numberCheck(no_, 0);
 			SurveyDTO dto = dao.getView(no);
 			request.setAttribute("dto", dto);
+		}else if(url.indexOf("solve.do") != -1) {
+			page = "/survey/survey_solve.jsp";
+			dao = new SurveyDAO();
+			
+			int totalConCount = dao.getTotalCount(list_gubun, search_option, search_data, search_date_s, search_date_e);
+			int conPerPage = totalConCount;
+			int pageNavLength = 5;
+			int jj = totalConCount - conPerPage * (pageNumber -1);
+			
+			int startRecord = 1;
+			int endRecord = conPerPage;
+			int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage));
+			int startPage = 1;
+			int lastPage = 1;
+			
+			//startPage = (pageNumber / pageNavLength - (pageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
+			//lastPage = startPage + pageNavLength -1;
+			//if(lastPage>totalPage)lastPage=totalPage;
+			
+			request.setAttribute("pageNumber", pageNumber);
+			request.setAttribute("conPerPage", conPerPage);
+			request.setAttribute("pageNavLength", pageNavLength);
+			request.setAttribute("totalConCount", totalConCount);
+			request.setAttribute("jj", jj);
+			request.setAttribute("startRecord", startRecord);
+			request.setAttribute("endRecord", endRecord);
+			request.setAttribute("totalPage", totalPage);
+			request.setAttribute("startPage", startPage);
+			request.setAttribute("lastPage", lastPage);
+			
+			//ArrayList<SurveyDTO> list = dao.getListAll(startRecord, endRecord);
+			ArrayList<SurveyDTO> list = dao.getListAll(startRecord, endRecord, 
+			list_gubun,search_option,search_data,search_date_s,search_date_e);
+			request.setAttribute("list", list);
+			
+		}else if(url.indexOf("solveProc.do") != -1) {
+			String[] noArr_ = request.getParameterValues("no");
+			String[] answerArr_ = request.getParameterValues("answer");
+			PrintWriter out = response.getWriter();
+			if(noArr_.length!=answerArr_.length) {
+				out.print(1);
+				return;
+			}
+			int[] noArr = util.numArrCheck(noArr_, 0);
+			int[] answerArr = util.numArrCheck(answerArr_, 0);
+			if(util.valueCheck(noArr)==1||util.valueCheck(answerArr)==1) {
+				out.print(1);
+				return;
+			}
+			for(int i=0; i<noArr.length; i++) {
+				dao = new SurveyDAO();
+				int no = noArr[i];
+				int answer = answerArr[i];
+				SurveyAnswerDTO dto = new SurveyAnswerDTO();
+				dto.setNo(no);
+				dto.setAnswer(answer);
+				dao.setAnswer(dto);
+			}
+			out.print(0);
+			return;
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

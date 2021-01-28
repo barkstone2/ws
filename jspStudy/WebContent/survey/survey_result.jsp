@@ -58,8 +58,14 @@
 #btn > div {
 	padding: 10px;
 }
+#formTitle{
+	text-align: center;
+}
 </style>
-<form style="width:900px; border:1px solid black" method="post" action="${path}/survey_servlet/answer.do">
+	<div id="formTitle">
+		<h2>설문결과</h2>
+	</div>
+<div style="width:900px; border:1px solid black">
 	<div class="row">
 		<div id="sDateView">
 			<div class="label">
@@ -137,7 +143,7 @@
 			</div>
 		</div>
 	</div>	
-</form>
+</div>
 <div id="btn">
 	<div>
 		<input type="button" value="돌아가기" id="btnBack">

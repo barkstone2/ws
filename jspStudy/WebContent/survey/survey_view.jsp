@@ -35,7 +35,13 @@
 #btn > div {
 	padding: 10px;
 }
+#formTitle{
+	text-align: center;
+}
 </style>
+	<div id="formTitle">
+		<h2>설문 내용 보기</h2>
+	</div>
 <form style="width:900px; border:1px solid black" method="post" action="${path}/survey_servlet/answer.do">
 	<div class="row">
 		<div id="sDateView">

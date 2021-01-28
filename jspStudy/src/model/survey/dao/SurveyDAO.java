@@ -157,6 +157,7 @@ public class SurveyDAO {
 		return list;
 	}
 	
+	
 	public SurveyDTO getView(int no) {
 		SurveyDTO dto = null;
 		String basicSql = "select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, "

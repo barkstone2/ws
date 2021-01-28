@@ -172,3 +172,8 @@ from survey a) a
 select * from survey_answer;
 
 ALTER TABLE survey_answer ADD CONSTRAINT answer CHECK(answer in(1,2,3,4));
+
+
+
+select * from survey where status=0 or current_timestamp > end_date;
+select * from survey_answer;

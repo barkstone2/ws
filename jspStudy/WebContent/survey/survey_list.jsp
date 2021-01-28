@@ -209,6 +209,9 @@
 			<div>
 				<button type="button" id="btnChuga">등록하기</button>
 			</div>
+			<div>
+				<button type="button" id="btnSolve">문제풀이</button>
+			</div>
 		</div>
 	</div>
 </div>
@@ -218,6 +221,10 @@
 		$("#btnChuga").click(function(){
 			goChuga();
 		});
+		$("#btnSolve").click(function(){
+			goSolve();
+		});
+		
 	});
 	function move(value1, value2, value3){
 		if(value1=='list'){

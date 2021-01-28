@@ -36,6 +36,77 @@ function goChuga(){
 			}
 		});
 }
+function goSolve(){
+	var param = {
+			"list_gubun" : $("#span_list_gubun").text(),
+			"pageNumber" : $("#span_pageNumber").text(),
+			"search_option" : $("#span_search_option").text(),
+			"search_data" : $("#span_search_data").text(),
+			"search_date_check" : $("#span_search_date_check").text(),
+			"search_date_s" : $("#span_search_date_s").text(),
+			"search_date_e" : $("#span_search_date_e").text()
+			};
+	$.ajax({
+			type: "post",
+			data: param,
+			url: "${path}/survey_servlet/solve.do",
+			success: function(data){
+				$("#result").html(data);
+				if($("#span_search_date_check").text()=="1"){
+					//$("input[id=search_date_check]:checkbox").prop("checked", true);
+					$("#search_date_check").prop("checked", true);
+				}else{
+					$("input[id=search_date_check]:checkbox").prop("checked", false);
+				}
+				if($("#span_search_option").text()=="question"){
+					$("#op_question").prop("selected", true);
+				}
+				$("#search_data").val($("#span_search_data").text());
+				$("#search_date_s").val($("#span_search_date_s").text());
+				$("#search_date_e").val($("#span_search_date_e").text());
+			}
+		});
+}
+function suntaek_solve(value1){
+	$("#span_list_gubun").text(value1);
+	$("#span_pageNumber").text(1);
+	goSolve();
+}
+function goSolveProc(){
+	if(confirm('제출하시겠습니까?')){
+		var answerArr = document.getElementsByName('answer');
+		var check = '0';
+		for(var i=0; i<answerArr.length; i++){
+			var temp = answerArr[i].value;
+			if(temp=='0'){
+				check = '1'
+				break;
+			}
+		}
+		if(check == '1'){
+			alert('답을 선택하지 않은 설문이 존재합니다.');
+		}else{
+			$.ajax({
+					type: "post",
+					data: $('form').serialize(),
+					url: "${path}/survey_servlet/solveProc.do",
+					success: function(data){
+						if(data=='1'){
+							alert('제출 실패');
+							goSolve();
+						}else{
+							alert('제출 성공');
+							goList();
+						}
+					},
+					error: function(){
+						alert('제출 실패');
+						goSolve();
+					}
+				});
+		}
+	}
+}
 function goChugaProc(){
 	if(confirm('등록하시겠습니까?')){
 		$.ajax({
@@ -106,7 +177,7 @@ function goView(){
 		});
 }
 function goAnswer(){
-	if($('input:radio[name=answer]').is(':checked')){
+	if($('input:radio[name=answer]').is(':checked')||$('#answer').val()!='0'){
 		$.ajax({
 			type: "post",
 			data: $('form').serialize(),

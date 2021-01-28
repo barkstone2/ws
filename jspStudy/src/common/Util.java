@@ -38,6 +38,42 @@ public class Util {
 		}
 	}
 	
+	public int[] numArrCheck(String[] strArr, int defaultNumber) {
+		String defaultPageNumber = String.valueOf(defaultNumber);
+		int[] result = {defaultNumber};
+		
+		if(strArr.length>0) {
+			result = new int[strArr.length];
+			for(int i=0; i<strArr.length; i++) {
+				String temp = strArr[i];
+				if(temp == null || temp.trim().equals("")) {
+					temp = defaultPageNumber;
+				}
+				try {
+					Double.parseDouble(temp);
+					result[i] = Integer.parseInt(temp);
+				}catch (Exception e) {
+					result[i] = Integer.parseInt(defaultPageNumber);
+				}
+			}
+		}
+		return result;
+	}
+	public int valueCheck(int[] arr) {
+		int result = 0;
+		if(arr.length>0) {
+			for(int i=0; i<arr.length; i++) {
+				if(arr[i]==0) {
+					result = 1;
+					break;
+				}
+			}
+		}
+		
+		
+		return result;
+	}
+	
 	public String list_gubunCheck(String list_gubun) {
 		if(list_gubun == null || list_gubun.trim().equals("")) {
 			list_gubun = "all";
