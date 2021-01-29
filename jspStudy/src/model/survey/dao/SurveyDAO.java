@@ -106,6 +106,8 @@ public class SurveyDAO {
 				sqlCheck[0] = true;
 			}
 			if(search_date_s.length()>0 && search_date_e.length()>0) {
+				search_date_s += " 00:00:00.0";
+				search_date_e += " 23:59:59.9";
 				basicSql+= " and (start_date>=to_timestamp(?) and end_date<=to_timestamp(?))";
 				sqlCheck[1] = true;
 			}
@@ -233,6 +235,8 @@ public class SurveyDAO {
 					sqlCheck[0] = true;
 			}
 			if(search_date_s.length()>0&&search_date_e.length()>0) {
+				search_date_s += " 00:00:00.0";
+				search_date_e += " 23:59:59.9";
 				sql+= " and (start_date>=to_timestamp(?) and end_date<=to_timestamp(?))";
 				sqlCheck[1] = true;
 			}

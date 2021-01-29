@@ -122,10 +122,8 @@ public class Util {
 			search_date_s = "";
 			search_date_e = "";
 			search_date_check = "";
-		}else {
-			search_date_s += " 00:00:00.0";
-			search_date_e += " 23:59:59.9";
 		}
+		
 		result[0] = search_option;
 		result[1] = search_data;
 		result[2] = search_date_s;

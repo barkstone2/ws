@@ -39,6 +39,11 @@
 						설문조사
 					</a>
 				</div>
+				<div id="menuMove_survey2">
+					<a href="${path}/survey_servlet2/list.do">
+						설문조사2
+					</a>
+				</div>
 				<div id="menuMove_board">
 					<a href="#">
 						게시판
