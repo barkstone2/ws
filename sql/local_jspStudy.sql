@@ -146,7 +146,8 @@ from
 (select count(*) from survey_answer where no=a.no) survey_counter, b.ans1c, b.ans2c, b.ans3c, b.ans4c 
 from survey a, v_ansCount b where a.no=b.no(+)) tb where tb.no=16
 
-
+select count(*) from survey_answer where no=1
+select * from survey_answer;
 
 select a.*, b.ans1c from survey a, v_ansCount b where a.no=b.no(+);
 select ans1c from v_ansCount where no=16;
