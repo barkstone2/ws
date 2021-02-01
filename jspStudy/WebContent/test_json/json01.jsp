@@ -63,9 +63,6 @@ function json01Proc(){
 			$("#json_his").text(json_sj.his);
 			$("#json_tot").text(json_sj.tot);
 			$("#json_avg").text(json_sj.avg);
-			
-			
-			
 		}
 	});
 	

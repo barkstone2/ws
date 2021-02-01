@@ -48,5 +48,32 @@ function save(){
 }
 function search(){
 	idCheckForm.submit();
+	
+	/* var id = $("#id").val();
+	if(id==''){
+		$("#label_id").html('아이디를 입력하세요.');
+		$("#label_id").css('color', 'green');
+		$("#label_id").css('font-size', '12px');
+		return;
+	}
+	var param = "id=" + id;
+	
+	$.ajax({
+		type: "post",
+		data: param,
+		url: "${path}/member_servlet/id_check.do",
+		success: function(result){
+			if(result>0){
+				$("#id").val('');
+				$("#label_id").html('사용할 수 없는 아이디입니다.');
+				$("#label_id").css('color', 'red');
+				$("#label_id").css('font-size', '12px');
+			}else{
+				$("#label_id").html('사용할 수 있는 아이디입니다.');
+				$("#label_id").css('color', 'blue');
+				$("#label_id").css('font-size', '12px');
+			}
+		}
+	}); */
 }
 </script>
