@@ -170,5 +170,6 @@ export PATH=$ORACLE_HOME/bin:$PATH
 
 14.56.196.4
 
-hyper V 
+cd c:\
+hyper V quit command
 dism.exe /Online /Disable-Feature:Microsoft-Hyper-V
