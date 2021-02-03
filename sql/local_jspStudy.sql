@@ -195,24 +195,29 @@ bParentNo number default 0
 
 create sequence seq_board;
 
-
-
-create or replace view view_maxGroupNo as
-select nvl(max(bGroupNo),0)+1 bGroupNo from board;
-
-select * from view_maxGroupNo;
-    
+   
 
 create table board_reply(
 rNo number not null,
 bNo number not null,
 rWriter nvarchar2(200) not null,
 rContent nvarchar2(200) not null,
+rPasswd nvarchar2(100) not null,
 rRegiDate timestamp default current_timestamp not null,
-rGroupNo number not null,
+rGroupNo number,
 rStepNo number default 0 check(rStepNo in(0,1)) not null 
 );
 
+create sequence seq_board_repl;
 
 select * from board;
+select * from board_reply;
 
+update board_reply set rgroupno=1, rstepno=1 where rno=7;
+commit;
+
+select * from board_reply order by rno;
+
+update board_reply set rgroupno=null where rgroupno=0;
+
+select * from (select rownum rn, a.* from (select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo from board_reply where bNo=1) a) where rn between 1 and 5

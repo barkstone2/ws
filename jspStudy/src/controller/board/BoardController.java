@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import common.Util;
 import model.board.dao.BoardDAO;
 import model.board.dto.BoardDTO;
+import model.board.dto.BoardReplyDTO;
 
 @WebServlet("/board_servlet/*")
 public class BoardController extends HttpServlet {
@@ -95,12 +96,14 @@ public class BoardController extends HttpServlet {
 			String bPasswd = request.getParameter("bPasswd");
 			String bSecretChk_ = request.getParameter("bSecretChk");
 			int bSecretChk = util.numberCheck(bSecretChk_, 0);
+			int maxGroupNo = dao.getMaxNo("bGroupNo", "board");
 			BoardDTO dto = new BoardDTO();
 			dto.setbSubject(bSubject);
 			dto.setbWriter(bWriter);
 			dto.setbContent(bContent);
 			dto.setbSecretChk(bSecretChk);
 			dto.setbPasswd(bPasswd);
+			dto.setbGroupNo(maxGroupNo);
 			int result = dao.setInsert(dto);
 			if(result>0) {
 				msg = "게시글 등록 성공";
@@ -109,6 +112,59 @@ public class BoardController extends HttpServlet {
 				msg = "게시글 등록 실패";
 				reUrl = "/board_servlet/chuga.do";
 			}
+		}else if(uri.indexOf("view.do") != -1) {
+			gubun = "/board/board_view.jsp";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			BoardDTO dto = dao.getView(bNo);
+			request.setAttribute("dto", dto);
+		}else if(uri.indexOf("replyList.do") != -1) {
+			page = "/board/board_reply_list.jsp";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			
+			int conPerPage = 5;
+			int pageNavLength = 5;
+			
+			int totalConCount = dao.getReplyCount(bNo);
+			int jj = totalConCount - conPerPage * (pageNumber -1);
+			
+			int startRecord = conPerPage * (pageNumber -1) + 1;
+			int endRecord = conPerPage * pageNumber;
+			int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage));
+			int startPage = 1;
+			int lastPage = 1;
+			
+			startPage = (pageNumber / pageNavLength - (pageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
+			lastPage = startPage + pageNavLength -1;
+			if(lastPage>totalPage)lastPage=totalPage;
+			
+			request.setAttribute("bNo", bNo);
+			request.setAttribute("pageNumber", pageNumber);
+			request.setAttribute("conPerPage", conPerPage);
+			request.setAttribute("pageNavLength", pageNavLength);
+			request.setAttribute("totalConCount", totalConCount);
+			request.setAttribute("jj", jj);
+			request.setAttribute("startRecord", startRecord);
+			request.setAttribute("endRecord", endRecord);
+			request.setAttribute("totalPage", totalPage);
+			request.setAttribute("startPage", startPage);
+			request.setAttribute("lastPage", lastPage);
+			
+			ArrayList<BoardReplyDTO> list = dao.getReply(bNo, startRecord, endRecord);
+			request.setAttribute("list", list);
+		}else if(uri.indexOf("replyReg.do") != -1) {
+			page = "/board_servlet/replyList.do";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			String rStepNo_ = request.getParameter("rStepNo");
+			int rStepNo = util.numberCheck(rStepNo_, 0);
+			String rWriter = request.getParameter("rWriter");
+			String rPasswd = request.getParameter("rPasswd");
+			String rContent = request.getParameter("rContent");
+			int rGroupNo = dao.getMaxNo("rGroupNo", "board_reply");
+			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
+			dao.setInsertReply(dto);
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

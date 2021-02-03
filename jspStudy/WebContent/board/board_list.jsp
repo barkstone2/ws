@@ -127,12 +127,14 @@
 		</div>
 	</c:if>
 	<c:forEach var="dto" items="${list}">
+		<c:set var="replyCounter" value=" [${dto.replyCounter}]"/>
 		<div class="mlistcon">
 			<div class="column1">
 				${jj}
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','1','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}')">${dto.bSubject}</a>
+				<a href="#" onclick="move('view','${pageNumber}','${list_gubun}','${search_option}',
+				'${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}')">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
 			</div>
 			<div class="column3">
 				${dto.bWriter}
@@ -210,7 +212,7 @@ function move(value1, value2, value3, value4, value5, value6, value7, value8){
 		+"&search_data="+value5
 		+"&search_date_s="+value6
 		+"&search_date_e="+value7
-		+"&no="+value8;
+		+"&bNo="+value8;
 	
 	if(value1=='list'){
 		location.href= basicUrl+"list.do"+ queryString;
