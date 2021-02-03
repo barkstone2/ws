@@ -221,3 +221,9 @@ create user test0201
 identified by 1234;
 
 grant connect, resource, dba to test0201;
+
+
+create user example01
+identified by 1234;
+
+grant connect, resource, dba to example01;
