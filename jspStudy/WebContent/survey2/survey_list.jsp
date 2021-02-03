@@ -151,7 +151,7 @@
 				${jj}
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','1','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.no}')">${dto.question}</a>
+				<a href="#" onclick="move('view','${pageNumber}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.no}')">${dto.question}</a>
 			</div>
 			<div class="column3">
 				&nbsp;&nbsp;&nbsp;${dto.start_date} ~<br>

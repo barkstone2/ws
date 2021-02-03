@@ -178,3 +178,41 @@ ALTER TABLE survey_answer ADD CONSTRAINT answer CHECK(answer in(1,2,3,4));
 
 select * from survey where status=0 or current_timestamp > end_date;
 select * from survey_answer;
+
+drop table board;
+create table board(
+bNo number not null,
+bSubject nvarchar2(200) not null,
+bWriter nvarchar2(200) not null,
+bContent clob not null,
+bRegiDate timestamp default current_timestamp not null,
+bSecretChk number default 0 not null check(bSecretChk in(0,1)),
+bPasswd nvarchar2(100) not null,
+bGroupNo number not null,
+bStepNo number default 0 not null,
+bParentNo number default 0
+);
+
+create sequence seq_board;
+
+
+
+create or replace view view_maxGroupNo as
+select nvl(max(bGroupNo),0)+1 bGroupNo from board;
+
+select * from view_maxGroupNo;
+    
+
+create table board_reply(
+rNo number not null,
+bNo number not null,
+rWriter nvarchar2(200) not null,
+rContent nvarchar2(200) not null,
+rRegiDate timestamp default current_timestamp not null,
+rGroupNo number not null,
+rStepNo number default 0 check(rStepNo in(0,1)) not null 
+);
+
+
+select * from board;
+

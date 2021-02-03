@@ -45,7 +45,7 @@
 					</a>
 				</div>
 				<div id="menuMove_board">
-					<a href="#">
+					<a href="${path}/board_servlet/list.do">
 						게시판
 					</a>
 				</div>
