@@ -216,7 +216,7 @@ select * from board_reply;
 update board_reply set rgroupno=1, rstepno=1 where rno=7;
 commit;
 
-select * from board_reply order by rno;
+select * from board_reply order by rgroupNo, rno;
 
 update board_reply set rgroupno=null where rgroupno=0;
 

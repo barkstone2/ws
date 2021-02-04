@@ -4,8 +4,9 @@
 <style>
 .replRow{
 	display:flex;
-	width:850px;
+	min-width:850px;
 	align-items: center;
+	max-width:850px;
 }
 .label{
 	width:120px;
@@ -101,16 +102,19 @@
 				<div class="replyListCon">
 					<input type="hidden" value="${reply.rGroupNo}" id="rGroupNo${reply.rNo}">
 					<input type="hidden" value="0" id="toggle${reply.rNo}">
-					<div class="replRow">
+					<div class="replRow" style="margin-left: ${reply.rStepNo>0?30:0}px">
 						<div style="width:158px;">
-							${reply.rWriter}
+							 ${reply.rWriter}
 						</div>
 						<div style="width:500px; display:flex; 
 						justify-content: flex-start; cursor: pointer;" onclick="reReply('${reply.rNo}');">
-							${reply.rContent}
+							<c:if test="${reply.rStepNo>0}">└ </c:if>${reply.rContent}
 						</div>
-						<div style="width:158px;">
+						<div style="width:158px; display:flex;">
 							${reply.rRegiDate}
+							<div style="width:18px; display:flex; align-items: center;">
+								<img src="../replyMoreImg.png" style="cursor: pointer;">
+							</div>
 						</div>
 					</div>
 					<div id="reReply${reply.rNo}"></div>
@@ -147,7 +151,7 @@
 				endRecord:${endRecord} / totalPage:${totalPage} / startPage:${startPage} / lastPage:${lastPage} / pageNumber:${pageNumber} 
 			</div>
 		</div>
-		<div style="width: 900px; display:flex; justify-content: center;">
+		<div style="width: 900px; display:flex; padding:5px; justify-content: center;">
 			<form id="replyForm" name="replyForm" method="post" action="">
 				<input type="hidden" name="bNo" value="${bNo}">
 				<input type="hidden" name="rGroupNo" value="0">
@@ -193,7 +197,7 @@
 			</div>
 		</div>
 		<div style="display:flex; justify-content: flex-end; margin-top: 5px;">
-			<input style="width:70px; height:35px;" type="button" value="댓글등록" id="btnReplyReg">
+			<input style="width:70px; height:35px;" type="button" value="댓글등록" onclick="reReplyReg();">
 		</div>
 	</form>
 	</div>

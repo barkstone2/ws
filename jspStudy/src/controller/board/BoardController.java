@@ -123,7 +123,7 @@ public class BoardController extends HttpServlet {
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			
-			int conPerPage = 5;
+			int conPerPage = 10;
 			int pageNavLength = 5;
 			
 			int totalConCount = dao.getReplyCount(bNo);
@@ -163,6 +163,19 @@ public class BoardController extends HttpServlet {
 			String rPasswd = request.getParameter("rPasswd");
 			String rContent = request.getParameter("rContent");
 			int rGroupNo = dao.getMaxNo("rGroupNo", "board_reply");
+			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
+			dao.setInsertReply(dto);
+		}else if(uri.indexOf("reReply.do") != -1) {
+			page = "/board_servlet/replyList.do";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			String rStepNo_ = request.getParameter("rStepNo");
+			int rStepNo = util.numberCheck(rStepNo_, 1);
+			String rWriter = request.getParameter("rWriter");
+			String rPasswd = request.getParameter("rPasswd");
+			String rContent = request.getParameter("rContent");
+			String rGroupNo_ = request.getParameter("rGroupNo");
+			int rGroupNo = util.numberCheck(rGroupNo_, dao.getMaxNo("rGroupNo", "board_reply"));
 			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
 			dao.setInsertReply(dto);
 		}

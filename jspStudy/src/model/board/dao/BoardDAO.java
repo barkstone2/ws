@@ -165,6 +165,7 @@ public class BoardDAO {
 				+ "from board_reply where bNo=?";
 		try {
 			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where rn between ? and ?";
+			sql += " order by rGroupNo, rNo";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bNo);
 			pstmt.setInt(2, startRecord);
@@ -220,11 +221,7 @@ public class BoardDAO {
 			pstmt.setString(2, dto.getrWriter());
 			pstmt.setString(3, dto.getrContent());
 			pstmt.setString(4, dto.getrPasswd());
-			if(dto.getrGroupNo()==0) {
-				pstmt.setNull(5, 0);
-			}else {
-				pstmt.setInt(5, dto.getrGroupNo());
-			}
+			pstmt.setInt(5, dto.getrGroupNo());
 			pstmt.setInt(6, dto.getrStepNo());
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {

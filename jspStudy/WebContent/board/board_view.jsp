@@ -114,6 +114,16 @@ function replyReg(){
 		});
 }
 
+function reReplyReg(){
+	$.ajax({
+			type: "post",
+			data: $('form').serialize(),
+			url: "${path}/board_servlet/reReply.do",
+			success: function(data){
+				$("#replyDiv").html(data);
+			}
+		});
+}
 
 function move(value1, value2, value3, value4, value5, value6, value7, value8){
 	var basicUrl = "${path}/board_servlet/";
