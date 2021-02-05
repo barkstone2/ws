@@ -13,7 +13,7 @@ import model.board.dto.BoardReplyDTO;
 import model.memo.dto.MemoDTO;
 import model.survey.dto.SurveyDTO;
 
-public class BoardDAO {
+public class BoardDAO2 {
 	private Db db = new DbImplOracle();
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
@@ -21,7 +21,7 @@ public class BoardDAO {
 	private String tableName1 = "board";
 	private String tableName2 = "board_reply";
 	
-	public BoardDAO() {
+	public BoardDAO2() {
 		conn = db.getConn();		
 	}
 	

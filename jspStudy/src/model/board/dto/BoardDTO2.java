@@ -2,7 +2,7 @@ package model.board.dto;
 
 import java.sql.Timestamp;
 
-public class BoardDTO {
+public class BoardDTO2 {
 	private int bNo;
 	private String bSubject;
 	private String bWriter;
@@ -21,7 +21,7 @@ public class BoardDTO {
 	private int bLevelNo; // 계층형 게시판 용
 	private int bHit; // 조회수
 	private int bMemberNo; // 0일시 비회원, 0보다 크면 회원
-	private int bNoticeNo; // 공지 판단용
+	private int bNoticeChk; // 공지 판단용
 	private String bIp;
 	
 	//이전글 다음글 표시용
@@ -30,10 +30,10 @@ public class BoardDTO {
 	private String bPreSubject;
 	private String bNextSubject;
 	
-	public BoardDTO() {
+	public BoardDTO2() {
 	}
 
-	public BoardDTO(int bNo, String bSubject, String bWriter, String bContent, Timestamp bRegiDate, int bSecretChk,
+	public BoardDTO2(int bNo, String bSubject, String bWriter, String bContent, Timestamp bRegiDate, int bSecretChk,
 			String bPasswd, int bGroupNo, int bStepNo, int bParentNo) {
 		this.bNo = bNo;
 		this.bSubject = bSubject;

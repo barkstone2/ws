@@ -49,6 +49,11 @@
 						게시판
 					</a>
 				</div>
+				<div id="menuMove_board2">
+					<a href="${path}/board_servlet2/index.do">
+						게시판2
+					</a>
+				</div>
 				<div id="menuMove_shop">
 					<a href="#">
 						쇼핑몰

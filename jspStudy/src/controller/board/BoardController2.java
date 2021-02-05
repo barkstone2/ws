@@ -18,8 +18,8 @@ import model.board.dao.BoardDAO;
 import model.board.dto.BoardDTO;
 import model.board.dto.BoardReplyDTO;
 
-@WebServlet("/board_servlet/*")
-public class BoardController extends HttpServlet {
+@WebServlet("/board_servlet2/*")
+public class BoardController2 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -73,8 +73,11 @@ public class BoardController extends HttpServlet {
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
 		
-		if(uri.indexOf("list.do") != -1) {
-			gubun = "/board/board_list.jsp";
+		if(uri.indexOf("index.do") != -1) {
+			gubun = "/board2/board_index.jsp";
+			
+		}else if(uri.indexOf("list.do") != -1) {
+			page = "/board2/board_list.jsp";
 			int conPerPage = 5;
 			int pageNavLength = 5;
 			
@@ -104,9 +107,9 @@ public class BoardController extends HttpServlet {
 			ArrayList<BoardDTO> list = dao.getListAll(startRecord, endRecord, search_option, search_data);
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("chuga.do") != -1) {
-			gubun = "/board/board_chuga.jsp";
+			page = "/board2/board_chuga.jsp";
 		}else if(uri.indexOf("chugaProc.do") != -1) {
-			page = "/message.jsp";
+			page = "/board2/board_list.do";
 			previousPageUrl += "/chuga.do";
 			String bSubject = request.getParameter("bSubject");
 			String bWriter = request.getParameter("bWriter");

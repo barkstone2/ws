@@ -1,7 +1,13 @@
 package common;
 
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
+import java.net.http.HttpRequest;
 import java.util.Calendar;
 import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class Util {
 	public int[] getDateTime() {
@@ -132,6 +138,67 @@ public class Util {
 		
 		return result;
 	}
+	
+	public String[] getServerInfo(HttpServletRequest request) throws UnknownHostException {
+		String referer = request.getHeader("REFERER")!=null?(String)request.getHeader("REFERER"):"";//이전 페이지 URL
+		String path = request.getContextPath(); //컨텍스트 경로
+		String url = request.getRequestURL().toString(); //전체주소
+		String uri = request.getRequestURI(); //도메인 주소를 제외한 주소
+		String servletPath = request.getServletPath(); // 서블링 경로
+		String ip = Inet4Address.getLocalHost().getHostAddress();
+		String ip6 = "";
+		String[] serverInfo = {referer, path, url, uri, servletPath, ip, ip6};
+		
+		return serverInfo;
+	}
+	
+	
+	public String[] sessionCheck(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		
+		int cookNo = 0;
+		if(session.getAttribute("cookNo") != null) {
+			cookNo = (Integer)session.getAttribute("cookNo");
+		}
+		
+		String cookId = "";
+		if(session.getAttribute("cookId") != null) {
+			cookId = (String)session.getAttribute("cookId");
+		}
+		
+		String cookName = "";
+		if(session.getAttribute("cookId") != null) {
+			cookName = (String)session.getAttribute("cookName");
+		}
+		
+		String[] result = {cookNo+"", cookId, cookName};
+		return result;
+	}
+	
+	public int[] pager(int conPerPage, int pageNavLength, int totalConCount, int pageNumber) {
+		int jj = totalConCount - conPerPage * (pageNumber -1);
+		int startRecord = conPerPage * (pageNumber -1) + 1;
+		int endRecord = conPerPage * pageNumber;
+		if(endRecord > totalConCount) {
+			endRecord = totalConCount;
+		}
+		
+		int totalPage = 0;
+		int startPage = 1;
+		int lastPage = 1;
+		if(totalConCount>0) {
+			totalPage = totalConCount / conPerPage + (totalConCount % conPerPage == 0 ? 0 : 1);
+			startPage = (pageNumber / pageNavLength - (pageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
+			lastPage = startPage + pageNavLength -1;
+			if(lastPage>totalPage)lastPage=totalPage;
+		}
+		
+		int[] result = {jj,startRecord,endRecord,totalPage,startPage,lastPage};
+		
+		return result;
+	}
+	
+	
 	
 	
 }
