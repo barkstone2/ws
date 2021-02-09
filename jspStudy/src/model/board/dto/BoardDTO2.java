@@ -3,63 +3,91 @@ package model.board.dto;
 import java.sql.Timestamp;
 
 public class BoardDTO2 {
-	private int bNo;
+	// ** DB처리용 데이터 **
+	private int bNo; // 고유번호
+	private int bNum; // 그냥 붙인 번호
+	private String boardType; // 아직 사용 안함
+	//사용자 입력값
 	private String bSubject;
 	private String bWriter;
 	private String bContent;
-	private Timestamp bRegiDate;
-	private int bSecretChk;
 	private String bPasswd;
+	private String bEmail;
+	private int bSecretChk; // 비밀글 판단용
+	private int bNoticeNum; // 공지 판단용
+	//기타 정보
+	private String bIp;
+	private int bMemberNo; // 0일시 비회원, 0보다 크면 회원
+	private int bHit; // 조회수
+	private Timestamp bRegiDate;
+	// 계층형 게시판 표시용
 	private int bGroupNo;
 	private int bStepNo;
+	private int bLevelNo;
 	private int bParentNo;
-	private int replyCounter;
-	
-	private int bNum; // 그냥 붙인 번호
-	private String bTbl; // 아직 사용 안함
-	private String bEmail;
-	private int bLevelNo; // 계층형 게시판 용
-	private int bHit; // 조회수
-	private int bMemberNo; // 0일시 비회원, 0보다 크면 회원
-	private int bNoticeChk; // 공지 판단용
-	private String bIp;
-	
+	private int childCount;
+
 	//이전글 다음글 표시용
 	private int bPreNo;
 	private int bNextNo;
 	private String bPreSubject;
 	private String bNextSubject;
+	private int replyCounter; // 댓글 수 표시용
 	
 	public BoardDTO2() {
 	}
 
-	public BoardDTO2(int bNo, String bSubject, String bWriter, String bContent, Timestamp bRegiDate, int bSecretChk,
-			String bPasswd, int bGroupNo, int bStepNo, int bParentNo) {
+	public BoardDTO2(int bNo, int bNum, String boardType, String bSubject, String bWriter, String bContent,
+			String bPasswd, String bEmail, int bSecretChk, int bNoticeNum, String bIp, int bMemberNo, int bHit,
+			Timestamp bRegiDate, int bGroupNo, int bStepNo, int bLevelNo, int bParentNo) {
 		this.bNo = bNo;
+		this.bNum = bNum;
+		this.boardType = boardType;
 		this.bSubject = bSubject;
 		this.bWriter = bWriter;
 		this.bContent = bContent;
-		this.bRegiDate = bRegiDate;
-		this.bSecretChk = bSecretChk;
 		this.bPasswd = bPasswd;
+		this.bEmail = bEmail;
+		this.bSecretChk = bSecretChk;
+		this.bNoticeNum = bNoticeNum;
+		this.bIp = bIp;
+		this.bMemberNo = bMemberNo;
+		this.bHit = bHit;
+		this.bRegiDate = bRegiDate;
 		this.bGroupNo = bGroupNo;
 		this.bStepNo = bStepNo;
+		this.bLevelNo = bLevelNo;
 		this.bParentNo = bParentNo;
-	}
-
-
-
-	
-	
-	
-	
-
-	public int getReplyCounter() {
-		return replyCounter;
-	}
-
-	public void setReplyCounter(int replyCounter) {
+		this.bPreNo = bPreNo;
+		this.bNextNo = bNextNo;
+		this.bPreSubject = bPreSubject;
+		this.bNextSubject = bNextSubject;
 		this.replyCounter = replyCounter;
+	}
+
+
+
+
+
+
+
+
+
+
+	public int getChildCount() {
+		return childCount;
+	}
+
+	public void setChildCount(int childCount) {
+		this.childCount = childCount;
+	}
+
+	public String getBoardType() {
+		return boardType;
+	}
+
+	public void setBoardType(String boardType) {
+		this.boardType = boardType;
 	}
 
 	public int getbNo() {
@@ -69,6 +97,15 @@ public class BoardDTO2 {
 	public void setbNo(int bNo) {
 		this.bNo = bNo;
 	}
+
+	public int getbNum() {
+		return bNum;
+	}
+
+	public void setbNum(int bNum) {
+		this.bNum = bNum;
+	}
+
 
 	public String getbSubject() {
 		return bSubject;
@@ -94,12 +131,20 @@ public class BoardDTO2 {
 		this.bContent = bContent;
 	}
 
-	public Timestamp getbRegiDate() {
-		return bRegiDate;
+	public String getbPasswd() {
+		return bPasswd;
 	}
 
-	public void setbRegiDate(Timestamp bRegiDate) {
-		this.bRegiDate = bRegiDate;
+	public void setbPasswd(String bPasswd) {
+		this.bPasswd = bPasswd;
+	}
+
+	public String getbEmail() {
+		return bEmail;
+	}
+
+	public void setbEmail(String bEmail) {
+		this.bEmail = bEmail;
 	}
 
 	public int getbSecretChk() {
@@ -110,12 +155,44 @@ public class BoardDTO2 {
 		this.bSecretChk = bSecretChk;
 	}
 
-	public String getbPasswd() {
-		return bPasswd;
+	public int getbNoticeNum() {
+		return bNoticeNum;
 	}
 
-	public void setbPasswd(String bPasswd) {
-		this.bPasswd = bPasswd;
+	public void setbNoticeNum(int bNoticeNum) {
+		this.bNoticeNum = bNoticeNum;
+	}
+
+	public String getbIp() {
+		return bIp;
+	}
+
+	public void setbIp(String bIp) {
+		this.bIp = bIp;
+	}
+
+	public int getbMemberNo() {
+		return bMemberNo;
+	}
+
+	public void setbMemberNo(int bMemberNo) {
+		this.bMemberNo = bMemberNo;
+	}
+
+	public int getbHit() {
+		return bHit;
+	}
+
+	public void setbHit(int bHit) {
+		this.bHit = bHit;
+	}
+
+	public Timestamp getbRegiDate() {
+		return bRegiDate;
+	}
+
+	public void setbRegiDate(Timestamp bRegiDate) {
+		this.bRegiDate = bRegiDate;
 	}
 
 	public int getbGroupNo() {
@@ -134,6 +211,14 @@ public class BoardDTO2 {
 		this.bStepNo = bStepNo;
 	}
 
+	public int getbLevelNo() {
+		return bLevelNo;
+	}
+
+	public void setbLevelNo(int bLevelNo) {
+		this.bLevelNo = bLevelNo;
+	}
+
 	public int getbParentNo() {
 		return bParentNo;
 	}
@@ -141,6 +226,46 @@ public class BoardDTO2 {
 	public void setbParentNo(int bParentNo) {
 		this.bParentNo = bParentNo;
 	}
-	
+
+	public int getbPreNo() {
+		return bPreNo;
+	}
+
+	public void setbPreNo(int bPreNo) {
+		this.bPreNo = bPreNo;
+	}
+
+	public int getbNextNo() {
+		return bNextNo;
+	}
+
+	public void setbNextNo(int bNextNo) {
+		this.bNextNo = bNextNo;
+	}
+
+	public String getbPreSubject() {
+		return bPreSubject;
+	}
+
+	public void setbPreSubject(String bPreSubject) {
+		this.bPreSubject = bPreSubject;
+	}
+
+	public String getbNextSubject() {
+		return bNextSubject;
+	}
+
+	public void setbNextSubject(String bNextSubject) {
+		this.bNextSubject = bNextSubject;
+	}
+
+	public int getReplyCounter() {
+		return replyCounter;
+	}
+
+	public void setReplyCounter(int replyCounter) {
+		this.replyCounter = replyCounter;
+	}
+
 	
 }

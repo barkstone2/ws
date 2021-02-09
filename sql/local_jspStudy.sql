@@ -220,4 +220,48 @@ select * from board_reply order by rgroupNo, rno;
 
 update board_reply set rgroupno=null where rgroupno=0;
 
-select * from (select rownum rn, a.* from (select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo from board_reply where bNo=1) a) where rn between 1 and 5
+select * from (select rownum rn, a.* from (select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo from board_reply where bNo=1) a) where rn between 1 and 5;
+
+drop table board2;
+
+create table board2(
+bNo number not null,
+bNum number not null,
+boardType nvarchar2(100) not null,
+bSubject nvarchar2(200) not null,
+bWriter nvarchar2(200) not null,
+bContent clob not null,
+bPasswd nvarchar2(100) not null,
+bEmail nvarchar2(100) not null,
+bSecretChk number default 0 check(bSecretChk in(0,1)) not null,
+bNoticeNum number default 0 not null,
+bIp nvarchar2(100) not null,
+bMemberNo number not null,
+bHit number default 0 not null,
+bRegiDate timestamp default current_timestamp not null,
+bGroupNo number not null,
+bStepNo number default 0 not null,
+bLevelNo number default 0 not null, 
+bParentNo number default 0 not null
+);
+
+create sequence seq_board2;
+
+create table board_reply2(
+rNo number not null,
+bNo number not null,
+rWriter nvarchar2(200) not null,
+rContent nvarchar2(200) not null,
+rPasswd nvarchar2(100) not null,
+rRegiDate timestamp default current_timestamp not null,
+rGroupNo number,
+rStepNo number default 0 check(rStepNo in(0,1)) not null 
+);
+
+
+select * from board2;
+
+select max(blevelno)+1 from board2;
+
+
+

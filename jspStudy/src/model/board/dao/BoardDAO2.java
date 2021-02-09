@@ -9,6 +9,7 @@ import java.util.HashMap;
 import db.Db;
 import db.DbImplOracle;
 import model.board.dto.BoardDTO;
+import model.board.dto.BoardDTO2;
 import model.board.dto.BoardReplyDTO;
 import model.memo.dto.MemoDTO;
 import model.survey.dto.SurveyDTO;
@@ -18,26 +19,39 @@ public class BoardDAO2 {
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-	private String tableName1 = "board";
-	private String tableName2 = "board_reply";
+	private String tableName1 = "board2";
+	private String tableName2 = "board_reply2";
 	
 	public BoardDAO2() {
 		conn = db.getConn();		
 	}
 	
-	public int setInsert(BoardDTO dto) {
+	public int setInsert(BoardDTO2 dto) {
 		int result=0;
+		int maxGroupNo = getMaxNo("bGroupNo", tableName1);
+		int maxLevelNo = getMaxNo("bLevelNo", tableName1);
+		int maxNoticeNum = 0;
+		if(dto.getbNoticeNum()>0) {
+			maxNoticeNum = getMaxNo("bNoticeNum", tableName1);
+		}
 		try {
-			String sql = "insert into board "
-					+ "(bNo, bSubject, bWriter, bContent, bRegiDate, bSecretChk, bPasswd, bGroupNo, bStepNo, bParentNo) "
-					+ "values(seq_board.nextval,?,?,?,default,?,?,?,default,default)";
+			String sql = "insert into "+ tableName1
+					+ " (bNo, bNum, boardType, bSubject, bWriter, bContent, bPasswd, bEmail, "
+					+ "bSecretChk, bNoticeNum, bIp, bMemberNo, bHit, bRegiDate, bGroupNo, bStepNo, bLevelNo, bParentNo) "
+					+ "values(seq_board2.nextval,0,?,?,?,?,?,?,?,?,?,?,default,default,?,default,?,default)";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, dto.getbSubject());
-			pstmt.setString(2, dto.getbWriter());
-			pstmt.setString(3, dto.getbContent());
-			pstmt.setInt(4, dto.getbSecretChk());
+			pstmt.setString(1, dto.getBoardType());
+			pstmt.setString(2, dto.getbSubject());
+			pstmt.setString(3, dto.getbWriter());
+			pstmt.setString(4, dto.getbContent());
 			pstmt.setString(5, dto.getbPasswd());
-			pstmt.setInt(6, dto.getbGroupNo());
+			pstmt.setString(6, dto.getbEmail());
+			pstmt.setInt(7, dto.getbSecretChk());
+			pstmt.setInt(8, maxNoticeNum);
+			pstmt.setString(9, dto.getbIp());
+			pstmt.setInt(10, dto.getbMemberNo());
+			pstmt.setInt(11, maxGroupNo);
+			pstmt.setInt(12, maxLevelNo);
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -48,9 +62,9 @@ public class BoardDAO2 {
 	}
 	
 	public int getMaxNo(String noName, String tableName) {
-		int maxNo = 1;
+		int maxNo = 0;
 		try {
-			String sql = "select max("+noName+")+1 from "+tableName;
+			String sql = "select max("+noName+") from "+tableName;
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
@@ -59,15 +73,19 @@ public class BoardDAO2 {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		return maxNo;
+		return maxNo+1;
 	}
 	
-	public ArrayList<BoardDTO> getListAll(int startRecord, int endRecord, String search_option, String search_data){
-		ArrayList<BoardDTO> list = new ArrayList<>();
-		String basicSql = "select a.bNo, a.bSubject, a.bWriter, a.bContent, a.bRegiDate, a.bSecretChk, a.bPasswd, a.bGroupNo, "
-				+ "a.bStepNo, a.bParentNo, (select count(*) from board_reply where a.bNo=bNo) replyCounter "
-				+ "from board a where bNo>0";
-		String orderBy = " order by bGroupNo desc, bStepNo asc, bNo asc";
+	public ArrayList<BoardDTO2> getListAll(String boardType, int startRecord, int endRecord, String search_option, String search_data){
+		ArrayList<BoardDTO2> list = new ArrayList<>();
+		int maxNoticeNum = getMaxNo("bNoticeNum", tableName1)-1;
+		String basicSql = "select a.bNo, a.bNum, a.boardType, a.bSubject, a.bWriter, a.bContent, "
+				+ "a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.bRegiDate, "
+				+ "a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo, "
+				+ "(select count(*) from "+tableName2+" where a.bNo=bNo) replyCounter, "
+				+ "(select count(*) from "+tableName1+" where a.bNo=bParentNo) childCount "
+				+ "from "+tableName1+" a where bNo>0 and boardType=?";
+		String orderBy = " order by bNoticeNum desc, bGroupNo desc, bStepNo asc, bLevelNo asc, bNo asc";
 		try {
 			boolean[] sqlCheck = new boolean[3];
 			if(search_option.length()>0&&search_data.length()>0) {
@@ -81,44 +99,57 @@ public class BoardDAO2 {
 					basicSql+= " and "+search_option+" like ?";
 					sqlCheck[2] = true;
 				}
-				
 			}
+			basicSql += " or bNoticeNum>0";
 			basicSql += orderBy;
-			int k = 0;  //++k
-			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where rn between ? and ?";
+			int k = 1;  //++k
+			String sql = "select c.*, "
+					+ "lag(bNo) over(order by rn) bPreNo, "
+					+ "lead(bNo) over(order by rn) bNextNo, "
+					+ "lag(bSubject) over(order by rn) bPreSubject, "
+					+ "lead(bSubject) over(order by rn) bNextSubject "
+					+ "from (select rownum rn, b.* from ("+basicSql+") b) c where rn between ? and ?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, boardType);
 			if(sqlCheck[0]) {
-				pstmt.setString(1, "%"+search_data+"%");
-				pstmt.setString(2, "%"+search_data+"%");
-				pstmt.setInt(2, startRecord);
-				pstmt.setInt(3, endRecord);
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
 			}else if(sqlCheck[1]) {
-				pstmt.setString(1, "%"+search_data+"%");
-				pstmt.setString(2, "%"+search_data+"%");
-				pstmt.setString(3, "%"+search_data+"%");
-				pstmt.setInt(4, startRecord);
-				pstmt.setInt(5, endRecord);
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
 			}else if(sqlCheck[2]){
-				pstmt.setString(1, "%"+search_data+"%");
-				pstmt.setInt(2, startRecord);
-				pstmt.setInt(3, endRecord);
-			}else {
-				pstmt.setInt(1, startRecord);
-				pstmt.setInt(2, endRecord);
+				pstmt.setString(++k, "%"+search_data+"%");
 			}
+			pstmt.setInt(++k, startRecord);
+			pstmt.setInt(++k, endRecord+maxNoticeNum);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
-				BoardDTO dto = new BoardDTO(rs.getInt("bNo"),
+				BoardDTO2 dto = new BoardDTO2(rs.getInt("bNo"),
+						rs.getInt("bNum"),
+						rs.getString("boardType"),
 						rs.getString("bSubject"),
 						rs.getString("bWriter"),
 						rs.getString("bContent"),
-						rs.getTimestamp("bRegiDate"),
-						rs.getInt("bSecretChk"),
 						rs.getString("bPasswd"),
+						rs.getString("bEmail"),
+						rs.getInt("bSecretChk"),
+						rs.getInt("bNoticeNum"),
+						rs.getString("bIp"),
+						rs.getInt("bMemberNo"),
+						rs.getInt("bHit"),
+						rs.getTimestamp("bRegiDate"),
 						rs.getInt("bGroupNo"),
 						rs.getInt("bStepNo"),
-						rs.getInt("bParentNo"));
+						rs.getInt("bLevelNo"),
+						rs.getInt("bParentNo")
+						);
 				dto.setReplyCounter(rs.getInt("replyCounter"));
+				dto.setbPreNo(rs.getInt("bPreNo"));
+				dto.setbNextNo(rs.getInt("bNextNo"));
+				dto.setbPreSubject(rs.getString("bPreSubject"));
+				dto.setbNextSubject(rs.getString("bNextSubject"));
+				dto.setChildCount(rs.getInt("childCount"));
 				list.add(dto);
 			}
 		}catch (Exception e) {
@@ -252,11 +283,11 @@ public class BoardDAO2 {
 		return result;
 	}
 	
-	
+	// ** 공지글을 제외한 총 글 개수 **
 	public int getTotalCount(String search_option, String search_data) {
 		int result = 0;
 		try {
-			String sql = "select count(*) from board where bNo>0";
+			String sql = "select count(*) from "+tableName1+" where bNo>0";
 			boolean[] sqlCheck = new boolean[3];
 			if(search_option.length()>0&&search_data.length()>0) {
 				if(search_option.equals("subcon")) {
@@ -270,16 +301,18 @@ public class BoardDAO2 {
 					sqlCheck[2] = true;
 				}
 			}
+			sql += " and bNoticeNum=0";
 			pstmt = conn.prepareStatement(sql);
+			int k = 0;
 			if(sqlCheck[0]) {
-				pstmt.setString(1, "%"+search_data+"%");
-				pstmt.setString(2, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
 			}else if(sqlCheck[1]) {
-				pstmt.setString(1, "%"+search_data+"%");
-				pstmt.setString(2, "%"+search_data+"%");
-				pstmt.setString(3, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
 			}else if(sqlCheck[2]){
-				pstmt.setString(1, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
 			}
 			rs = pstmt.executeQuery();
 			if(rs.next()) {

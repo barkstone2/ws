@@ -83,13 +83,13 @@
 			이메일
 		</div>
 		<div>
-			<input type="text" name="bEamil" id="bEamil" style="width:500px;">
+			<input type="text" name="bEmail" id="bEmail" style="width:500px;">
 		</div>
 		<div class="label" style="margin-right: 50px;">
 			공지사항
 		</div>
 		<div>
-			<input type="checkbox" name="bNoticeChk" id="bNoticeChk" value="" class="inp">
+			<input type="checkbox" name="bNoticeNum" id="bNoticeNum" value="" class="inp">
 		</div>
 	</div>
 	
@@ -100,10 +100,14 @@
 					<input type="button" value="게시글등록" id="btnSave">
 				</div>
 				<div>
-					<input type="button" value="목록으로" onclick="move('list','${pageNumber}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.no}');" id="btnList">
+					<input type="button" value="목록으로" id="btnList">
 				</div>
 			</div>
 		</div>
+	</div>
+	<div>
+		<input type="hidden" name="boardType" value="free">
+		<input type="hidden" name="bMemberNo" value="">
 	</div>
 </form>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -117,14 +121,16 @@ $(document).ready(function(){
 				$("#bSecretChk").val('0');
 			}
 			
-			if($("#bNoticeChk").is(":checked") == true){
-				$("#bNoticeChk").val('1');
+			if($("#bNoticeNum").is(":checked") == true){
+				$("#bNoticeNum").val('1');
 			}else{
-				$("#bNoticeChk").val('0');
+				$("#bNoticeNum").val('0');
 			}
-			
 			goPage('chugaProc');
 		}
+	});
+	$("#btnList").click(function(){
+		goPage('list');
 	});
 });
 

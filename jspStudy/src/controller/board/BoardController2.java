@@ -11,11 +11,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import common.Util;
 import common.UtilBoard;
-import model.board.dao.BoardDAO;
-import model.board.dto.BoardDTO;
+import model.board.dao.BoardDAO2;
+import model.board.dto.BoardDTO2;
 import model.board.dto.BoardReplyDTO;
 
 @WebServlet("/board_servlet2/*")
@@ -33,10 +34,10 @@ public class BoardController2 extends HttpServlet {
 	protected void doProc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
-		Util util = new UtilBoard();
+		UtilBoard util = new UtilBoard();
 		
+		//** ServerInfo **
 		String[] serverInfo = util.getServerInfo(request);
-		
 		String referer = serverInfo[0]; //이전 페이지 URL
 		String path = serverInfo[1]; //컨텍스트 경로
 		String url = serverInfo[2]; //전체주소
@@ -45,13 +46,14 @@ public class BoardController2 extends HttpServlet {
 		String ip = serverInfo[5];
 		//String ip6 = serverInfo[6];
 		
-		
-		String previousPageUrl = url.replace(uri,"") + path + servletPath;
+		// ** 포워딩 & 메시지 출력 **
+		String previousPageUrl = url.replace(uri,"") + path + servletPath; // 이전 페이지 URL
 		String gubun = ""; //main에 출력할 페이지
 		String msg = ""; //Proc 처리 후 출력할 메시지
 		String reUrl = ""; //Proc 처리 후 redirect 할 url
 		String page = "/main/main.jsp"; //기본 포워딩 페이지
 		
+		// ** 현재 날짜 **
 		int[] DateTime = util.getDateTime();
 		Map<String,Integer> nowDate = new HashMap<>();
 		nowDate.put("nowYear", DateTime[0]);
@@ -59,17 +61,25 @@ public class BoardController2 extends HttpServlet {
 		nowDate.put("nowDay", DateTime[2]);
 		request.setAttribute("nowDate", nowDate);
 		
-		BoardDAO dao = new BoardDAO();
+		// ** 세션 처리 **
+		String[] sessionInfo = util.sessionCheck(request);
+		int cookNo = Integer.parseInt(sessionInfo[0]);
+		String cookId = sessionInfo[1];
+		String cookName = sessionInfo[2];
+		
+		
+		// ** 공통 페이징 정보 **
+		BoardDAO2 dao = new BoardDAO2();
 		String pageNumber_ = request.getParameter("pageNumber"); 
 		int pageNumber = util.numberCheck(pageNumber_,1);
-		
 		String search_option = request.getParameter("search_option");
 		String search_data = request.getParameter("search_data");
-		String[] searchArray = util.searchCheck(search_option, search_data, "", "", "");
-		
+		String[] searchArray = util.searchCheck(search_option, search_data);
 		search_option = searchArray[0];
 		search_data = searchArray[1];
-		
+		String boardType = request.getParameter("boardType");
+		boardType = util.boardTypeCheck(boardType, "free");
+		request.setAttribute("boardType", boardType);
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
 		
@@ -78,10 +88,12 @@ public class BoardController2 extends HttpServlet {
 			
 		}else if(uri.indexOf("list.do") != -1) {
 			page = "/board2/board_list.jsp";
-			int conPerPage = 5;
-			int pageNavLength = 5;
 			
+			int conPerPage = 5; // 페이지 당 개시글 수
+			int pageNavLength = 5; // 페이징 범위
+			// 공지글을 제외한 총 게시글 수
 			int totalConCount = dao.getTotalCount(search_option, search_data);
+			// 게시글 순번
 			int jj = totalConCount - conPerPage * (pageNumber -1);
 			
 			int startRecord = conPerPage * (pageNumber -1) + 1;
@@ -104,7 +116,7 @@ public class BoardController2 extends HttpServlet {
 			request.setAttribute("totalPage", totalPage);
 			request.setAttribute("startPage", startPage);
 			request.setAttribute("lastPage", lastPage);
-			ArrayList<BoardDTO> list = dao.getListAll(startRecord, endRecord, search_option, search_data);
+			ArrayList<BoardDTO2> list = dao.getListAll(boardType, startRecord, endRecord, search_option, search_data);
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("chuga.do") != -1) {
 			page = "/board2/board_chuga.jsp";
@@ -115,16 +127,22 @@ public class BoardController2 extends HttpServlet {
 			String bWriter = request.getParameter("bWriter");
 			String bContent = request.getParameter("bContent");
 			String bPasswd = request.getParameter("bPasswd");
+			String bEmail = request.getParameter("bEmail");
 			String bSecretChk_ = request.getParameter("bSecretChk");
 			int bSecretChk = util.numberCheck(bSecretChk_, 0);
-			int maxGroupNo = dao.getMaxNo("bGroupNo", "board");
-			BoardDTO dto = new BoardDTO();
+			String bNoticeNum_ = request.getParameter("bNoticeNum");
+			int bNoticeNum = util.numberCheck(bNoticeNum_, 0);
+			BoardDTO2 dto = new BoardDTO2();
+			dto.setBoardType(boardType);
 			dto.setbSubject(bSubject);
 			dto.setbWriter(bWriter);
 			dto.setbContent(bContent);
 			dto.setbSecretChk(bSecretChk);
 			dto.setbPasswd(bPasswd);
-			dto.setbGroupNo(maxGroupNo);
+			dto.setbEmail(bEmail);
+			dto.setbNoticeNum(bNoticeNum);
+			dto.setbIp(ip);
+			dto.setbMemberNo(cookNo);
 			int result = dao.setInsert(dto);
 			if(result>0) {
 				msg = "게시글 등록 성공";
@@ -137,8 +155,8 @@ public class BoardController2 extends HttpServlet {
 			gubun = "/board/board_view.jsp";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
-			BoardDTO dto = dao.getView(bNo);
-			request.setAttribute("dto", dto);
+			//BoardDTO2 dto = dao.getView(bNo);
+			//request.setAttribute("dto", dto);
 		}else if(uri.indexOf("replyList.do") != -1) {
 			page = "/board/board_reply_list.jsp";
 			String bNo_ = request.getParameter("bNo");
