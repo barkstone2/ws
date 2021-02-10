@@ -98,6 +98,7 @@ public class BoardController2 extends HttpServlet {
 			
 			int startRecord = conPerPage * (pageNumber -1) + 1;
 			int endRecord = conPerPage * pageNumber;
+			
 			int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage));
 			int startPage = 1;
 			int lastPage = 1;
@@ -116,7 +117,11 @@ public class BoardController2 extends HttpServlet {
 			request.setAttribute("totalPage", totalPage);
 			request.setAttribute("startPage", startPage);
 			request.setAttribute("lastPage", lastPage);
+			
+			
+			ArrayList<BoardDTO2> noticeList = dao.getNoticeAll(boardType);
 			ArrayList<BoardDTO2> list = dao.getListAll(boardType, startRecord, endRecord, search_option, search_data);
+			request.setAttribute("noticeList", noticeList);
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("chuga.do") != -1) {
 			page = "/board2/board_chuga.jsp";
@@ -152,13 +157,31 @@ public class BoardController2 extends HttpServlet {
 				reUrl = "/board_servlet/chuga.do";
 			}
 		}else if(uri.indexOf("view.do") != -1) {
-			gubun = "/board/board_view.jsp";
+			page = "/board2/board_view.jsp";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
-			//BoardDTO2 dto = dao.getView(bNo);
-			//request.setAttribute("dto", dto);
+			String bPasswd = request.getParameter("bPasswd");
+			bPasswd = util.nullCheck(bPasswd);
+			dao.setHit(bNo);
+			BoardDTO2 dto = dao.getView(bNo);
+			int secretChk = 0;
+			int accessChk = 0;
+			String viewMsg = "";
+			if(dto.getbSecretChk()>0) {
+				secretChk = 1;
+				if(bPasswd.equals(dto.getbPasswd())) {
+					accessChk = 1;
+				}else if(bPasswd.equals("")){
+				}else {
+					viewMsg = "비밀번호가 일치하지 않습니다.";
+				}
+			}
+			request.setAttribute("viewMsg", viewMsg);
+			request.setAttribute("secretChk", secretChk);
+			request.setAttribute("accessChk", accessChk);
+			request.setAttribute("dto", dto);
 		}else if(uri.indexOf("replyList.do") != -1) {
-			page = "/board/board_reply_list.jsp";
+			page = "/board2/board_reply_list.jsp";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			
@@ -192,7 +215,7 @@ public class BoardController2 extends HttpServlet {
 			ArrayList<BoardReplyDTO> list = dao.getReply(bNo, startRecord, endRecord);
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("replyReg.do") != -1) {
-			page = "/board_servlet/replyList.do";
+			page = "/board_servlet2/replyList.do";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			String rStepNo_ = request.getParameter("rStepNo");
@@ -204,7 +227,7 @@ public class BoardController2 extends HttpServlet {
 			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
 			dao.setInsertReply(dto);
 		}else if(uri.indexOf("reReply.do") != -1) {
-			page = "/board_servlet/replyList.do";
+			page = "/board_servlet2/replyList.do";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			String rStepNo_ = request.getParameter("rStepNo");

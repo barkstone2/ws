@@ -264,4 +264,17 @@ select * from board2;
 select max(blevelno)+1 from board2;
 
 
+select 
+c.*, 
+lag(bNo) over(order by rn) bPreNo, 
+lead(bNo) over(order by rn) bNextNo, 
+lag(bSubject) over(order by rn) bPreSubject, 
+lead(bSubject) over(order by rn) bNextSubject 
+from 
+(select rownum rn, b.* 
+from 
+(select a.bNo, a.bNum, a.boardType, a.bSubject, a.bWriter, a.bContent, 
+a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.bRegiDate, 
+a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo from board2 a) b) c where bNo=8
 
+select * from board_reply2;

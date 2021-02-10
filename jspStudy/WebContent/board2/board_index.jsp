@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@include file="../include/inc_header.jsp" %>
 
+
 <div id="result"></div>  
 
 <c:if test="${menu_gubun=='/board2/board_index.jsp'}">
@@ -13,8 +14,14 @@
 </c:if>
 
 <script>
-function goPage(value1){
-	var param = {};
+function goPage(value1, value2, value3, value4, value5, value6){
+	var param = {
+			"pageNumber" : value2,
+			"search_option" : value3,
+			"search_data" : value4,
+			"bNo" : value5,
+			"bPasswd" : value6
+	};
 	var url = "";
 		//var param = "pageNumber="+pageNumber+"&no="+no;
 		/* var param = {
@@ -43,6 +50,8 @@ function goPage(value1){
 				"search_option" : $("#search_option").val(),
 				"search_data" : $("#search_data").val()
 		}
+	}else if(value1=='view'){
+		url = "${path}/board_servlet2/view.do";
 	}
 				
 	$.ajax({

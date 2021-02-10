@@ -76,16 +76,63 @@ public class BoardDAO2 {
 		return maxNo+1;
 	}
 	
+	public ArrayList<BoardDTO2> getNoticeAll(String boardType){
+		ArrayList<BoardDTO2> list = new ArrayList<>();
+		String basicSql = "select a.bNo, a.bNum, a.boardType, a.bSubject, a.bWriter, a.bContent, "
+				+ "a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.bRegiDate, "
+				+ "a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo, "
+				+ "(select count(*) from "+tableName2+" where a.bNo=bNo) replyCounter, "
+				+ "(select count(*) from "+tableName1+" where a.bNo=bParentNo) childCount "
+				+ "from "+tableName1+" a where bNo>0 and boardType=? and bNoticeNum>0";
+		String orderBy = " order by bNoticeNum desc, bGroupNo desc, bStepNo asc, bLevelNo asc, bNo asc";
+		try {
+			basicSql += orderBy;
+			int k = 1;  //++k
+			String sql = "select * from (select rownum rn, b.* from ("+basicSql+") b)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, boardType);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BoardDTO2 dto = new BoardDTO2(
+						rs.getInt("bNo"),
+						rs.getInt("bNum"),
+						rs.getString("boardType"),
+						rs.getString("bSubject"),
+						rs.getString("bWriter"),
+						rs.getString("bContent"),
+						rs.getString("bPasswd"),
+						rs.getString("bEmail"),
+						rs.getInt("bSecretChk"),
+						rs.getInt("bNoticeNum"),
+						rs.getString("bIp"),
+						rs.getInt("bMemberNo"),
+						rs.getInt("bHit"),
+						rs.getTimestamp("bRegiDate"),
+						rs.getInt("bGroupNo"),
+						rs.getInt("bStepNo"),
+						rs.getInt("bLevelNo"),
+						rs.getInt("bParentNo")
+						);
+				dto.setReplyCounter(rs.getInt("replyCounter"));
+				dto.setChildCount(rs.getInt("childCount"));
+				list.add(dto);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
 	public ArrayList<BoardDTO2> getListAll(String boardType, int startRecord, int endRecord, String search_option, String search_data){
 		ArrayList<BoardDTO2> list = new ArrayList<>();
-		int maxNoticeNum = getMaxNo("bNoticeNum", tableName1)-1;
 		String basicSql = "select a.bNo, a.bNum, a.boardType, a.bSubject, a.bWriter, a.bContent, "
 				+ "a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.bRegiDate, "
 				+ "a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo, "
 				+ "(select count(*) from "+tableName2+" where a.bNo=bNo) replyCounter, "
 				+ "(select count(*) from "+tableName1+" where a.bNo=bParentNo) childCount "
 				+ "from "+tableName1+" a where bNo>0 and boardType=?";
-		String orderBy = " order by bNoticeNum desc, bGroupNo desc, bStepNo asc, bLevelNo asc, bNo asc";
+		String orderBy = " order by bGroupNo desc, bStepNo asc, bLevelNo asc, bNo asc";
 		try {
 			boolean[] sqlCheck = new boolean[3];
 			if(search_option.length()>0&&search_data.length()>0) {
@@ -100,7 +147,7 @@ public class BoardDAO2 {
 					sqlCheck[2] = true;
 				}
 			}
-			basicSql += " or bNoticeNum>0";
+			basicSql += " and bNoticeNum=0";
 			basicSql += orderBy;
 			int k = 1;  //++k
 			String sql = "select c.*, "
@@ -122,7 +169,7 @@ public class BoardDAO2 {
 				pstmt.setString(++k, "%"+search_data+"%");
 			}
 			pstmt.setInt(++k, startRecord);
-			pstmt.setInt(++k, endRecord+maxNoticeNum);
+			pstmt.setInt(++k, endRecord);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardDTO2 dto = new BoardDTO2(rs.getInt("bNo"),
@@ -161,26 +208,48 @@ public class BoardDAO2 {
 	}
 	
 		
-	public BoardDTO getView(int bNo) {
-		BoardDTO dto = null;
+	public BoardDTO2 getView(int bNo) {
+		BoardDTO2 dto = null;
 		try {
-			String sql = "select bNo, bSubject, bWriter, bContent, bRegiDate, "
-					+ "bSecretChk, bPasswd, bGroupNo, bStepNo, bParentNo "
-					+ "from board where bNo=?";
+			String basicSql = "select a.bNo, a.bNum, a.boardType, a.bSubject, a.bWriter, a.bContent, "
+					+ "a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.bRegiDate, "
+					+ "a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo "
+					+ "from "+tableName1+" a";
+			String orderBy = " order by bGroupNo desc, bStepNo asc, bLevelNo asc, bNo asc";
+			String basicSql2 = "select c.*, "
+					+ "lag(bNo) over(order by rn) bPreNo, "
+					+ "lead(bNo) over(order by rn) bNextNo, "
+					+ "lag(bSubject) over(order by rn) bPreSubject, "
+					+ "lead(bSubject) over(order by rn) bNextSubject "
+					+ "from (select rownum rn, b.* from ("+basicSql+") b) c";
+			String sql = "select * from ("+basicSql2+") where bNo=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bNo);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
-				dto = new BoardDTO(rs.getInt("bNo"),
+				dto = new BoardDTO2(rs.getInt("bNo"),
+						rs.getInt("bNum"),
+						rs.getString("boardType"),
 						rs.getString("bSubject"),
 						rs.getString("bWriter"),
 						rs.getString("bContent"),
-						rs.getTimestamp("bRegiDate"),
-						rs.getInt("bSecretChk"),
 						rs.getString("bPasswd"),
+						rs.getString("bEmail"),
+						rs.getInt("bSecretChk"),
+						rs.getInt("bNoticeNum"),
+						rs.getString("bIp"),
+						rs.getInt("bMemberNo"),
+						rs.getInt("bHit"),
+						rs.getTimestamp("bRegiDate"),
 						rs.getInt("bGroupNo"),
 						rs.getInt("bStepNo"),
-						rs.getInt("bParentNo"));
+						rs.getInt("bLevelNo"),
+						rs.getInt("bParentNo")
+						);
+				dto.setbPreNo(rs.getInt("bPreNo"));
+				dto.setbNextNo(rs.getInt("bNextNo"));
+				dto.setbPreSubject(rs.getString("bPreSubject"));
+				dto.setbNextSubject(rs.getString("bNextSubject"));
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -194,7 +263,7 @@ public class BoardDAO2 {
 	public ArrayList<BoardReplyDTO> getReply(int bNo, int startRecord, int endRecord){
 		ArrayList<BoardReplyDTO> replList = new ArrayList<>();
 		String basicSql = "select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo "
-				+ "from board_reply where bNo=?";
+				+ "from "+tableName2+" where bNo=?";
 		try {
 			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where rn between ? and ?";
 			sql += " order by rGroupNo, rNo";
@@ -246,7 +315,7 @@ public class BoardDAO2 {
 		int result = 0;
 		
 		try {
-			String sql = "insert into board_reply (rNo, bNo, rWriter,rContent, rPasswd, rRegiDate,rGroupNo, rStepNo) "
+			String sql = "insert into "+tableName2+" (rNo, bNo, rWriter,rContent, rPasswd, rRegiDate,rGroupNo, rStepNo) "
 					+ "values(seq_board_repl.nextval, ?,?,?,?,default,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getbNo());
@@ -270,7 +339,7 @@ public class BoardDAO2 {
 	public int getReplyCount(int bNo) {
 		int result = 0;
 		try {
-			String sql = "select count(*) from board_reply where bNo=?";
+			String sql = "select count(*) from "+tableName2+" where bNo=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, bNo);
 			rs = pstmt.executeQuery();
@@ -323,4 +392,17 @@ public class BoardDAO2 {
 		}
 		return result;
 	}
+	
+	public void setHit(int bNo) {
+		try {
+			String sql = "update "+tableName1+" set bHit=(bHit+1) where bNo=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bNo);
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 }

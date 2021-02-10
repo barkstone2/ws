@@ -97,7 +97,7 @@
 			<c:forEach var="reply" items="${list}">
 				<div class="replyListCon">
 					<input type="hidden" value="${reply.rGroupNo}" id="rGroupNo${reply.rNo}">
-					<input type="hidden" value="0" id="toggle${reply.rNo}">
+					<input type="hidden" value="0" class="toggleChk" id="toggle${reply.rNo}">
 					<div class="replRow" style="margin-left: ${reply.rStepNo>0?30:0}px">
 						<div style="width:158px;">
 							 ${reply.rWriter}
@@ -213,6 +213,7 @@ function reReply(value1){
 	var groupNo = $("#"+groupNoId).val();
 	
 	if($("#"+toggleChk).val()=='0'){
+		$(".toggleChk").val('0');
 		$("#"+toggleChk).val('1');
 		$(".reReplyDiv").html('');
 		$(".reReplyDiv").find("input[name=rGroupNo]").val('');
@@ -226,34 +227,5 @@ function reReply(value1){
 	
 	
 }
-
-function move(value1, value2, value3, value4, value5, value6, value7, value8){
-	var basicUrl = "${path}/board_servlet/";
-	var queryString = 
-		"?pageNumber="+value2
-		+"&list_gubun="+value3
-		+"&search_option="+value4
-		+"&search_data="+value5
-		+"&search_date_s="+value6
-		+"&search_date_e="+value7
-		+"&bNo="+value8;
-	
-	if(value1=='list'){
-		location.href= basicUrl+"list.do"+ queryString;
-	}else if(value1=='view'){
-		location.href=basicUrl+"view.do"+ queryString;
-	}else if(value1=='result'){
-		location.href=basicUrl+"result.do"+ queryString;
-	}else if(value1=='modify'){
-		location.href=basicUrl+"modify.do"+ queryString;
-	}else if(value1=='chuga'){
-		location.href=basicUrl+"chuga.do"+ queryString;
-	}else if(value1=='answer'){
-		location.href=basicUrl+"answer.do"+ queryString;
-	}else if(value1=='chugaProc'){
-		chugaForm.submit();
-	}
-}
-
 
 </script>

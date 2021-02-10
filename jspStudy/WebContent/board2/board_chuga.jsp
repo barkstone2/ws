@@ -92,7 +92,6 @@
 			<input type="checkbox" name="bNoticeNum" id="bNoticeNum" value="" class="inp">
 		</div>
 	</div>
-	
 	<div class="row">	
 		<div class="btn">
 			<div style="width:300px; display:flex; justify-content: space-around;">

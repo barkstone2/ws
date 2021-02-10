@@ -103,7 +103,13 @@
 	padding: 10px;
 }
 </style>
-<c:set var="today" value="${nowDate.nowYear}-0${nowDate.nowMonth}-0${nowDate.nowDay}"/>
+<c:set var="nowYear" value="${nowDate.nowYear}"/>
+<c:set var="nowMonth" value="${nowDate.nowMonth}"/>
+<c:set var="nowDay" value="${nowDate.nowDay}"/>
+<c:if test="${nowMonth<10}"><c:set var="nowMonth" value="0${nowDate.nowMonth}"/></c:if>
+<c:if test="${nowDay<10}"><c:set var="nowDay" value="0${nowDate.nowMonth}"/></c:if>
+<c:set var="today" value="${nowYear}-${nowMonth}-${nowDay}"/>
+
 <div style="min-width:750px; min-height: 500px; width:1500px;">
 	<div id="formTitle">
 		<h2>게시글 목록</h2>
@@ -144,6 +150,42 @@
 				자식글여부
 			</div>
 		</div>
+	<c:forEach var="notice" items="${noticeList}">
+		<c:set var="replyCounter" value=" [${notice.replyCounter}]"/>
+		<div class="mlistcon">
+			<div class="column1">
+				공지
+			</div>
+			<div class="column2">
+				<a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${notice.bNo}');">${notice.bSubject}${notice.replyCounter>0?replyCounter:""}</a>
+			</div>
+			<div class="column3">
+				${notice.bWriter}
+			</div>
+			<div class="column4">
+				<c:if test="${today == fn:substring(notice.bRegiDate,0,10)}">${fn:substring(notice.bRegiDate,10,16)}</c:if>
+				<c:if test="${today != fn:substring(notice.bRegiDate,0,10)}">${fn:substring(notice.bRegiDate,0,10)}</c:if>
+			</div>
+			<div class="column5">
+				${notice.bHit}
+			</div>
+			<div class="column6">
+				${notice.bIp}
+			</div>
+			<div class="column7">
+				${notice.bMemberNo}
+			</div>
+			<div class="column8">
+				${notice.bNoticeNum}
+			</div>
+			<div class="column9">
+				${notice.bSecretChk}
+			</div>
+			<div class="column10">
+				${notice.childCount}
+			</div>
+		</div>
+	</c:forEach>	
 	<c:if test="${totalConCount==0}">
 		<div style="text-align:center;">
 			등록된 게시글이 없습니다.
@@ -153,12 +195,10 @@
 		<c:set var="replyCounter" value=" [${dto.replyCounter}]"/>
 		<div class="mlistcon">
 			<div class="column1">
-				<c:if test="${dto.bNoticeNum>0}">공지</c:if>
-				<c:if test="${dto.bNoticeNum==0}">${jj}</c:if>
+				${jj}
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','${pageNumber}','${list_gubun}','${search_option}',
-				'${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}')">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
+				<a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
 			</div>
 			<div class="column3">
 				${dto.bWriter}
@@ -186,15 +226,13 @@
 				${dto.childCount}
 			</div>
 		</div>
-		<c:if test="${dto.bNoticeNum==0}">
-			<c:set var="jj" value="${jj = jj-1}"/>
-		</c:if>
+		<c:set var="jj" value="${jj = jj-1}"/>
 	</c:forEach>
 	</div>
 	<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
-		<div><a href="#" onclick="move('list','1','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">[첫페이지]</a></div>
+		<div><a href="#" onclick="move('list','1','${search_option}','${search_data}','${dto.bNo}');">[첫페이지]</a></div>
 		<c:if test="${startPage>pageNavLength}">
-			<div><a href="#" onclick="move('list','${startPage-pageNavLength}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">[이전${pageNavLength}개]</a></div>
+			<div><a href="#" onclick="move('list','${startPage-pageNavLength}','${search_option}','${search_data}');">[이전${pageNavLength}개]</a></div>
 		</c:if>
 		<c:if test="${startPage<=pageNavLength}">
 			<div>[이전${pageNavLength}개]</div>
@@ -204,16 +242,16 @@
 				<div>[${i}]</div>
 			</c:if>
 			<c:if test="${i!=pageNumber}">
-				<div><a href="#" onclick="move('list','${i}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">${i}</a></div>
+				<div><a href="#" onclick="move('list','${i}','${search_option}','${search_data}');">${i}</a></div>
 			</c:if>
 		</c:forEach>
 		<c:if test="${lastPage<totalPage}">
-			<div><a href="#" onclick="move('list','${startPage+pageNavLength}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">[다음${pageNavLength}개]</a></div>
+			<div><a href="#" onclick="move('list','${startPage+pageNavLength}','${search_option}','${search_data}');">[다음${pageNavLength}개]</a></div>
 		</c:if>
 		<c:if test="${lastPage>=totalPage}">
 			<div>[다음${pageNavLength}개]</div>
 		</c:if>
-		<div><a href="#" onclick="move('list','${totalPage}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}');">[끝페이지]</a></div>
+		<div><a href="#" onclick="move('list','${totalPage}','${search_option}','${search_data}','${dto.bNo}');">[끝페이지]</a></div>
 		<div style="display:none;" id="pagerInfo">
 			conPerPage:${conPerPage} / pageNavLength:${pageNavLength} / totalConCount:${totalConCount}
 			/ jj:${jj} / startRecord:${startRecord} <br>
@@ -253,7 +291,7 @@ $(document).ready(function(){
 		goPage('chuga');
 	});
 	$("#btnSearch").click(function(){
-		goPage('search');
+		goPage('search','','',$("#search_option").val(),$("#search_data").val());
 	});
 	
 	var search_option = '${search_option}';
@@ -269,41 +307,12 @@ $(document).ready(function(){
 		$("#op_all").prop("selected",true);
 	}
 });
-function move(value1, value2, value3, value4, value5, value6, value7, value8){
-	var basicUrl = "${path}/board_servlet2/";
-	var queryString = 
-		"?pageNumber="+value2
-		+"&list_gubun="+value3
-		+"&search_option="+value4
-		+"&search_data="+value5
-		+"&search_date_s="+value6
-		+"&search_date_e="+value7
-		+"&bNo="+value8;
-	
+
+function move(value1, value2, value3, value4, value5){
 	if(value1=='list'){
-		location.href= basicUrl+"list.do"+ queryString;
+		goPage(value1, value2, value3, value4, value5);
 	}else if(value1=='view'){
-		location.href=basicUrl+"view.do"+ queryString;
-	}else if(value1=='result'){
-		location.href=basicUrl+"result.do"+ queryString;
-	}else if(value1=='modify'){
-		location.href=basicUrl+"modify.do"+ queryString;
-	}else if(value1=='chuga'){
-		location.href=basicUrl+"chuga.do"+ queryString;
-	}else if(value1=='answer'){
-		location.href=basicUrl+"answer.do"+ queryString;
-	}else if(value1=='chugaProc'){
-		chugaForm.submit();
-	}else if(value1=='search'){
-		if($("input:checkbox[id=search_date_check]").is(":checked") == true){
-			$("#search_date_check").val('1');
-		}else{
-			$("#search_date_check").val('0');
-			$('#search_date_s').val('');
-			$('#search_date_e').val('');
-		}
-		searchForm.action = basicUrl+"list.do";
-		searchForm.submit();
+		goPage(value1, value2, value3, value4, value5);
 	}
 }
 

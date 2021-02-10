@@ -199,6 +199,19 @@ public class Util {
 	}
 	
 	
+	public String nullCheck(String str) {
+		String result = "";
+		
+		if(str == null || str.trim().equals("")) {
+			result = "";
+		}else {
+			result = str;
+		}
+		
+		return result;
+	}
+	
+	
 	
 	
 }
