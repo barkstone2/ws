@@ -39,7 +39,6 @@
 }
 #mList{
 	width:1500px;
-	height:400px;
 	min-height: 400px;
 }
 .mlistcon{
@@ -59,6 +58,8 @@
 .column2{
 	border-right: 1px solid black;
 	width:600px;
+	text-align: left;
+	margin-left:15px;
 }
 .column3{
 	border-right: 1px solid black;
@@ -122,7 +123,7 @@
 			<div class="column1">
 				순번
 			</div>
-			<div class="column2">
+			<div class="column2" style="text-align: center;">
 				제목
 			</div>
 			<div class="column3">
@@ -198,7 +199,9 @@
 				${jj}
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
+				<c:set var="ansSubMargin" value="0"/>
+				<c:forEach begin="1" end="${dto.bStepNo}" step="1">[Re:]</c:forEach>
+				<c:if test="${dto.bStepNo>0}"></c:if><a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
 			</div>
 			<div class="column3">
 				${dto.bWriter}

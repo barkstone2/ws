@@ -132,7 +132,7 @@ public class BoardDAO2 {
 				+ "(select count(*) from "+tableName2+" where a.bNo=bNo) replyCounter, "
 				+ "(select count(*) from "+tableName1+" where a.bNo=bParentNo) childCount "
 				+ "from "+tableName1+" a where bNo>0 and boardType=?";
-		String orderBy = " order by bGroupNo desc, bStepNo asc, bLevelNo asc, bNo asc";
+		String orderBy = " order by bGroupNo desc, bLevelNo asc, bNo asc";
 		try {
 			boolean[] sqlCheck = new boolean[3];
 			if(search_option.length()>0&&search_data.length()>0) {
@@ -292,25 +292,6 @@ public class BoardDAO2 {
 		return replList;
 	}
 	
-	
-	
-	public int setUpdate(String id, String content, int no) {
-		int result = 0;
-		try {
-			String sql = "update memo set id=?, content=? where no=?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, content);
-			pstmt.setInt(3, no);
-			result = pstmt.executeUpdate();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			db.quitConn(rs, pstmt, conn);
-		}
-		return result;
-	}
-	
 	public int setInsertReply(BoardReplyDTO dto) {
 		int result = 0;
 		
@@ -404,5 +385,98 @@ public class BoardDAO2 {
 		}
 	}
 	
+	public int setAnswer(BoardDTO2 dto) {
+		int result=0;
+		int maxNoticeNum = 0;
+		if(dto.getbNoticeNum()>0) {
+			maxNoticeNum = getMaxNo("bNoticeNum", tableName1);
+		}
+		setLevelNo(dto.getbGroupNo(), dto.getbLevelNo());
+		try {
+			String sql = "insert into "+ tableName1
+					+ " (bNo, bNum, boardType, bSubject, bWriter, bContent, bPasswd, bEmail, "
+					+ "bSecretChk, bNoticeNum, bIp, bMemberNo, bHit, bRegiDate, bGroupNo, bStepNo, bLevelNo, bParentNo) "
+					+ "values(seq_board2.nextval,0,?,?,?,?,?,?,?,?,?,?,default,default,?,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getBoardType());
+			pstmt.setString(2, dto.getbSubject());
+			pstmt.setString(3, dto.getbWriter());
+			pstmt.setString(4, dto.getbContent());
+			pstmt.setString(5, dto.getbPasswd());
+			pstmt.setString(6, dto.getbEmail());
+			pstmt.setInt(7, dto.getbSecretChk());
+			pstmt.setInt(8, maxNoticeNum);
+			pstmt.setString(9, dto.getbIp());
+			pstmt.setInt(10, dto.getbMemberNo());
+			pstmt.setInt(11, dto.getbGroupNo());
+			pstmt.setInt(12, dto.getbStepNo()+1);
+			pstmt.setInt(13, dto.getbLevelNo()+1);
+			pstmt.setInt(14, dto.getbNo());
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
+	
+	public void setLevelNo(int bGroupNo, int bLevelNo) {
+		try {
+			String sql = "update "+tableName1+" set bLevelNo=bLevelNo+1 where bGroupNo=? and bLevelNo>?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bGroupNo);
+			pstmt.setInt(2, bLevelNo);
+			pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int setUpdate(BoardDTO2 dto) {
+		int result = 0;
+		int maxNoticeNum = 0;
+		if(dto.getbNoticeNum()>0) {
+			maxNoticeNum = getMaxNo("bNoticeNum", tableName1);
+		}
+		try {
+			String sql = "update "+tableName1+" set BoardType=?, bSubject=?, bWriter=?, "
+					+ "bContent=?, bPasswd=?, bEmail=?, bSecretChk=?, bNoticeNum=?, "
+					+ "bIp=?, bMemberNo=? where bNo=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getBoardType());
+			pstmt.setString(2, dto.getbSubject());
+			pstmt.setString(3, dto.getbWriter());
+			pstmt.setString(4, dto.getbContent());
+			pstmt.setString(5, dto.getbPasswd());
+			pstmt.setString(6, dto.getbEmail());
+			pstmt.setInt(7, dto.getbSecretChk());
+			pstmt.setInt(8, maxNoticeNum);
+			pstmt.setString(9, dto.getbIp());
+			pstmt.setInt(10, dto.getbMemberNo());
+			pstmt.setInt(11, dto.getbNo());
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
+	
+	public int setDelete(int bNo) {
+		int result = 0;
+		try {
+			String sql = "delete from "+tableName1+" where bNo=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, bNo);
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
 	
 }

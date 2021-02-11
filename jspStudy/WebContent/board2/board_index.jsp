@@ -8,7 +8,7 @@
 <c:if test="${menu_gubun=='/board2/board_index.jsp'}">
 	<script>
 	$(document).ready(function(){
-			goPage('list');
+		goPage('list');
 	});
 	</script>
 </c:if>
@@ -52,6 +52,45 @@ function goPage(value1, value2, value3, value4, value5, value6){
 		}
 	}else if(value1=='view'){
 		url = "${path}/board_servlet2/view.do";
+	}else if(value1=='answer'){
+		url = "${path}/board_servlet2/answer.do";
+	}else if(value1=='answerProc'){
+		url = "${path}/board_servlet2/answerProc.do";
+		param = {
+				"bSubject" : $("#bSubject").val(),
+				"bWriter" : $("#bWriter").val(),
+				"bPasswd" : $("#bPasswd").val(),
+				"bSecretChk" : $("#bSecretChk").val(),
+				"bContent" : $("#bContent").val(),
+				"bEmail" : $("#bEmail").val(),
+				"bNoticeNum" : $("#bNoticeNum").val(),
+				"bNo" : $("#bNo").val(),
+				"bGroupNo" : $("#bGroupNo").val(),
+				"bStepNo" : $("#bStepNo").val(),
+				"bLevelNo" : $("#bLevelNo").val()
+			}
+	}else if(value1=='modify'){
+		url = "${path}/board_servlet2/modify.do";
+	}else if(value1=='modifyProc'){
+		url = "${path}/board_servlet2/modifyProc.do";
+		param = {
+				"bSubject" : $("#bSubject").val(),
+				"bWriter" : $("#bWriter").val(),
+				"bPasswd" : $("#bPasswd").val(),
+				"bSecretChk" : $("#bSecretChk").val(),
+				"bContent" : $("#bContent").val(),
+				"bEmail" : $("#bEmail").val(),
+				"bNoticeNum" : $("#bNoticeNum").val(),
+				"bNo" : $("#bNo").val()
+			}
+	}else if(value1=='delete'){
+		url = "${path}/board_servlet2/delete.do";
+	}else if(value1=='deleteProc'){
+		url = "${path}/board_servlet2/deleteProc.do";
+		param = {
+				"bNo" : $("#bNo").val(),
+				"bPasswd" : $("#bPasswd").val()
+			}
 	}
 				
 	$.ajax({
@@ -59,13 +98,9 @@ function goPage(value1, value2, value3, value4, value5, value6){
 			data: param,
 			url: url,
 			success: function(data){
-				if(value1 == 'chugaProc'){
-					suntaek_page('1');
-				}else if(value1 == 'search'){
-					$("#result").html(data);
-				}else{
-					$("#result").html(data);
-				}
+				$("#result").html(data);
+				
+				
 				/* if($("#span_search_date_check").text()=="1"){
 					//$("input[id=search_date_check]:checkbox").prop("checked", true);
 					$("#search_date_check").prop("checked", true);

@@ -89,7 +89,7 @@ public class BoardController2 extends HttpServlet {
 		}else if(uri.indexOf("list.do") != -1) {
 			page = "/board2/board_list.jsp";
 			
-			int conPerPage = 5; // 페이지 당 개시글 수
+			int conPerPage = 10; // 페이지 당 개시글 수
 			int pageNavLength = 5; // 페이징 범위
 			// 공지글을 제외한 총 게시글 수
 			int totalConCount = dao.getTotalCount(search_option, search_data);
@@ -121,12 +121,14 @@ public class BoardController2 extends HttpServlet {
 			
 			ArrayList<BoardDTO2> noticeList = dao.getNoticeAll(boardType);
 			ArrayList<BoardDTO2> list = dao.getListAll(boardType, startRecord, endRecord, search_option, search_data);
+			
 			request.setAttribute("noticeList", noticeList);
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("chuga.do") != -1) {
 			page = "/board2/board_chuga.jsp";
 		}else if(uri.indexOf("chugaProc.do") != -1) {
-			page = "/board2/board_list.do";
+			page = "/message.jsp";
+			reUrl = "/board_servlet2/index.do";
 			previousPageUrl += "/chuga.do";
 			String bSubject = request.getParameter("bSubject");
 			String bWriter = request.getParameter("bWriter");
@@ -151,10 +153,8 @@ public class BoardController2 extends HttpServlet {
 			int result = dao.setInsert(dto);
 			if(result>0) {
 				msg = "게시글 등록 성공";
-				reUrl = "/board_servlet/list.do";
 			}else {
 				msg = "게시글 등록 실패";
-				reUrl = "/board_servlet/chuga.do";
 			}
 		}else if(uri.indexOf("view.do") != -1) {
 			page = "/board2/board_view.jsp";
@@ -223,7 +223,7 @@ public class BoardController2 extends HttpServlet {
 			String rWriter = request.getParameter("rWriter");
 			String rPasswd = request.getParameter("rPasswd");
 			String rContent = request.getParameter("rContent");
-			int rGroupNo = dao.getMaxNo("rGroupNo", "board_reply");
+			int rGroupNo = dao.getMaxNo("rGroupNo", "board_reply2");
 			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
 			dao.setInsertReply(dto);
 		}else if(uri.indexOf("reReply.do") != -1) {
@@ -236,9 +236,141 @@ public class BoardController2 extends HttpServlet {
 			String rPasswd = request.getParameter("rPasswd");
 			String rContent = request.getParameter("rContent");
 			String rGroupNo_ = request.getParameter("rGroupNo");
-			int rGroupNo = util.numberCheck(rGroupNo_, dao.getMaxNo("rGroupNo", "board_reply"));
+			int rGroupNo = util.numberCheck(rGroupNo_, dao.getMaxNo("rGroupNo", "board_reply2"));
 			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
 			dao.setInsertReply(dto);
+		}else if(uri.indexOf("answer.do") != -1) {
+			page = "/board2/board_answer.jsp";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			BoardDTO2 dto = dao.getView(bNo);
+			int bGroupNo = dto.getbGroupNo();
+			int bStepNo = dto.getbStepNo();
+			int bLevelNo = dto.getbLevelNo();
+			request.setAttribute("bNo", bNo);
+			request.setAttribute("bGroupNo", bGroupNo);
+			request.setAttribute("bStepNo", bStepNo);
+			request.setAttribute("bLevelNo", bLevelNo);
+		}else if(uri.indexOf("answerProc.do") != -1) {
+			page = "/message.jsp";
+			reUrl = "/board_servlet2/index.do";
+			String bSubject = request.getParameter("bSubject");
+			String bWriter = request.getParameter("bWriter");
+			String bContent = request.getParameter("bContent");
+			String bPasswd = request.getParameter("bPasswd");
+			String bEmail = request.getParameter("bEmail");
+			
+			String bSecretChk_ = request.getParameter("bSecretChk");
+			String bNoticeNum_ = request.getParameter("bNoticeNum");
+			String bNo_ = request.getParameter("bNo");
+			String bGroupNo_ = request.getParameter("bGroupNo");
+			String bStepNo_ = request.getParameter("bStepNo");
+			String bLevelNo_ = request.getParameter("bLevelNo");
+			
+			int bSecretChk = util.numberCheck(bSecretChk_, 0);
+			int bNoticeNum = util.numberCheck(bNoticeNum_, 0);
+			int bNo = util.numberCheck(bNo_, 0);
+			int bGroupNo = util.numberCheck(bGroupNo_, 0);
+			int bStepNo = util.numberCheck(bStepNo_, 0);
+			int bLevelNo = util.numberCheck(bLevelNo_, 0);
+			
+			BoardDTO2 dto = new BoardDTO2();
+			dto.setBoardType(boardType);
+			dto.setbSubject(bSubject);
+			dto.setbWriter(bWriter);
+			dto.setbContent(bContent);
+			dto.setbSecretChk(bSecretChk);
+			dto.setbPasswd(bPasswd);
+			dto.setbEmail(bEmail);
+			dto.setbNoticeNum(bNoticeNum);
+			dto.setbIp(ip);
+			dto.setbMemberNo(cookNo);
+			dto.setbNo(bNo);
+			dto.setbGroupNo(bGroupNo);
+			dto.setbStepNo(bStepNo);
+			dto.setbLevelNo(bLevelNo);
+			
+			int result = dao.setAnswer(dto);
+			if(result>0) {
+				msg = "답변 등록 성공";
+			}else {
+				msg = "답변 등록 실패";
+			}
+		}else if(uri.indexOf("modify.do") != -1) {
+			page = "/board2/board_modify.jsp";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			String bPasswd = request.getParameter("bPasswd");
+			bPasswd = util.nullCheck(bPasswd);
+			BoardDTO2 dto = dao.getView(bNo);
+			int accessChk = 0;
+			String viewMsg = "";
+			if(bPasswd.equals(dto.getbPasswd())) {
+				accessChk = 1;
+			}else if(bPasswd.equals("")){
+			}else {
+				viewMsg = "비밀번호가 일치하지 않습니다.";
+			}
+			request.setAttribute("viewMsg", viewMsg);
+			request.setAttribute("accessChk", accessChk);
+			request.setAttribute("dto", dto);
+		}else if(uri.indexOf("modifyProc.do") != -1) {
+			page = "/message.jsp";
+			reUrl = "/board_servlet2/index.do";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			String bSubject = request.getParameter("bSubject");
+			String bWriter = request.getParameter("bWriter");
+			String bContent = request.getParameter("bContent");
+			String bPasswd = request.getParameter("bPasswd");
+			String bEmail = request.getParameter("bEmail");
+			String bSecretChk_ = request.getParameter("bSecretChk");
+			int bSecretChk = util.numberCheck(bSecretChk_, 0);
+			String bNoticeNum_ = request.getParameter("bNoticeNum");
+			int bNoticeNum = util.numberCheck(bNoticeNum_, 0);
+			BoardDTO2 dto = new BoardDTO2();
+			dto.setBoardType(boardType);
+			dto.setbSubject(bSubject);
+			dto.setbWriter(bWriter);
+			dto.setbContent(bContent);
+			dto.setbSecretChk(bSecretChk);
+			dto.setbPasswd(bPasswd);
+			dto.setbEmail(bEmail);
+			dto.setbNoticeNum(bNoticeNum);
+			dto.setbIp(ip);
+			dto.setbMemberNo(cookNo);
+			dto.setbNo(bNo);
+			int result = dao.setUpdate(dto);
+			if(result>0) {
+				msg = "게시글 수정 성공";
+			}else {
+				msg = "게시글 수정 실패";
+			}
+		}else if(uri.indexOf("delete.do") != -1) {
+			page = "/board2/board_delete.jsp";
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			request.setAttribute("bNo", bNo);
+		}else if(uri.indexOf("deleteProc.do") != -1) {
+			page = "/message.jsp";
+			reUrl = "/board_servlet2/index.do"; 
+			String bNo_ = request.getParameter("bNo");
+			int bNo = util.numberCheck(bNo_, 0);
+			String bPasswd = request.getParameter("bPasswd");
+			bPasswd = util.nullCheck(bPasswd);
+			BoardDTO2 dto = dao.getView(bNo);
+			if(bPasswd.equals(dto.getbPasswd())) {
+				dao = new BoardDAO2();
+				int result = dao.setDelete(bNo);
+				if(result>0) {
+					msg = "삭제 성공";
+				}else {
+					msg = "삭제 실패";
+				}
+			}else if(bPasswd.equals("")){
+			}else {
+				msg = "비밀번호가 일치하지 않습니다.";
+			}
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

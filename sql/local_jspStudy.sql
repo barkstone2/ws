@@ -246,7 +246,7 @@ bParentNo number default 0 not null
 );
 
 create sequence seq_board2;
-
+drop table board_reply2;
 create table board_reply2(
 rNo number not null,
 bNo number not null,
@@ -275,6 +275,7 @@ from
 from 
 (select a.bNo, a.bNum, a.boardType, a.bSubject, a.bWriter, a.bContent, 
 a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.bRegiDate, 
-a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo from board2 a) b) c where bNo=8
+a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo from board2 a) b) c where bNo=8;
 
+select * from board2 order by bgroupNo, blevelno;
 select * from board_reply2;

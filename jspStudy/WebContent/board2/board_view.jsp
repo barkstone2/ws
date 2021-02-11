@@ -125,15 +125,18 @@
 			</div>
 			<div class="row">	
 				<div class="btn">
-					<div style="width:300px; display:flex; justify-content: space-around;">
+					<div style="width:400px; display:flex; justify-content: space-around;">
 						<div>
-							<input type="button" value="글쓰기" onclick="move('modify','${pageNumber}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="글쓰기" onclick="move('chuga','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="답변쓰기" onclick="move('answer','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
+						</div>
+						<div>
+							<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
 						</div>
 						<div>
 							<input type="button" value="목록으로" onclick="move('list','${pageNumber}','${search_option}','${search_data}');" id="btnList">
@@ -189,6 +192,14 @@ function move(value1, value2, value3, value4, value5){
 	}else if(value1=='view'){
 		var pwd = $('#bPasswd').val();
 		goPage(value1, value2, value3, value4, value5, pwd);
+	}else if(value1=='chuga'){
+		goPage(value1, value2, value3, value4, value5);
+	}else if(value1=='answer'){
+		goPage(value1, value2, value3, value4, value5);
+	}else if(value1=='modify'){
+		goPage(value1, value2, value3, value4, value5);
+	}else if(value1=='delete'){
+		goPage(value1, value2, value3, value4, value5);
 	}
 }
 var msg = '${viewMsg}';
