@@ -2,7 +2,6 @@
     pageEncoding="UTF-8"%>
 <%@include file="../include/inc_header.jsp" %>
 
-
 <div id="result"></div>  
 
 <c:if test="${menu_gubun=='/board2/board_index.jsp'}">
@@ -14,27 +13,19 @@
 </c:if>
 
 <script>
-function goPage(value1, value2, value3, value4, value5, value6){
+function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 	var param = {
-			"pageNumber" : value2,
-			"search_option" : value3,
-			"search_data" : value4,
-			"bNo" : value5,
-			"bPasswd" : value6
+			"pageNumber" : v_pageNumber,
+			"bNo" : v_bNo,
+			"search_option" : '${search_option}',
+			"search_data" : '${search_data}',
+			"boardType" : '${boardType}',
+			"bPasswd" : v_passwd
 	};
-	var url = "";
-		//var param = "pageNumber="+pageNumber+"&no="+no;
-		/* var param = {
-				"pageNumber" : $("#span_pageNumber").text(),
-				"search_option" : $("#span_search_option").text(),
-				"search_data" : $("#span_search_data").text()
-				}; */
-	if(value1=='list'){
-		url = "${path}/board_servlet2/list.do";
-	}else if(value1=='chuga'){
-		url = "${path}/board_servlet2/chuga.do";
-	}else if(value1=='chugaProc'){
-		url = "${path}/board_servlet2/chugaProc.do";
+	var prefix = "${path}/board_servlet2/";
+	var suffix = ".do";
+	var url = prefix + v_location +suffix; 
+	if(v_location=='chugaProc'){
 		param = {
 			"bSubject" : $("#bSubject").val(),
 			"bWriter" : $("#bWriter").val(),
@@ -42,20 +33,16 @@ function goPage(value1, value2, value3, value4, value5, value6){
 			"bSecretChk" : $("#bSecretChk").val(),
 			"bContent" : $("#bContent").val(),
 			"bEmail" : $("#bEmail").val(),
-			"bNoticeNum" : $("#bNoticeNum").val()
+			"bNoticeNum" : $("#bNoticeNum").val(),
+			"boardType" : $("#boardType").val()
 		}
-	}else if(value1=='search'){
+	}else if(v_location=='search'){
 		url = "${path}/board_servlet2/list.do";
 		param = {
 				"search_option" : $("#search_option").val(),
 				"search_data" : $("#search_data").val()
 		}
-	}else if(value1=='view'){
-		url = "${path}/board_servlet2/view.do";
-	}else if(value1=='answer'){
-		url = "${path}/board_servlet2/answer.do";
-	}else if(value1=='answerProc'){
-		url = "${path}/board_servlet2/answerProc.do";
+	}else if(v_location=='answerProc'){
 		param = {
 				"bSubject" : $("#bSubject").val(),
 				"bWriter" : $("#bWriter").val(),
@@ -67,12 +54,10 @@ function goPage(value1, value2, value3, value4, value5, value6){
 				"bNo" : $("#bNo").val(),
 				"bGroupNo" : $("#bGroupNo").val(),
 				"bStepNo" : $("#bStepNo").val(),
-				"bLevelNo" : $("#bLevelNo").val()
+				"bLevelNo" : $("#bLevelNo").val(),
+				"boardType" : $("#boardType").val()
 			}
-	}else if(value1=='modify'){
-		url = "${path}/board_servlet2/modify.do";
-	}else if(value1=='modifyProc'){
-		url = "${path}/board_servlet2/modifyProc.do";
+	}else if(v_location=='modifyProc'){
 		param = {
 				"bSubject" : $("#bSubject").val(),
 				"bWriter" : $("#bWriter").val(),
@@ -83,10 +68,7 @@ function goPage(value1, value2, value3, value4, value5, value6){
 				"bNoticeNum" : $("#bNoticeNum").val(),
 				"bNo" : $("#bNo").val()
 			}
-	}else if(value1=='delete'){
-		url = "${path}/board_servlet2/delete.do";
-	}else if(value1=='deleteProc'){
-		url = "${path}/board_servlet2/deleteProc.do";
+	}else if(v_location=='deleteProc'){
 		param = {
 				"bNo" : $("#bNo").val(),
 				"bPasswd" : $("#bPasswd").val()
@@ -98,7 +80,12 @@ function goPage(value1, value2, value3, value4, value5, value6){
 			data: param,
 			url: url,
 			success: function(data){
-				$("#result").html(data);
+				if(/.*Proc/.exec(v_location)){
+					alert(data);
+					goPage('list');
+				}else{
+					$("#result").html(data);
+				}
 				
 				
 				/* if($("#span_search_date_check").text()=="1"){

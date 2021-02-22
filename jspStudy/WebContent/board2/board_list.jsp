@@ -113,7 +113,7 @@
 
 <div style="min-width:750px; min-height: 500px; width:1500px;">
 	<div id="formTitle">
-		<h2>게시글 목록</h2>
+		<h2>${boardName}</h2>
 	</div>
 	<div id="mList">
 		<div id="memcount">
@@ -158,7 +158,7 @@
 				공지
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${notice.bNo}');">${notice.bSubject}${notice.replyCounter>0?replyCounter:""}</a>
+				<a href="#" onclick="move('view','${pageNumber}','${notice.bNo}');">${notice.bSubject}${notice.replyCounter>0?replyCounter:""}</a>
 			</div>
 			<div class="column3">
 				${notice.bWriter}
@@ -199,9 +199,9 @@
 				${jj}
 			</div>
 			<div class="column2">
-				<c:set var="ansSubMargin" value="0"/>
+				<c:forEach begin="1" end="${dto.bStepNo}" step="1">&nbsp;&nbsp;</c:forEach>
 				<c:forEach begin="1" end="${dto.bStepNo}" step="1">[Re:]</c:forEach>
-				<c:if test="${dto.bStepNo>0}"></c:if><a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
+				<c:if test="${dto.bStepNo>0}"></c:if><a href="#" onclick="move('view','${pageNumber}','${dto.bNo}');">${dto.bSubject}${dto.replyCounter>0?replyCounter:""}</a>
 			</div>
 			<div class="column3">
 				${dto.bWriter}
@@ -233,9 +233,9 @@
 	</c:forEach>
 	</div>
 	<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
-		<div><a href="#" onclick="move('list','1','${search_option}','${search_data}','${dto.bNo}');">[첫페이지]</a></div>
+		<div><a href="#" onclick="move('list','1');">[첫페이지]</a></div>
 		<c:if test="${startPage>pageNavLength}">
-			<div><a href="#" onclick="move('list','${startPage-pageNavLength}','${search_option}','${search_data}');">[이전${pageNavLength}개]</a></div>
+			<div><a href="#" onclick="move('list','${startPage-pageNavLength}');">[이전${pageNavLength}개]</a></div>
 		</c:if>
 		<c:if test="${startPage<=pageNavLength}">
 			<div>[이전${pageNavLength}개]</div>
@@ -245,16 +245,16 @@
 				<div>[${i}]</div>
 			</c:if>
 			<c:if test="${i!=pageNumber}">
-				<div><a href="#" onclick="move('list','${i}','${search_option}','${search_data}');">${i}</a></div>
+				<div><a href="#" onclick="move('list','${i}');">${i}</a></div>
 			</c:if>
 		</c:forEach>
 		<c:if test="${lastPage<totalPage}">
-			<div><a href="#" onclick="move('list','${startPage+pageNavLength}','${search_option}','${search_data}');">[다음${pageNavLength}개]</a></div>
+			<div><a href="#" onclick="move('list','${startPage+pageNavLength}');">[다음${pageNavLength}개]</a></div>
 		</c:if>
 		<c:if test="${lastPage>=totalPage}">
 			<div>[다음${pageNavLength}개]</div>
 		</c:if>
-		<div><a href="#" onclick="move('list','${totalPage}','${search_option}','${search_data}','${dto.bNo}');">[끝페이지]</a></div>
+		<div><a href="#" onclick="move('list','${totalPage}');">[끝페이지]</a></div>
 		<div style="display:none;" id="pagerInfo">
 			conPerPage:${conPerPage} / pageNavLength:${pageNavLength} / totalConCount:${totalConCount}
 			/ jj:${jj} / startRecord:${startRecord} <br>
@@ -311,12 +311,10 @@ $(document).ready(function(){
 	}
 });
 
-function move(value1, value2, value3, value4, value5){
-	if(value1=='list'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='view'){
-		goPage(value1, value2, value3, value4, value5);
-	}
+function move(v_location, v_pageNumber, v_bNo){
+	//var bPasswd = $('#bPasswd').val();
+	
+	goPage(v_location, v_pageNumber, v_bNo);
 }
 
 

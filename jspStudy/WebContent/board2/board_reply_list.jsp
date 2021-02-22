@@ -119,28 +119,28 @@
 		</div>
 		</div>
 		<div id="pager" style="${totalConCount>0?'display:flex;':'display:none;'}">
-			<div><a href="#" onclick="move('list','1','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">[첫페이지]</a></div>
+			<div><a href="#" onclick="loadReply('${bNo}','1');">[첫페이지]</a></div>
 			<c:if test="${startPage>pageNavLength}">
-				<div><a href="#" onclick="move('list','${startPage-pageNavLength}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">[이전${pageNavLength}개]</a></div>
+				<div><a href="#" onclick="loadReply('${bNo}','${startPage-pageNavLength}');">[이전${pageNavLength}개]</a></div>
 			</c:if>
 			<c:if test="${startPage<=pageNavLength}">
 				<div>[이전${pageNavLength}개]</div>
 			</c:if>
 			<c:forEach var="i" begin="${startPage}" end="${lastPage}" step="1">
-				<c:if test="${i==pageNumber}">
+				<c:if test="${i==rePageNumber}">
 					<div>[${i}]</div>
 				</c:if>
-				<c:if test="${i!=pageNumber}">
-					<div><a href="#" onclick="move('list','${i}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">${i}</a></div>
+				<c:if test="${i!=rePageNumber}">
+					<div><a href="#" onclick="loadReply('${bNo}','${i}');">${i}</a></div>
 				</c:if>
 			</c:forEach>
 			<c:if test="${lastPage<totalPage}">
-				<div><a href="#" onclick="move('list','${startPage+pageNavLength}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}');">[다음${pageNavLength}개]</a></div>
+				<div><a href="#" onclick="loadReply('${bNo}','${startPage+pageNavLength}');">[다음${pageNavLength}개]</a></div>
 			</c:if>
 			<c:if test="${lastPage>=totalPage}">
 				<div>[다음${pageNavLength}개]</div>
 			</c:if>
-			<div><a href="#" onclick="move('list','${totalPage}','${list_gubun}','${search_option}','${search_data}','${search_date_s}','${search_date_e}','${dto.bNo}');">[끝페이지]</a></div>
+			<div><a href="#" onclick="loadReply('${bNo}','${totalPage}');">[끝페이지]</a></div>
 			<div style="display:none;" id="pagerInfo">
 				conPerPage:${conPerPage} / pageNavLength:${pageNavLength} / totalConCount:${totalConCount}
 				/ jj:${jj} / startRecord:${startRecord} <br>
@@ -149,6 +149,7 @@
 		</div>
 		<div style="width: 900px; display:flex; padding:5px; justify-content: center;">
 			<form id="replyForm" name="replyForm" method="post" action="">
+				<input type="hidden" name="rePageNumber" value="${rePageNumber}">
 				<input type="hidden" name="bNo" value="${bNo}">
 				<input type="hidden" name="rGroupNo" value="0">
 				<input type="hidden" name="rStepNo" value="0">
@@ -176,6 +177,7 @@
 <div id="reReplyHtml" style="display:none;">
 	<div style="width: 850px; margin-bottom:5px;">
 	<form id="replyForm" name="replyForm" method="post" action="">
+		<input type="hidden" name="rePageNumber" value="${rePageNumber}">
 		<input type="hidden" name="bNo" value="${bNo}">
 		<input type="hidden" name="rGroupNo" value="0">
 		<input type="hidden" name="rStepNo" value="1">

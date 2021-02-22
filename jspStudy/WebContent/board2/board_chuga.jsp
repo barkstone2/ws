@@ -105,8 +105,8 @@
 		</div>
 	</div>
 	<div>
-		<input type="hidden" name="boardType" value="free">
-		<input type="hidden" name="bMemberNo" value="">
+		<input type="hidden" name="boardType" id="boardType" value="${boardType}">
+		<input type="hidden" name="bMemberNo" id="bMemberNo" value="">
 	</div>
 </form>
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>

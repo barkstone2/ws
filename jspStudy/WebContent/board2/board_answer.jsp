@@ -109,7 +109,7 @@
 		<input type="hidden" name="bGroupNo" id="bGroupNo" value="${bGroupNo}">
 		<input type="hidden" name="bStepNo" id="bStepNo" value="${bStepNo}">
 		<input type="hidden" name="bLevelNo" id="bLevelNo" value="${bLevelNo}">
-		<input type="hidden" name="boardType" id="boardType" value="free">
+		<input type="hidden" name="boardType" id="boardType" value="${boardType}">
 		<input type="hidden" name="bMemberNo" id="bMemberNo" value="">
 	</div>
 </form>

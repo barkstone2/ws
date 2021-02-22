@@ -5,7 +5,7 @@
 	비밀번호 <input type="password" name="bPasswd" id="bPasswd">
 	<input type="hidden" name="bNo" id="bNo" value="${bNo}">
 	<input type="button" value="삭제하기" id="btnSave">
-	<input type="button" value="취소" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNo}','${dto.bPasswd}');" id="btnList">	
+	<input type="button" value="취소" onclick="move('view','${pageNumber}','${dto.bNo}');" id="btnList">	
 </form>
 <script>
 $(document).ready(function(){
@@ -16,26 +16,16 @@ $(document).ready(function(){
 	});
 });
 
-function move(value1, value2, value3, value4, value5, value6){
-	if(value1=='list'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='view'){
-		goPage(value1, value2, value3, value4, value5, value6);
-	}else if(value1=='chuga'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='answer'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='modify'){
-		var pwd = $('#bPasswdChk').val();
-		goPage(value1, value2, value3, value4, value5, pwd);
-	}else if(value1=='delete'){
-		goPage(value1, value2, value3, value4, value5);
-	}
+function move(v_location, v_pageNumber, v_bNo){
+	var bPasswd = '${dto.bPasswd}';
+	
+	goPage(v_location, v_pageNumber, v_bNo, bPasswd);
 }
+
 var msg = '${viewMsg}';
 if(msg != ""){
 	alert(msg);
-	move('list','${pageNumber}','${search_option}','${search_data}');
+	move('list','${pageNumber}');
 }
 
 </script>

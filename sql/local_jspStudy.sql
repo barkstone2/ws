@@ -245,14 +245,22 @@ bLevelNo number default 0 not null,
 bParentNo number default 0 not null
 );
 
+alter table board2 add primary key(bNo);
+alter table board2 add CONSTRAINT fk_boardType
+   FOREIGN KEY (boardType)
+   REFERENCES boardType2(boardType)
+   on delete cascade;
+
 create sequence seq_board2;
 drop table board_reply2;
 create table board_reply2(
-rNo number not null,
-bNo number not null,
+rNo number not null primary key,
+bNo number not null references board2(bNo) on delete cascade,
 rWriter nvarchar2(200) not null,
 rContent nvarchar2(200) not null,
 rPasswd nvarchar2(100) not null,
+rMemberNo number not null,
+rIp nvarchar2(100) not null,
 rRegiDate timestamp default current_timestamp not null,
 rGroupNo number,
 rStepNo number default 0 check(rStepNo in(0,1)) not null 
@@ -278,4 +286,29 @@ a.bPasswd, a.bEmail, a.bSecretChk, a.bNoticeNum, a.bIp, a.bMemberNo, a.bHit, a.b
 a.bGroupNo, a.bStepNo, a.bLevelNo, a.bParentNo from board2 a) b) c where bNo=8;
 
 select * from board2 order by bgroupNo, blevelno;
-select * from board_reply2;
+select * from board_reply2 order by rGroupNo;
+
+
+select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo from board_reply2 where bNo=27
+
+
+select * from (select rownum rn, a.* from 
+(select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo from board_reply2 where bNo=27 order by rGroupNo) a) 
+where rn between 1 and 10 order by rGroupNo, rNo;
+
+
+create table boardType2(
+no number not null unique,
+boardType nvarchar2(100) not null primary key,
+boardName nvarchar2(100) not null unique,
+serviceGubun nvarchar2(1) default 'F' check(serviceGubun in('T','F')) not null,
+regiDate timestamp default current_timestamp not null
+);
+
+create sequence seq_boardType2;
+
+select * from board2;
+
+insert into boardType2 values(seq_boardType2.nextval, 'aaa', 'aaa°Ô½ÃÆÇ','T',default);
+commit;
+

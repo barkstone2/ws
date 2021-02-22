@@ -1,6 +1,7 @@
 package controller.board;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,8 @@ public class BoardController2 extends HttpServlet {
 		String msg = ""; //Proc 처리 후 출력할 메시지
 		String reUrl = ""; //Proc 처리 후 redirect 할 url
 		String page = "/main/main.jsp"; //기본 포워딩 페이지
-		
+		PrintWriter out = response.getWriter();
+				
 		// ** 현재 날짜 **
 		int[] DateTime = util.getDateTime();
 		Map<String,Integer> nowDate = new HashMap<>();
@@ -77,9 +79,28 @@ public class BoardController2 extends HttpServlet {
 		String[] searchArray = util.searchCheck(search_option, search_data);
 		search_option = searchArray[0];
 		search_data = searchArray[1];
+		
+		
+		
 		String boardType = request.getParameter("boardType");
 		boardType = util.boardTypeCheck(boardType, "free");
+		String boardName = dao.checkBoardType(boardType);
+		
+		if(boardName.equals("")||boardName.length()<=0) {
+			boardType = "free";
+			boardName = "자유게시판";
+		}
+		
 		request.setAttribute("boardType", boardType);
+		request.setAttribute("boardName", boardName);
+		
+		/* 댓글 페이징용 페이지 넘버 */
+		String rePageNumber_ = request.getParameter("rePageNumber");
+		int rePageNumber =util.numberCheck(rePageNumber_, 1);
+		
+		
+		
+		
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
 		
@@ -92,7 +113,7 @@ public class BoardController2 extends HttpServlet {
 			int conPerPage = 10; // 페이지 당 개시글 수
 			int pageNavLength = 5; // 페이징 범위
 			// 공지글을 제외한 총 게시글 수
-			int totalConCount = dao.getTotalCount(search_option, search_data);
+			int totalConCount = dao.getTotalCount(search_option, search_data, boardType);
 			// 게시글 순번
 			int jj = totalConCount - conPerPage * (pageNumber -1);
 			
@@ -127,7 +148,7 @@ public class BoardController2 extends HttpServlet {
 		}else if(uri.indexOf("chuga.do") != -1) {
 			page = "/board2/board_chuga.jsp";
 		}else if(uri.indexOf("chugaProc.do") != -1) {
-			page = "/message.jsp";
+			//page = "/board2/board_list.jsp";
 			reUrl = "/board_servlet2/index.do";
 			previousPageUrl += "/chuga.do";
 			String bSubject = request.getParameter("bSubject");
@@ -156,6 +177,9 @@ public class BoardController2 extends HttpServlet {
 			}else {
 				msg = "게시글 등록 실패";
 			}
+			
+			out.print(msg);
+			return;
 		}else if(uri.indexOf("view.do") != -1) {
 			page = "/board2/board_view.jsp";
 			String bNo_ = request.getParameter("bNo");
@@ -189,19 +213,20 @@ public class BoardController2 extends HttpServlet {
 			int pageNavLength = 5;
 			int totalConCount = dao.getReplyCount(bNo);
 					
-			int jj = totalConCount - conPerPage * (pageNumber -1);
-			int startRecord = conPerPage * (pageNumber -1) + 1;
-			int endRecord = conPerPage * pageNumber;
+			int jj = totalConCount - conPerPage * (rePageNumber -1);
+			int startRecord = conPerPage * (rePageNumber -1) + 1;
+			int endRecord = conPerPage * rePageNumber;
 			int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage));
 			int startPage = 1;
 			int lastPage = 1;
 			
-			startPage = (pageNumber / pageNavLength - (pageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
+			startPage = (rePageNumber / pageNavLength - (rePageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
 			lastPage = startPage + pageNavLength -1;
 			if(lastPage>totalPage)lastPage=totalPage;
 			
 			request.setAttribute("bNo", bNo);
 			request.setAttribute("pageNumber", pageNumber);
+			request.setAttribute("rePageNumber", rePageNumber);
 			request.setAttribute("conPerPage", conPerPage);
 			request.setAttribute("pageNavLength", pageNavLength);
 			request.setAttribute("totalConCount", totalConCount);
@@ -224,7 +249,10 @@ public class BoardController2 extends HttpServlet {
 			String rPasswd = request.getParameter("rPasswd");
 			String rContent = request.getParameter("rContent");
 			int rGroupNo = dao.getMaxNo("rGroupNo", "board_reply2");
+			int rMemberNo = 0;
 			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
+			dto.setrIp(ip);
+			dto.setrMemberNo(rMemberNo);
 			dao.setInsertReply(dto);
 		}else if(uri.indexOf("reReply.do") != -1) {
 			page = "/board_servlet2/replyList.do";
@@ -237,7 +265,10 @@ public class BoardController2 extends HttpServlet {
 			String rContent = request.getParameter("rContent");
 			String rGroupNo_ = request.getParameter("rGroupNo");
 			int rGroupNo = util.numberCheck(rGroupNo_, dao.getMaxNo("rGroupNo", "board_reply2"));
+			int rMemberNo = 0;
 			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
+			dto.setrIp(ip);
+			dto.setrMemberNo(rMemberNo);
 			dao.setInsertReply(dto);
 		}else if(uri.indexOf("answer.do") != -1) {
 			page = "/board2/board_answer.jsp";
@@ -252,7 +283,7 @@ public class BoardController2 extends HttpServlet {
 			request.setAttribute("bStepNo", bStepNo);
 			request.setAttribute("bLevelNo", bLevelNo);
 		}else if(uri.indexOf("answerProc.do") != -1) {
-			page = "/message.jsp";
+			//page = "/board2/board_list.jsp";
 			reUrl = "/board_servlet2/index.do";
 			String bSubject = request.getParameter("bSubject");
 			String bWriter = request.getParameter("bWriter");
@@ -296,6 +327,8 @@ public class BoardController2 extends HttpServlet {
 			}else {
 				msg = "답변 등록 실패";
 			}
+			out.print(msg);
+			return;
 		}else if(uri.indexOf("modify.do") != -1) {
 			page = "/board2/board_modify.jsp";
 			String bNo_ = request.getParameter("bNo");
@@ -315,8 +348,8 @@ public class BoardController2 extends HttpServlet {
 			request.setAttribute("accessChk", accessChk);
 			request.setAttribute("dto", dto);
 		}else if(uri.indexOf("modifyProc.do") != -1) {
-			page = "/message.jsp";
-			reUrl = "/board_servlet2/index.do";
+			//page = "/board2/board_list.jsp";
+			//reUrl = "/board_servlet2/index.do";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			String bSubject = request.getParameter("bSubject");
@@ -346,14 +379,16 @@ public class BoardController2 extends HttpServlet {
 			}else {
 				msg = "게시글 수정 실패";
 			}
+			out.print(msg);
+			return;
 		}else if(uri.indexOf("delete.do") != -1) {
 			page = "/board2/board_delete.jsp";
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			request.setAttribute("bNo", bNo);
 		}else if(uri.indexOf("deleteProc.do") != -1) {
-			page = "/message.jsp";
-			reUrl = "/board_servlet2/index.do"; 
+			page = "/board2/board_index.jsp";
+			//reUrl = "/board_servlet2/index.do"; 
 			String bNo_ = request.getParameter("bNo");
 			int bNo = util.numberCheck(bNo_, 0);
 			String bPasswd = request.getParameter("bPasswd");
@@ -371,6 +406,8 @@ public class BoardController2 extends HttpServlet {
 			}else {
 				msg = "비밀번호가 일치하지 않습니다.";
 			}
+			out.print(msg);
+			return;
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

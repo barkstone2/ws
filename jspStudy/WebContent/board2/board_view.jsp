@@ -38,8 +38,8 @@
 <c:if test="${secretChk>0&&accessChk==0}">
 	<form>
 		비밀번호 <input type="password" name="bPasswd" id="bPasswd">
-		<input type="button" value="확인" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');">
-		<input type="button" value="목록으로" onclick="move('list','${pageNumber}','${search_option}','${search_data}');" id="btnList">	
+		<input type="button" value="확인" onclick="move('view','${pageNumber}','${dto.bNo}');">
+		<input type="button" value="목록으로" onclick="move('list','${pageNumber}');" id="btnList">	
 	</form>
 </c:if>
 <c:if test="${secretChk==0||accessChk>0}">
@@ -103,7 +103,7 @@
 							다음 글이 없습니다.
 						</c:if>
 						<c:if test="${dto.bNextNo>0}">
-							<a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bNextNo}');">${dto.bNextSubject}</a>
+							<a href="#" onclick="move('view','${pageNumber}','${dto.bNextNo}');">${dto.bNextSubject}</a>
 						</c:if>
 					</div>
 				</div>
@@ -118,7 +118,7 @@
 							이전 글이 없습니다.
 						</c:if>
 						<c:if test="${dto.bPreNo>0}">
-							<a href="#" onclick="move('view','${pageNumber}','${search_option}','${search_data}','${dto.bPreNo}');">${dto.bPreSubject}</a>
+							<a href="#" onclick="move('view','${pageNumber}','${dto.bPreNo}');">${dto.bPreSubject}</a>
 						</c:if>
 					</div>
 				</div>
@@ -127,19 +127,19 @@
 				<div class="btn">
 					<div style="width:400px; display:flex; justify-content: space-around;">
 						<div>
-							<input type="button" value="글쓰기" onclick="move('chuga','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="글쓰기" onclick="move('chuga','${pageNumber}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="답변쓰기" onclick="move('answer','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="답변쓰기" onclick="move('answer','${pageNumber}','${dto.bNo}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${dto.bNo}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${search_option}','${search_data}','${dto.bNo}');" id="btnSave">
+							<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${dto.bNo}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="목록으로" onclick="move('list','${pageNumber}','${search_option}','${search_data}');" id="btnList">
+							<input type="button" value="목록으로" onclick="move('list','${pageNumber}');" id="btnList">
 						</div>
 					</div>
 				</div>
@@ -149,17 +149,24 @@
 </c:if>
 <script>
 $(document).ready(function(){
-	loadReply('${dto.bNo}');
+	loadReply('${dto.bNo}','${rePageNumber}', 'init');
 });
 
-function loadReply(value1){
-	var param = {"bNo" : value1};
+function loadReply(value1, value2, value3){
+	var param = {
+			"bNo" : value1,
+			"rePageNumber" : value2		
+	};
 	$.ajax({
 			type: "post",
 			data: param,
 			url: "${path}/board_servlet2/replyList.do",
 			success: function(data){
 				$("#replyDiv").html(data);
+				if(value3!='init'){
+					var offset = $("#replyDiv").offset();
+				    $('html, body').animate({scrollTop : offset.top}, 0);
+				}
 			}
 		});
 }
@@ -186,25 +193,14 @@ function reReplyReg(){
 		});
 }
 
-function move(value1, value2, value3, value4, value5){
-	if(value1=='list'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='view'){
-		var pwd = $('#bPasswd').val();
-		goPage(value1, value2, value3, value4, value5, pwd);
-	}else if(value1=='chuga'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='answer'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='modify'){
-		goPage(value1, value2, value3, value4, value5);
-	}else if(value1=='delete'){
-		goPage(value1, value2, value3, value4, value5);
-	}
+function move(v_location, v_pageNumber, v_bNo){
+	var bPasswd = $('#bPasswd').val();
+	goPage(v_location, v_pageNumber, v_bNo, bPasswd);
 }
+
 var msg = '${viewMsg}';
 if(msg != ""){
 	alert(msg);
-	move('list','${pageNumber}','${search_option}','${search_data}');
+	move('list','${pageNumber}');
 }
 </script>

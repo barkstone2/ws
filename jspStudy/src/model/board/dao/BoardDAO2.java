@@ -21,6 +21,7 @@ public class BoardDAO2 {
 	private ResultSet rs = null;
 	private String tableName1 = "board2";
 	private String tableName2 = "board_reply2";
+	private String tableName3 = "boardType2";
 	
 	public BoardDAO2() {
 		conn = db.getConn();		
@@ -263,7 +264,7 @@ public class BoardDAO2 {
 	public ArrayList<BoardReplyDTO> getReply(int bNo, int startRecord, int endRecord){
 		ArrayList<BoardReplyDTO> replList = new ArrayList<>();
 		String basicSql = "select rNo, bNo, rWriter, rContent, rPasswd, rRegiDate, rGroupNo, rStepNo "
-				+ "from "+tableName2+" where bNo=?";
+				+ "from "+tableName2+" where bNo=? order by rGroupNo";
 		try {
 			String sql = "select * from (select rownum rn, a.* from ("+basicSql+") a) where rn between ? and ?";
 			sql += " order by rGroupNo, rNo";
@@ -296,15 +297,17 @@ public class BoardDAO2 {
 		int result = 0;
 		
 		try {
-			String sql = "insert into "+tableName2+" (rNo, bNo, rWriter,rContent, rPasswd, rRegiDate,rGroupNo, rStepNo) "
-					+ "values(seq_board_repl.nextval, ?,?,?,?,default,?,?)";
+			String sql = "insert into "+tableName2+" (rNo, bNo, rWriter,rContent, rPasswd, rMemberNo, rIp, rRegiDate, rGroupNo, rStepNo) "
+					+ "values(seq_board_repl.nextval, ?,?,?,?,?,?,default,?,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, dto.getbNo());
 			pstmt.setString(2, dto.getrWriter());
 			pstmt.setString(3, dto.getrContent());
 			pstmt.setString(4, dto.getrPasswd());
-			pstmt.setInt(5, dto.getrGroupNo());
-			pstmt.setInt(6, dto.getrStepNo());
+			pstmt.setInt(5, dto.getrMemberNo());
+			pstmt.setString(6, dto.getrIp());
+			pstmt.setInt(7, dto.getrGroupNo());
+			pstmt.setInt(8, dto.getrStepNo());
 			result = pstmt.executeUpdate();
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -334,7 +337,7 @@ public class BoardDAO2 {
 	}
 	
 	// ** 공지글을 제외한 총 글 개수 **
-	public int getTotalCount(String search_option, String search_data) {
+	public int getTotalCount(String search_option, String search_data, String boardType) {
 		int result = 0;
 		try {
 			String sql = "select count(*) from "+tableName1+" where bNo>0";
@@ -351,7 +354,7 @@ public class BoardDAO2 {
 					sqlCheck[2] = true;
 				}
 			}
-			sql += " and bNoticeNum=0";
+			sql += " and bNoticeNum=0 and boardType=?";
 			pstmt = conn.prepareStatement(sql);
 			int k = 0;
 			if(sqlCheck[0]) {
@@ -364,6 +367,7 @@ public class BoardDAO2 {
 			}else if(sqlCheck[2]){
 				pstmt.setString(++k, "%"+search_data+"%");
 			}
+			pstmt.setString(++k, boardType);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				result = rs.getInt(1);
@@ -477,6 +481,23 @@ public class BoardDAO2 {
 			db.quitConn(rs, pstmt, conn);
 		}
 		return result;
+	}
+	
+	public String checkBoardType(String boardType) {
+		String boardName = "";
+		try {
+			String sql = "select boardName from "+tableName3+" where boardType=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, boardType);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				boardName = rs.getString("boardName");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return boardName;
 	}
 	
 }

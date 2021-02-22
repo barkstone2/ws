@@ -8,6 +8,8 @@ public class BoardReplyDTO {
 	private String rWriter;
 	private String rContent;
 	private String rPasswd;
+	private int rMemberNo;
+	private String rIp;
 	private Timestamp rRegiDate;
 	private int rGroupNo;
 	private int rStepNo;
@@ -38,6 +40,22 @@ public class BoardReplyDTO {
 
 
 
+
+	public int getrMemberNo() {
+		return rMemberNo;
+	}
+
+	public void setrMemberNo(int rMemberNo) {
+		this.rMemberNo = rMemberNo;
+	}
+
+	public String getrIp() {
+		return rIp;
+	}
+
+	public void setrIp(String rIp) {
+		this.rIp = rIp;
+	}
 
 	public int getrNo() {
 		return rNo;
