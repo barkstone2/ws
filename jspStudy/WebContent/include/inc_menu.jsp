@@ -36,12 +36,12 @@
 				</div>
 				<div id="menuMove_survey">
 					<a href="${path}/survey_servlet/index.do">
-						설문조사
+						설문조사(ajax)
 					</a>
 				</div>
 				<div id="menuMove_survey2">
 					<a href="${path}/survey_servlet2/list.do">
-						설문조사2
+						설문조사
 					</a>
 				</div>
 				<div id="menuMove_board">
@@ -51,12 +51,17 @@
 				</div>
 				<div id="menuMove_board2">
 					<a href="${path}/board_servlet2/index.do">
-						게시판2
+						게시판(ajax)
 					</a>
 				</div>
-				<div id="menuMove_shop">
+				<div id="menuMove_mall">
 					<a href="#">
 						쇼핑몰
+					</a>
+				</div>
+				<div id="menuMove_product">
+					<a href="${path}/product_servlet/index.do">
+						쇼핑몰 관리(ajax)
 					</a>
 				</div>
 				<div id="menuMove_admin">

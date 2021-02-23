@@ -312,3 +312,19 @@ select * from board2;
 insert into boardType2 values(seq_boardType2.nextval, 'aaa', 'aaa°Ô½ÃÆÇ','T',default);
 commit;
 
+
+create table product(
+no number not null,
+name nvarchar2(50) not null,
+price number default 0,
+description clob,
+product_img nvarchar2(1000) not null,
+regiDate timestamp default current_timestamp not null,
+primary key(no)
+);
+
+create sequence seq_product;
+
+
+
+

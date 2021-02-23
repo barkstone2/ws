@@ -1,7 +1,8 @@
-package common;
+package shop.common;
 
+import common.Util;
 
-public class UtilBoard extends Util{
+public class UtilProduct extends Util{
 	
 	public String boardTypeCheck(String boardType, String defaultBoardType) {
 		if (boardType == null || boardType.trim().equals("")) {
