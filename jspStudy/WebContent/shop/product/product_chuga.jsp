@@ -70,7 +70,9 @@
 			상품이미지
 		</div>
 		<div>
-			<input type="text" name="bEmail" id="bEmail" class="longInput">
+			<input type="file" name="files">
+			<input type="file" name="files">
+			<input type="file" name="files">
 		</div>
 	</div>
 	<div class="row">	

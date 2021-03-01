@@ -1,8 +1,10 @@
 package shop.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +14,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import common.UtilBoard;
 import shop.model.dao.ProductDAO;
@@ -118,7 +123,6 @@ public class ProductController extends HttpServlet {
 			request.setAttribute("startPage", startPage);
 			request.setAttribute("lastPage", lastPage);
 			
-			
 			ArrayList<ProductDTO> list = dao.getListAll(startRecord, endRecord, search_option, search_data);
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("chuga.do") != -1) {
@@ -127,27 +131,71 @@ public class ProductController extends HttpServlet {
 			//page = "/board2/board_list.jsp";
 			reUrl = "/shop/product_servlet2/index.do";
 			previousPageUrl += "/chuga.do";
+			String webPath = "/attach/product_img/";
+			String realPath = request.getServletContext().getRealPath(webPath);
 			
-			String name = request.getParameter("pName");
-			String price_ = request.getParameter("price");
-			String description = request.getParameter("description");
-			String product_img = "0";
-			int price = util.numberCheck(price_, 0);
-			
-			ProductDTO dto = new ProductDTO();
-			dto.setName(name);
-			dto.setPrice(price);
-			dto.setDescription(description);
-			dto.setProduct_img(product_img);
-			int result = dao.setInsert(dto);
-			if(result>0) {
-				msg = "게시글 등록 성공";
-			}else {
-				msg = "게시글 등록 실패";
+			File savePath = new File(realPath);
+			if(!savePath.exists()) {
+				savePath.mkdirs();
 			}
 			
-			out.print(msg);
-			return;
+			int maxSize = 10 * 1024 * 1024; // 10MB
+			
+			MultipartRequest multi = new MultipartRequest(request, realPath, 
+					maxSize, "UTF-8", new DefaultFileRenamePolicy());
+			
+//			String name = multi.getParameter("pName");
+//			String price_ = multi.getParameter("price");
+//			String description = multi.getParameter("description");
+//			String product_img = "0"; //multi.getFile(arg0);
+//			int price = util.numberCheck(price_, 0);
+//			
+//			String[] fileNames = new String[3];
+//			
+//			Enumeration files = multi.getFileNames();
+//			
+//			while(files.hasMoreElements()) {
+//				String formName = (String) files.nextElement();
+//				String fileName = multi.getFilesystemName(formName);
+//				
+//				if(formName.equals("0")) {
+//					fileNames[0] = fileName;
+//				}else if(formName.equals("1")) {
+//					fileNames[1] = fileName;
+//				}else if(formName.equals("2")) {
+//					fileNames[2] = fileName;
+//				}
+//			}
+//			String tempFileNames = "";
+//			for(int i=0; i<fileNames.length; i++) {
+//				if(fileNames[i]==null) {
+//					tempFileNames += ",-";
+//				}else {
+//					tempFileNames += "," + fileNames[i];
+//				}
+//			}
+//			tempFileNames = tempFileNames.substring(1);
+//			
+//				//String fileOrgName = multi.getOriginalFileName(formName);
+//				//String fileType = multi.getContentType(formName);
+//				
+//				//System.out.println("1:"+formName + " : " + fileName);
+//				//System.out.println("2:"+fileOrgName + " / " + fileType);
+//			
+//			ProductDTO dto = new ProductDTO();
+//			dto.setName(name);
+//			dto.setPrice(price);
+//			dto.setDescription(description);
+//			dto.setProduct_img(tempFileNames);
+//			int result = dao.setInsert(dto);
+//			if(result>0) {
+//				msg = "게시글 등록 성공";
+//			}else {
+//				msg = "게시글 등록 실패";
+//			}
+//			
+//			out.print(msg);
+//			return;
 		}else if(uri.indexOf("view.do") != -1) {
 			page = "/shop/product/product_view.jsp";
 			String no_ = request.getParameter("no");

@@ -10,7 +10,11 @@
 			${fn:substring(aaa,4,8)}<br>
 			${fn:substring(aaa,9,13)}<br> --%>
 			${fn:indexOf(fn:substringAfter(menu_gubun,'/'),'/')} /
-			${fn:substringBefore(fn:substringAfter(menu_gubun,'/'),'/')}
+			<c:set var="targetMenu" value="${fn:substringBefore(fn:substringAfter(menu_gubun,'/'),'/')}"/>
+			<c:if test="${targetMenu=='shop'}">
+				<c:set var="targetMenu" value="${fn:substringBefore(fn:substringAfter(menu_gubun,'shop/'),'/')}"/>
+			</c:if>
+			<c:out value="${targetMenu}" />
 		</div>
 		<div id="menu">
 			<nav id="mainMenu" class="menu">
@@ -123,6 +127,9 @@ if(cookId==''){
 
 <script>
 var selectedMenu = '${fn:substringBefore(fn:substringAfter(menu_gubun,'/'),'/')}';
+if(selectedMenu=='shop'){
+	selectedMenu = '${fn:substringBefore(fn:substringAfter(menu_gubun,'shop/'),'/')}';
+}
 var toChangeDivId = 'menuMove_'+selectedMenu;
 document.getElementById(toChangeDivId).style.backgroundColor ='#dcdce6';
 /* 

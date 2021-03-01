@@ -36,6 +36,7 @@
 	display:flex;
 	justify-content: flex-start;
 	align-items: center;
+	height: 45px;
 }
 #mList{
 	width:1000px;
@@ -48,8 +49,16 @@
 }
 .mlistcon, #listLabel {
 	border-bottom: 1px solid black;
-	height:45px;
 	text-align: center;
+}
+.mlistcon{
+	min-height:100px;
+}
+.mlistcon > div{
+	min-height:70px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 .column1{
 	border-right: 1px solid black;
@@ -58,8 +67,7 @@
 .column2{
 	border-right: 1px solid black;
 	width:200px;
-	text-align: left;
-	margin-left:15px;
+	text-align: center;
 }
 .column3{
 	border-right: 1px solid black;
@@ -145,21 +153,26 @@
 		</div>
 	</c:if>
 	<c:forEach var="dto" items="${list}">
+		<c:set var="mainImgName" value="${fn:substringBefore(dto.product_img,',')}"/>
 		<div class="mlistcon">
 			<div class="column1">
 				${jj}
 			</div>
 			<div class="column2">
-				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');">${dto.product_img}</a>
+				<c:set var="imgPath" value="${path}/attach/product_img/${mainImgName}"/>
+				<c:if test="${mainImgName=='-'}">
+					<c:set var="imgPath" value="이미지X"/>
+				</c:if>
+				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');"><c:if test="${imgPath=='이미지X'}">${imgPath}</c:if><c:if test="${imgPath!='이미지X'}"><img src="${imgPath}" width="60px" height="60px" /></c:if></a>
 			</div>
 			<div class="column3">
 				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');">${dto.name}</a>
 			</div>
 			<div class="column4">
-				${dto.price}
+				<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.price}" />
 			</div>
 			<div class="column5">
-				&nbsp;
+				${mainImgName}
 			</div>
 			<div class="column6">
 				<c:if test="${today == fn:substring(dto.regiDate,0,10)}">${fn:substring(dto.regiDate,10,16)}</c:if>
