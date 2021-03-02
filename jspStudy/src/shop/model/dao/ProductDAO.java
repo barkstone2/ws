@@ -222,36 +222,24 @@ public class ProductDAO {
 //		}
 //	}
 //	
-//	public int setUpdate(BoardDTO2 dto) {
-//		int result = 0;
-//		int maxNoticeNum = 0;
-//		if(dto.getbNoticeNum()>0) {
-//			maxNoticeNum = getMaxNo("bNoticeNum", tableName1);
-//		}
-//		try {
-//			String sql = "update "+tableName1+" set BoardType=?, bSubject=?, bWriter=?, "
-//					+ "bContent=?, bPasswd=?, bEmail=?, bSecretChk=?, bNoticeNum=?, "
-//					+ "bIp=?, bMemberNo=? where bNo=?";
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setString(1, dto.getBoardType());
-//			pstmt.setString(2, dto.getbSubject());
-//			pstmt.setString(3, dto.getbWriter());
-//			pstmt.setString(4, dto.getbContent());
-//			pstmt.setString(5, dto.getbPasswd());
-//			pstmt.setString(6, dto.getbEmail());
-//			pstmt.setInt(7, dto.getbSecretChk());
-//			pstmt.setInt(8, maxNoticeNum);
-//			pstmt.setString(9, dto.getbIp());
-//			pstmt.setInt(10, dto.getbMemberNo());
-//			pstmt.setInt(11, dto.getbNo());
-//			result = pstmt.executeUpdate();
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}finally {
-//			db.quitConn(rs, pstmt, conn);
-//		}
-//		return result;
-//	}
+	public int setUpdate(ProductDTO dto) {
+		int result = 0;
+		try {
+			String sql = "update "+tableName1+" set name=?, price=?, description=?, product_img=? where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setInt(2, dto.getPrice());
+			pstmt.setString(3, dto.getDescription());
+			pstmt.setString(4, dto.getProduct_img());
+			pstmt.setInt(5, dto.getNo());
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
 //	
 //	public int setDelete(int bNo) {
 //		int result = 0;
@@ -286,5 +274,6 @@ public class ProductDAO {
 //	}
 //	
 //}
+
 
 }

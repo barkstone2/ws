@@ -265,6 +265,8 @@ public class ProductController extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(request, realPath, 
 					maxSize, "UTF-8", new DefaultFileRenamePolicy());
 			
+			String no_ = multi.getParameter("no");
+			int no = util.numberCheck(no_, 0);
 			String name = multi.getParameter("pName");
 			String price_ = multi.getParameter("price");
 			int price = util.numberCheck(price_, 0);
@@ -272,6 +274,12 @@ public class ProductController extends HttpServlet {
 			String product_img = "0"; //multi.getFile(arg0);
 			String[] curImgNames = multi.getParameterValues("curImgNames");
 			
+			System.out.println("dto Info");
+			System.out.println(no);
+			System.out.println(name);
+			System.out.println(price);
+			System.out.println(description);
+			System.out.println("---------------");
 			
 			String[] fileNames = new String[3];
 			Enumeration files = multi.getFileNames();
@@ -326,19 +334,20 @@ public class ProductController extends HttpServlet {
 				tempFile.renameTo(newFile);
 				
 				fileNames[i] = fileNames[i] + "|" + new_fileName;
-				System.out.println("fileName"+i+":"+fileNames[i]);
 			}
 			
-			for(int i=0; i<curImgNames.length; i++) {
-				int index = -1;
-				String imgName = "";
-				int tempIndex = curImgNames[i].lastIndexOf("|");
-				imgName = curImgNames[i].substring(0, tempIndex);
-				System.out.println("imgName:"+imgName);
-				index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
-				
-				if(fileNames[index].equals("-")) fileNames[index] = imgName;
-			}
+				for(int i=0; i<curImgNames.length; i++) {
+					
+					if(!(curImgNames[i].equals("")||curImgNames[i]==null)){
+						int index = -1;
+						String imgName = "";
+						int tempIndex = curImgNames[i].lastIndexOf("|");
+						imgName = curImgNames[i].substring(0, tempIndex);
+						index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
+						
+						if(fileNames[index].equals("-")) fileNames[index] = imgName;
+					}
+				}
 			
 			String tempFileNames = "";
 			for(int i=0; i<fileNames.length; i++) {
@@ -347,26 +356,21 @@ public class ProductController extends HttpServlet {
 			tempFileNames = tempFileNames.substring(1);
 			System.out.println(tempFileNames);
 			
+			ProductDTO dto = new ProductDTO();
+			dto.setNo(no);
+			dto.setName(name);
+			dto.setPrice(price);
+			dto.setDescription(description);
+			dto.setProduct_img(tempFileNames);
 			
-			
-			
-//			ProductDTO dto = new ProductDTO();
-//			dto.setName(name);
-//			dto.setPrice(price);
-//			dto.setDescription(description);
-//			dto.setProduct_img(tempFileNames);
-//			int result = dao.setInsert(dto);
-			
-			
-			
-//			int result = dao.setUpdate(dto);
-//			if(result>0) {
-//				msg = "게시글 수정 성공";
-//			}else {
-//				msg = "게시글 수정 실패";
-//			}
-//			out.print(msg);
-//			return;
+			int result = dao.setUpdate(dto);
+			if(result>0) {
+				msg = "게시글 수정 성공";
+			}else {
+				msg = "게시글 수정 실패";
+			}
+			out.print(msg);
+			return;
 //		}else if(uri.indexOf("delete.do") != -1) {
 //			page = "/board2/board_delete.jsp";
 //			String bNo_ = request.getParameter("bNo");

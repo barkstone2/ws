@@ -37,7 +37,8 @@
 </style>
 <form style="width:900px; border: 1px solid black;" name="chugaForm">
 	<div id="formTitle">
-		<h2>상품 등록</h2>
+		<h2>상품 수정</h2>
+		<input type="hidden" name="no" id="no" value="${dto.no}">
 	</div>
 	<div class="row">
 		<div class="label">
@@ -73,8 +74,10 @@
 			<c:set var="i" value="0" />
 			<c:forEach var="imgName" items="${imgNames}">
 				<c:if test="${imgName!='-'}">
+					<div id="curImgName${i}">
+						<input type="hidden" name="curImgNames" value="${imgName}|${i}">
+					</div>
 					<c:set var="imgName" value="${fn:substringAfter(imgName,'|')}"/>
-					<input type="text" name="curImgNames" id="curImgName${i}" value="${imgName}|${i}" style="display:none;">
 					<div id="currentImg${i}">
 						<a style="none; cursor: pointer;" onclick="changeFile('${i}');">${imgName}</a>
 						<input type="button" value="다시선택" onclick="changeFile('${i}');">
@@ -126,7 +129,7 @@ function changeFile(fileIndex){
 	var fileInput = $("#fileInputDiv").html();
 	$("#currentImg"+i).hide();
 	$("#newImg"+i).show();
-	$("#curImgName"+i).empty();
+	$("#curImgName"+i).html('');
 }
 
 

@@ -56,14 +56,13 @@ function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 		contentType = false;
 		processData = false;
 		param = new FormData();
+		param.append("no", $("#no").val());
 		param.append("pName", $("#pName").val());
 		param.append("price", $("#price").val());
 		param.append("description", $("#description").val());
 		
 		var curImgCounter = $("input[name='curImgNames']").length;
-		//배열 생성
 		var curImgArr = new Array(curImgCounter);
-		//배열에 값 주입
 		for(var i=0; i<curImgCounter; i++){                          
 			curImgArr[i] = $("input[name='curImgNames']")[i].value;
 		}
