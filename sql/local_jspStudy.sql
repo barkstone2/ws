@@ -326,5 +326,5 @@ primary key(no)
 create sequence seq_product;
 
 
-
+select * from product;
 

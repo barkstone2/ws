@@ -37,11 +37,8 @@ public class SurveyController extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		Util util = new Util();
-		int[] DateTime = util.getDateTime();
-		Map<String,Integer> nowDate = new HashMap<>();
-		nowDate.put("nowYear", DateTime[0]);
-		nowDate.put("nowMonth", DateTime[1]);
-		nowDate.put("nowDay", DateTime[2]);
+		
+		Map<String,Integer> nowDate = util.getDateTime();
 		request.setAttribute("nowDate", nowDate);
 		
 		String list_gubun = request.getParameter("list_gubun");

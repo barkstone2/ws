@@ -58,11 +58,7 @@ public class ProductController extends HttpServlet {
 		PrintWriter out = response.getWriter();
 				
 		// ** 현재 날짜 **
-		int[] DateTime = util.getDateTime();
-		Map<String,Integer> nowDate = new HashMap<>();
-		nowDate.put("nowYear", DateTime[0]);
-		nowDate.put("nowMonth", DateTime[1]);
-		nowDate.put("nowDay", DateTime[2]);
+		Map<String,Integer> nowDate = util.getDateTime();
 		request.setAttribute("nowDate", nowDate);
 		
 		// ** 세션 처리 **
@@ -144,233 +140,225 @@ public class ProductController extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(request, realPath, 
 					maxSize, "UTF-8", new DefaultFileRenamePolicy());
 			
-//			String name = multi.getParameter("pName");
-//			String price_ = multi.getParameter("price");
-//			String description = multi.getParameter("description");
-//			String product_img = "0"; //multi.getFile(arg0);
-//			int price = util.numberCheck(price_, 0);
-//			
-//			String[] fileNames = new String[3];
-//			
-//			Enumeration files = multi.getFileNames();
-//			
-//			while(files.hasMoreElements()) {
-//				String formName = (String) files.nextElement();
-//				String fileName = multi.getFilesystemName(formName);
-//				
-//				if(formName.equals("0")) {
-//					fileNames[0] = fileName;
-//				}else if(formName.equals("1")) {
-//					fileNames[1] = fileName;
-//				}else if(formName.equals("2")) {
-//					fileNames[2] = fileName;
-//				}
-//			}
-//			String tempFileNames = "";
-//			for(int i=0; i<fileNames.length; i++) {
-//				if(fileNames[i]==null) {
-//					tempFileNames += ",-";
-//				}else {
-//					tempFileNames += "," + fileNames[i];
-//				}
-//			}
-//			tempFileNames = tempFileNames.substring(1);
-//			
-//				//String fileOrgName = multi.getOriginalFileName(formName);
-//				//String fileType = multi.getContentType(formName);
-//				
-//				//System.out.println("1:"+formName + " : " + fileName);
-//				//System.out.println("2:"+fileOrgName + " / " + fileType);
-//			
-//			ProductDTO dto = new ProductDTO();
-//			dto.setName(name);
-//			dto.setPrice(price);
-//			dto.setDescription(description);
-//			dto.setProduct_img(tempFileNames);
-//			int result = dao.setInsert(dto);
-//			if(result>0) {
-//				msg = "게시글 등록 성공";
-//			}else {
-//				msg = "게시글 등록 실패";
-//			}
-//			
-//			out.print(msg);
-//			return;
+			String name = multi.getParameter("pName");
+			String price_ = multi.getParameter("price");
+			String description = multi.getParameter("description");
+			String product_img = "0"; //multi.getFile(arg0);
+			int price = util.numberCheck(price_, 0);
+			
+			String[] fileNames = new String[3];
+			
+			Enumeration files = multi.getFileNames();
+			
+			while(files.hasMoreElements()) {
+				String formName = (String) files.nextElement();
+				String fileName = multi.getFilesystemName(formName);
+				
+				int fileNamesIndex = Integer.parseInt(formName);
+				fileNames[fileNamesIndex] = fileName;
+			}
+		
+			for(int i=0; i<fileNames.length; i++) {
+				
+				// 파일 확장자, null 체크
+				// 리눅스 환경에서는 확장자가 jpg라도 원래 타입으로 실행됨
+				// fileType check가 필수(img/jpg 형식으로 출력됨)
+				//String fileOrgName = multi.getOriginalFileName(formName);
+				//String fileType = multi.getContentType(formName);
+				
+				// 파일이름이 null일 경우 continue
+				if(fileNames[i] == null) continue;
+				
+				// 파일 확장자 추출, 파일 객체 생성
+				int extIndex = fileNames[i].lastIndexOf(".");
+				String fileExt = fileNames[i].substring(extIndex+1).toLowerCase();
+				String tempPath = realPath + File.separator + fileNames[i];
+				File tempFile = new File(tempPath);
+				
+				// 파일이 실제로 존재하는 지 확인
+				if(!tempFile.exists()) {
+					fileNames[i] = null;
+					continue;
+				}
+				
+				// 파일 확장자가 없을 경우 업로드된 파일 삭제
+				if(extIndex==-1) {
+					tempFile.delete();
+					fileNames[i] = null;
+					continue;
+				}
+				
+				// 파일 확장자 확인 후 허용되지 않을 경우 업로드 된 파일 삭제 
+				if(!(fileExt.equals("jpg") || fileExt.equals("jpeg") ||
+						fileExt.equals("gif") || fileExt.equals("png"))) {
+					tempFile.delete();
+					fileNames[i] = null;
+					continue;
+				}
+				
+				// 파일 이름 재정의
+				String uuid = util.create_uuid();
+				String new_fileName = util.getDateTimeType() + "_" + uuid + "." + fileExt;
+				File newFile = new File(realPath + File.separator + new_fileName);
+				tempFile.renameTo(newFile);
+				
+				fileNames[i] = fileNames[i] + "|" + new_fileName;
+				
+			}
+			
+			String tempFileNames = "";
+			for(int i=0; i<fileNames.length; i++) {
+				if(fileNames[i] == null) fileNames[i] = "-";
+				tempFileNames += "," + fileNames[i];
+			}
+			tempFileNames = tempFileNames.substring(1);
+			System.out.println(tempFileNames);
+			
+			
+			
+			ProductDTO dto = new ProductDTO();
+			dto.setName(name);
+			dto.setPrice(price);
+			dto.setDescription(description);
+			dto.setProduct_img(tempFileNames);
+			int result = dao.setInsert(dto);
+			if(result>0) {
+				msg = "게시글 등록 성공";
+			}else {
+				msg = "게시글 등록 실패";
+			}
+			
+			out.print(msg);
+			return;
 		}else if(uri.indexOf("view.do") != -1) {
 			page = "/shop/product/product_view.jsp";
 			String no_ = request.getParameter("no");
 			int no = util.numberCheck(no_, 0);
 			ProductDTO dto = dao.getView(no);
 			request.setAttribute("dto", dto);
-//		}else if(uri.indexOf("replyList.do") != -1) {
-//			page = "/board2/board_reply_list.jsp";
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			
-//			int conPerPage = 10;
-//			int pageNavLength = 5;
-//			int totalConCount = dao.getReplyCount(bNo);
-//					
-//			int jj = totalConCount - conPerPage * (rePageNumber -1);
-//			int startRecord = conPerPage * (rePageNumber -1) + 1;
-//			int endRecord = conPerPage * rePageNumber;
-//			int totalPage = (int)Math.ceil((totalConCount / (double)conPerPage));
-//			int startPage = 1;
-//			int lastPage = 1;
-//			
-//			startPage = (rePageNumber / pageNavLength - (rePageNumber % pageNavLength!=0 ? 0:1)) * pageNavLength +1; 
-//			lastPage = startPage + pageNavLength -1;
-//			if(lastPage>totalPage)lastPage=totalPage;
-//			
-//			request.setAttribute("bNo", bNo);
-//			request.setAttribute("pageNumber", pageNumber);
-//			request.setAttribute("rePageNumber", rePageNumber);
-//			request.setAttribute("conPerPage", conPerPage);
-//			request.setAttribute("pageNavLength", pageNavLength);
-//			request.setAttribute("totalConCount", totalConCount);
-//			request.setAttribute("jj", jj);
-//			request.setAttribute("startRecord", startRecord);
-//			request.setAttribute("endRecord", endRecord);
-//			request.setAttribute("totalPage", totalPage);
-//			request.setAttribute("startPage", startPage);
-//			request.setAttribute("lastPage", lastPage);
-//			
-//			ArrayList<BoardReplyDTO> list = dao.getReply(bNo, startRecord, endRecord);
-//			request.setAttribute("list", list);
-//		}else if(uri.indexOf("replyReg.do") != -1) {
-//			page = "/board_servlet2/replyList.do";
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			String rStepNo_ = request.getParameter("rStepNo");
-//			int rStepNo = util.numberCheck(rStepNo_, 0);
-//			String rWriter = request.getParameter("rWriter");
-//			String rPasswd = request.getParameter("rPasswd");
-//			String rContent = request.getParameter("rContent");
-//			int rGroupNo = dao.getMaxNo("rGroupNo", "board_reply2");
-//			int rMemberNo = 0;
-//			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
-//			dto.setrIp(ip);
-//			dto.setrMemberNo(rMemberNo);
-//			dao.setInsertReply(dto);
-//		}else if(uri.indexOf("reReply.do") != -1) {
-//			page = "/board_servlet2/replyList.do";
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			String rStepNo_ = request.getParameter("rStepNo");
-//			int rStepNo = util.numberCheck(rStepNo_, 1);
-//			String rWriter = request.getParameter("rWriter");
-//			String rPasswd = request.getParameter("rPasswd");
-//			String rContent = request.getParameter("rContent");
-//			String rGroupNo_ = request.getParameter("rGroupNo");
-//			int rGroupNo = util.numberCheck(rGroupNo_, dao.getMaxNo("rGroupNo", "board_reply2"));
-//			int rMemberNo = 0;
-//			BoardReplyDTO dto = new BoardReplyDTO(bNo, rWriter, rContent, rPasswd, rGroupNo, rStepNo);
-//			dto.setrIp(ip);
-//			dto.setrMemberNo(rMemberNo);
-//			dao.setInsertReply(dto);
-//		}else if(uri.indexOf("answer.do") != -1) {
-//			page = "/board2/board_answer.jsp";
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			BoardDTO2 dto = dao.getView(bNo);
-//			int bGroupNo = dto.getbGroupNo();
-//			int bStepNo = dto.getbStepNo();
-//			int bLevelNo = dto.getbLevelNo();
-//			request.setAttribute("bNo", bNo);
-//			request.setAttribute("bGroupNo", bGroupNo);
-//			request.setAttribute("bStepNo", bStepNo);
-//			request.setAttribute("bLevelNo", bLevelNo);
-//		}else if(uri.indexOf("answerProc.do") != -1) {
-//			//page = "/board2/board_list.jsp";
-//			reUrl = "/board_servlet2/index.do";
-//			String bSubject = request.getParameter("bSubject");
-//			String bWriter = request.getParameter("bWriter");
-//			String bContent = request.getParameter("bContent");
-//			String bPasswd = request.getParameter("bPasswd");
-//			String bEmail = request.getParameter("bEmail");
-//			
-//			String bSecretChk_ = request.getParameter("bSecretChk");
-//			String bNoticeNum_ = request.getParameter("bNoticeNum");
-//			String bNo_ = request.getParameter("bNo");
-//			String bGroupNo_ = request.getParameter("bGroupNo");
-//			String bStepNo_ = request.getParameter("bStepNo");
-//			String bLevelNo_ = request.getParameter("bLevelNo");
-//			
-//			int bSecretChk = util.numberCheck(bSecretChk_, 0);
-//			int bNoticeNum = util.numberCheck(bNoticeNum_, 0);
-//			int bNo = util.numberCheck(bNo_, 0);
-//			int bGroupNo = util.numberCheck(bGroupNo_, 0);
-//			int bStepNo = util.numberCheck(bStepNo_, 0);
-//			int bLevelNo = util.numberCheck(bLevelNo_, 0);
-//			
-//			BoardDTO2 dto = new BoardDTO2();
-//			dto.setBoardType(boardType);
-//			dto.setbSubject(bSubject);
-//			dto.setbWriter(bWriter);
-//			dto.setbContent(bContent);
-//			dto.setbSecretChk(bSecretChk);
-//			dto.setbPasswd(bPasswd);
-//			dto.setbEmail(bEmail);
-//			dto.setbNoticeNum(bNoticeNum);
-//			dto.setbIp(ip);
-//			dto.setbMemberNo(cookNo);
-//			dto.setbNo(bNo);
-//			dto.setbGroupNo(bGroupNo);
-//			dto.setbStepNo(bStepNo);
-//			dto.setbLevelNo(bLevelNo);
-//			
-//			int result = dao.setAnswer(dto);
-//			if(result>0) {
-//				msg = "답변 등록 성공";
-//			}else {
-//				msg = "답변 등록 실패";
-//			}
-//			out.print(msg);
-//			return;
-//		}else if(uri.indexOf("modify.do") != -1) {
-//			page = "/board2/board_modify.jsp";
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			String bPasswd = request.getParameter("bPasswd");
-//			bPasswd = util.nullCheck(bPasswd);
-//			BoardDTO2 dto = dao.getView(bNo);
-//			int accessChk = 0;
-//			String viewMsg = "";
-//			if(bPasswd.equals(dto.getbPasswd())) {
-//				accessChk = 1;
-//			}else if(bPasswd.equals("")){
-//			}else {
-//				viewMsg = "비밀번호가 일치하지 않습니다.";
-//			}
-//			request.setAttribute("viewMsg", viewMsg);
-//			request.setAttribute("accessChk", accessChk);
-//			request.setAttribute("dto", dto);
-//		}else if(uri.indexOf("modifyProc.do") != -1) {
-//			//page = "/board2/board_list.jsp";
-//			//reUrl = "/board_servlet2/index.do";
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			String bSubject = request.getParameter("bSubject");
-//			String bWriter = request.getParameter("bWriter");
-//			String bContent = request.getParameter("bContent");
-//			String bPasswd = request.getParameter("bPasswd");
-//			String bEmail = request.getParameter("bEmail");
-//			String bSecretChk_ = request.getParameter("bSecretChk");
-//			int bSecretChk = util.numberCheck(bSecretChk_, 0);
-//			String bNoticeNum_ = request.getParameter("bNoticeNum");
-//			int bNoticeNum = util.numberCheck(bNoticeNum_, 0);
-//			BoardDTO2 dto = new BoardDTO2();
-//			dto.setBoardType(boardType);
-//			dto.setbSubject(bSubject);
-//			dto.setbWriter(bWriter);
-//			dto.setbContent(bContent);
-//			dto.setbSecretChk(bSecretChk);
-//			dto.setbPasswd(bPasswd);
-//			dto.setbEmail(bEmail);
-//			dto.setbNoticeNum(bNoticeNum);
-//			dto.setbIp(ip);
-//			dto.setbMemberNo(cookNo);
-//			dto.setbNo(bNo);
+		}else if(uri.indexOf("modify.do") != -1) {
+			page = "/shop/product/product_modify.jsp";
+			String no_ = request.getParameter("no");
+			int no = util.numberCheck(no_, 0);
+			ProductDTO dto = dao.getView(no);
+			
+			
+			String tempImgNames = dto.getProduct_img();
+			String[] imgNames = tempImgNames.split(",");
+			
+			request.setAttribute("imgNames", imgNames);
+			request.setAttribute("dto", dto);
+		}else if(uri.indexOf("modifyProc.do") != -1) {
+			//page = "/board2/board_list.jsp";
+			//reUrl = "/board_servlet2/index.do";
+			
+			String webPath = "/attach/product_img/";
+			String realPath = request.getServletContext().getRealPath(webPath);
+			
+			File savePath = new File(realPath);
+			if(!savePath.exists()) {
+				savePath.mkdirs();
+			}
+			
+			int maxSize = 10 * 1024 * 1024; // 10MB
+			
+			MultipartRequest multi = new MultipartRequest(request, realPath, 
+					maxSize, "UTF-8", new DefaultFileRenamePolicy());
+			
+			String name = multi.getParameter("pName");
+			String price_ = multi.getParameter("price");
+			int price = util.numberCheck(price_, 0);
+			String description = multi.getParameter("description");
+			String product_img = "0"; //multi.getFile(arg0);
+			String[] curImgNames = multi.getParameterValues("curImgNames");
+			
+			
+			String[] fileNames = new String[3];
+			Enumeration files = multi.getFileNames();
+			
+			while(files.hasMoreElements()) {
+				String formName = (String) files.nextElement();
+				String fileName = multi.getFilesystemName(formName);
+				
+				int fileNamesIndex = Integer.parseInt(formName);
+				fileNames[fileNamesIndex] = fileName;
+			}
+		
+			for(int i=0; i<fileNames.length; i++) {
+				
+				// 파일이름이 null일 경우 continue
+				if(fileNames[i] == null) {
+					fileNames[i] = "-";
+					continue;
+				}
+				
+				// 파일 확장자 추출, 파일 객체 생성
+				int extIndex = fileNames[i].lastIndexOf(".");
+				String fileExt = fileNames[i].substring(extIndex+1).toLowerCase();
+				String tempPath = realPath + File.separator + fileNames[i];
+				File tempFile = new File(tempPath);
+				
+				// 파일이 실제로 존재하는 지 확인
+				if(!tempFile.exists()) {
+					fileNames[i] = null;
+					continue;
+				}
+				
+				// 파일 확장자가 없을 경우 업로드된 파일 삭제
+				if(extIndex==-1) {
+					tempFile.delete();
+					fileNames[i] = null;
+					continue;
+				}
+				
+				// 파일 확장자 확인 후 허용되지 않을 경우 업로드 된 파일 삭제 
+				if(!(fileExt.equals("jpg") || fileExt.equals("jpeg") ||
+						fileExt.equals("gif") || fileExt.equals("png"))) {
+					tempFile.delete();
+					fileNames[i] = null;
+					continue;
+				}
+				
+				// 파일 이름 재정의
+				String uuid = util.create_uuid();
+				String new_fileName = util.getDateTimeType() + "_" + uuid + "." + fileExt;
+				File newFile = new File(realPath + File.separator + new_fileName);
+				tempFile.renameTo(newFile);
+				
+				fileNames[i] = fileNames[i] + "|" + new_fileName;
+				System.out.println("fileName"+i+":"+fileNames[i]);
+			}
+			
+			for(int i=0; i<curImgNames.length; i++) {
+				int index = -1;
+				String imgName = "";
+				int tempIndex = curImgNames[i].lastIndexOf("|");
+				imgName = curImgNames[i].substring(0, tempIndex);
+				System.out.println("imgName:"+imgName);
+				index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
+				
+				if(fileNames[index].equals("-")) fileNames[index] = imgName;
+			}
+			
+			String tempFileNames = "";
+			for(int i=0; i<fileNames.length; i++) {
+				tempFileNames += "," + fileNames[i];
+			}
+			tempFileNames = tempFileNames.substring(1);
+			System.out.println(tempFileNames);
+			
+			
+			
+			
+//			ProductDTO dto = new ProductDTO();
+//			dto.setName(name);
+//			dto.setPrice(price);
+//			dto.setDescription(description);
+//			dto.setProduct_img(tempFileNames);
+//			int result = dao.setInsert(dto);
+			
+			
+			
 //			int result = dao.setUpdate(dto);
 //			if(result>0) {
 //				msg = "게시글 수정 성공";

@@ -56,11 +56,7 @@ public class BoardController2 extends HttpServlet {
 		PrintWriter out = response.getWriter();
 				
 		// ** 현재 날짜 **
-		int[] DateTime = util.getDateTime();
-		Map<String,Integer> nowDate = new HashMap<>();
-		nowDate.put("nowYear", DateTime[0]);
-		nowDate.put("nowMonth", DateTime[1]);
-		nowDate.put("nowDay", DateTime[2]);
+		Map<String,Integer> nowDate = util.getDateTime();
 		request.setAttribute("nowDate", nowDate);
 		
 		// ** 세션 처리 **

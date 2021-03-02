@@ -52,11 +52,7 @@ public class BoardController extends HttpServlet {
 		String reUrl = ""; //Proc 처리 후 redirect 할 url
 		String page = "/main/main.jsp"; //기본 포워딩 페이지
 		
-		int[] DateTime = util.getDateTime();
-		Map<String,Integer> nowDate = new HashMap<>();
-		nowDate.put("nowYear", DateTime[0]);
-		nowDate.put("nowMonth", DateTime[1]);
-		nowDate.put("nowDay", DateTime[2]);
+		Map<String,Integer> nowDate = util.getDateTime();
 		request.setAttribute("nowDate", nowDate);
 		
 		BoardDAO dao = new BoardDAO();

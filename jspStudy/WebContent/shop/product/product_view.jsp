@@ -36,13 +36,23 @@
 }
 </style>
 	<div>
+		<c:set var="mainImgName" value="${fn:substringBefore(dto.product_img,',')}"/>
+		<c:if test="${mainImgName!='-'}">
+			<c:set var="mainImgName" value="${fn:substringAfter(fn:substringBefore(dto.product_img,','),'|')}"/>
+		</c:if>
+		<c:set var="imgPath" value="${path}/attach/product_img/${mainImgName}"/>
+		<c:if test="${mainImgName=='-'}">
+			<c:set var="imgPath" value="이미지X"/>
+		</c:if>
+	</div>
+	<div>
 		<form style="width:900px; border: 1px solid black;" name="chugaForm">
 			<div id="formTitle">
 				<h2>상품 상세 보기</h2>
 			</div>
 			<div class="row">
-				<div style="width:200px; height:200px; border: 1px solid black; margin-left: 25px;">
-					${dto.product_img}
+				<div style="width:200px; height:200px; border: 1px solid black; display:flex; align-items:center; justify-content:center; margin-left: 25px;">
+					<c:if test="${imgPath=='이미지X'}">${imgPath}</c:if><c:if test="${imgPath!='이미지X'}"><img src="${imgPath}" width="200px" height="200px" /></c:if>
 				</div>
 				<div style="height:202px; display: flex; align-items: center;">
 					<div>

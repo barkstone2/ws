@@ -2,32 +2,29 @@ package common;
 
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
-import java.net.http.HttpRequest;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.regex.Pattern;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class Util {
-	public int[] getDateTime() {
-		int[] result = new int[6];
+	public Map<String,Integer> getDateTime() {
+
 		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH)+1;
-		int day = cal.get(Calendar.DAY_OF_MONTH);
-		int hour = cal.get(Calendar.HOUR_OF_DAY);
-		int min = cal.get(Calendar.MINUTE);
-		int sec = cal.get(Calendar.SECOND);
-		
-		result[0] = year;
-		result[1] = month;
-		result[2] = day;
-		result[3] = hour;
-		result[4] = min;
-		result[5] = sec;
-		
-		return result;
+		Map<String,Integer> nowDate = new HashMap<>();
+		nowDate.put("nowYear", cal.get(Calendar.YEAR));
+		nowDate.put("nowMonth", cal.get(Calendar.MONTH)+1);
+		nowDate.put("nowDay", cal.get(Calendar.DAY_OF_MONTH));
+		nowDate.put("nowHour", cal.get(Calendar.HOUR_OF_DAY));
+		nowDate.put("nowMin", cal.get(Calendar.MINUTE));
+		nowDate.put("nowSec", cal.get(Calendar.SECOND));
+				
+		return nowDate;
 	}
 	
 	public int numberCheck(String str, int defaultNumber) {
@@ -211,7 +208,34 @@ public class Util {
 		return result;
 	}
 	
+	public String create_uuid() {
+		return UUID.randomUUID().toString();
+	}
 	
+	public String getDateTimeType() {
+		
+		String result = "";
+		Map<String,Integer> nowDate = getDateTime();
+		
+		String y = nowDate.get("nowYear") + "";
+		String m = nowDate.get("nowMonth") + "";
+		String d = nowDate.get("nowDay") + "";
+		String s = nowDate.get("nowHour") + "";
+		String b = nowDate.get("nowMin") + "";
+		String c = nowDate.get("nowSec") + "";
+		if(m.length() < 2) m = "0" + m;
+		if(d.length() < 2) d = "0" + d;
+		if(s.length() < 2) s = "0" + s;
+		if(b.length() < 2) b = "0" + b;
+		if(c.length() < 2) c = "0" + c;
+		result = y+m+d+s+b+c;
+		return result;
+	}
 	
+	public String todayTime() {
+		Date now = new Date();
+		SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
+		return sf.format(now);
+	}
 	
 }

@@ -52,23 +52,32 @@ function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 				"search_option" : $("#search_option").val(),
 				"search_data" : $("#search_data").val()
 		}
-	}/* else if(v_location=='modifyProc'){
-		param = {
-				"bSubject" : $("#bSubject").val(),
-				"bWriter" : $("#bWriter").val(),
-				"bPasswd" : $("#bPasswd").val(),
-				"bSecretChk" : $("#bSecretChk").val(),
-				"bContent" : $("#bContent").val(),
-				"bEmail" : $("#bEmail").val(),
-				"bNoticeNum" : $("#bNoticeNum").val(),
-				"bNo" : $("#bNo").val()
-			}
+	}else if(v_location=='modifyProc'){
+		contentType = false;
+		processData = false;
+		param = new FormData();
+		param.append("pName", $("#pName").val());
+		param.append("price", $("#price").val());
+		param.append("description", $("#description").val());
+		
+		var curImgCounter = $("input[name='curImgNames']").length;
+		//배열 생성
+		var curImgArr = new Array(curImgCounter);
+		//배열에 값 주입
+		for(var i=0; i<curImgCounter; i++){                          
+			curImgArr[i] = $("input[name='curImgNames']")[i].value;
+		}
+		param.append("curImgNames", curImgArr);
+		
+		var file_counter = parseInt($('input[name="files"]').length);
+		for(i=0; i<file_counter; i++){
+			param.append(i, $('input[name="files"]')[i].files[0]);
+		}
+		
 	}else if(v_location=='deleteProc'){
 		param = {
-				"bNo" : $("#bNo").val(),
-				"bPasswd" : $("#bPasswd").val()
 			}
-	} */
+	}
 				
 	$.ajax({
 			type: "post",

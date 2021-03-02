@@ -77,7 +77,11 @@
 	border-right: 1px solid black;
 	width:150px;
 }
-.column5, .column7, .column8, .column9{
+.column5{
+	border-right: 1px solid black;
+	width:300px;
+}
+.column7, .column8, .column9{
 	border-right: 1px solid black;
 	width:100px;
 }
@@ -116,7 +120,7 @@
 <c:set var="nowMonth" value="${nowDate.nowMonth}"/>
 <c:set var="nowDay" value="${nowDate.nowDay}"/>
 <c:if test="${nowMonth<10}"><c:set var="nowMonth" value="0${nowDate.nowMonth}"/></c:if>
-<c:if test="${nowDay<10}"><c:set var="nowDay" value="0${nowDate.nowMonth}"/></c:if>
+<c:if test="${nowDay<10}"><c:set var="nowDay" value="0${nowDate.nowDay}"/></c:if>
 <c:set var="today" value="${nowYear}-${nowMonth}-${nowDay}"/>
 
 <div style="min-width:750px; min-height: 500px; width:1000px;">
@@ -153,16 +157,21 @@
 		</div>
 	</c:if>
 	<c:forEach var="dto" items="${list}">
-		<c:set var="mainImgName" value="${fn:substringBefore(dto.product_img,',')}"/>
+		<div id="imgPathConfig">
+			<c:set var="mainImgName" value="${fn:substringBefore(dto.product_img,',')}"/>
+			<c:if test="${mainImgName!='-'}">
+				<c:set var="mainImgName" value="${fn:substringAfter(fn:substringBefore(dto.product_img,','),'|')}"/>
+			</c:if>
+			<c:set var="imgPath" value="${path}/attach/product_img/${mainImgName}"/>
+			<c:if test="${mainImgName=='-'}">
+				<c:set var="imgPath" value="이미지X"/>
+			</c:if>
+		</div>
 		<div class="mlistcon">
 			<div class="column1">
 				${jj}
 			</div>
 			<div class="column2">
-				<c:set var="imgPath" value="${path}/attach/product_img/${mainImgName}"/>
-				<c:if test="${mainImgName=='-'}">
-					<c:set var="imgPath" value="이미지X"/>
-				</c:if>
 				<a href="#" onclick="move('view','${pageNumber}','${dto.no}');"><c:if test="${imgPath=='이미지X'}">${imgPath}</c:if><c:if test="${imgPath!='이미지X'}"><img src="${imgPath}" width="60px" height="60px" /></c:if></a>
 			</div>
 			<div class="column3">
