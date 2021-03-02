@@ -74,8 +74,8 @@
 			<c:forEach var="imgName" items="${imgNames}">
 				<c:if test="${imgName!='-'}">
 					<c:set var="imgName" value="${fn:substringAfter(imgName,'|')}"/>
+					<input type="text" name="curImgNames" id="curImgName${i}" value="${imgName}|${i}" style="display:none;">
 					<div id="currentImg${i}">
-						<input type="text" name="curImgNames" id="curImgNames${i}" value="${imgName}|${i}" style="display:none;">
 						<a style="none; cursor: pointer;" onclick="changeFile('${i}');">${imgName}</a>
 						<input type="button" value="다시선택" onclick="changeFile('${i}');">
 					</div>
@@ -121,13 +121,12 @@ $(document).ready(function(){
 	});
 });
 
-function changeFile(fileIndex, cancelChk){
+function changeFile(fileIndex){
 	var i = fileIndex;
 	var fileInput = $("#fileInputDiv").html();
-	var cancel = cancelChk;
 	$("#currentImg"+i).hide();
 	$("#newImg"+i).show();
-	$("#curImgNames"+i).val = '';
+	$("#curImgName"+i).empty();
 }
 
 
