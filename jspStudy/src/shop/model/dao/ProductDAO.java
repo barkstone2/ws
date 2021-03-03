@@ -240,21 +240,21 @@ public class ProductDAO {
 		}
 		return result;
 	}
-//	
-//	public int setDelete(int bNo) {
-//		int result = 0;
-//		try {
-//			String sql = "delete from "+tableName1+" where bNo=?";
-//			pstmt = conn.prepareStatement(sql);
-//			pstmt.setInt(1, bNo);
-//			result = pstmt.executeUpdate();
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//		}finally {
-//			db.quitConn(rs, pstmt, conn);
-//		}
-//		return result;
-//	}
+	
+	public int setDelete(int no) {
+		int result = 0;
+		try {
+			String sql = "delete from "+tableName1+" where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, no);
+			result = pstmt.executeUpdate();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		return result;
+	}
 //	
 //	public String checkBoardType(String boardType) {
 //		String boardName = "";

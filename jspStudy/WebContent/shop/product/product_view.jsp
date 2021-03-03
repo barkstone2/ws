@@ -77,7 +77,7 @@
 								상품가격
 							</div>
 							<div>
-								${dto.price}
+								<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.price}" />
 							</div>
 						</div>
 						<div class="shotLine">
@@ -111,7 +111,7 @@
 							<input type="button" value="수정하기" onclick="move('modify','${pageNumber}','${dto.no}');" id="btnSave">
 						</div>
 						<div>
-							<input type="button" value="삭제하기" onclick="move('delete','${pageNumber}','${dto.no}');" id="btnSave">
+							<input type="button" value="삭제하기" onclick="move('deleteProc','${pageNumber}','${dto.no}');" id="btnSave">
 						</div>
 						<div>
 							<input type="button" value="목록으로" onclick="move('list','${pageNumber}');" id="btnList">
@@ -123,6 +123,12 @@
 	</div>
 <script>
 function move(v_location, v_pageNumber, v_bNo){
-	goPage(v_location, v_pageNumber, v_bNo);
+	if(v_location=='deleteProc'){
+		if(confirm('삭제하시겠습니까?')){
+			goPage(v_location, v_pageNumber, v_bNo);
+		}
+	}else{
+		goPage(v_location, v_pageNumber, v_bNo);
+	}
 }
 </script>

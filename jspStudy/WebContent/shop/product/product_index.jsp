@@ -72,10 +72,6 @@ function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 		for(i=0; i<file_counter; i++){
 			param.append(i, $('input[name="files"]')[i].files[0]);
 		}
-		
-	}else if(v_location=='deleteProc'){
-		param = {
-			}
 	}
 				
 	$.ajax({

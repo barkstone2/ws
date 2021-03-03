@@ -35,7 +35,7 @@
 	margin-right: 30px;
 }
 </style>
-<form style="width:900px; border: 1px solid black;" name="chugaForm">
+<form style="width:900px; border: 1px solid black;" name="chugaForm" id="modifyForm">
 	<div id="formTitle">
 		<h2>상품 수정</h2>
 		<input type="hidden" name="no" id="no" value="${dto.no}">
@@ -45,7 +45,7 @@
 			상품명
 		</div>
 		<div>
-			<input type="text" name="pName" id="pName" class="longInput" value="${dto.name}">
+			<input type="text" name="pName" id="pName" class="longInput" value="${dto.name}" required="required">
 		</div>
 	</div>
 	<div class="row">
@@ -54,7 +54,7 @@
 				상품가격
 			</div>
 			<div>
-				<input type="text" name="price" id="price" class="longInput" value="${dto.price}">
+				<input type="text" name="price" id="price" class="longInput" value="${dto.price}" required="required">
 			</div>
 		</div>
 	</div>
@@ -63,7 +63,7 @@
 			상품설명
 		</div>
 		<div>
-			<textarea name="description" id="description" style="width:770px; height:500px; resize: none;">${dto.description}</textarea>
+			<textarea name="description" id="description" required="required" style="width:770px; height:500px; resize: none;">${dto.description}</textarea>
 		</div>
 	</div>
 	<div class="row">	
@@ -83,14 +83,14 @@
 						<input type="button" value="다시선택" onclick="changeFile('${i}');">
 					</div>
 					<div style="display:flex;">
-						<div id="newImg${i}" style="display:none;">
-							<input type="file" name="files">
+						<div id="newImg${i}" style="padding:5px; display:none;">
+							<input type="file" name="files" accept="image/*">
 						</div>
 					</div>
 				</c:if>
 				<c:if test="${imgName=='-'}">
-					<div id="fileInputDiv">
-						<input type="file" name="files">
+					<div style="padding:5px;">
+						<input type="file" name="files" accept="image/*">
 					</div>
 				</c:if>
 				<c:set var="i" value="${i+1}" />
@@ -102,6 +102,9 @@
 			<div style="width:300px; display:flex; justify-content: space-around;">
 				<div>
 					<input type="button" value="상품수정" id="btnSave">
+				</div>
+				<div>
+					<input type="button" value="돌아가기" id="btnReturn">
 				</div>
 				<div>
 					<input type="button" value="목록으로" id="btnList">
@@ -116,14 +119,19 @@
 $(document).ready(function(){
 	$("#btnSave").click(function(){
 		if(confirm('수정하시겠습니까?')){
-			goPage('modifyProc');
+			var $modifyForm = $('#modifyForm');
+			if($modifyForm[0].checkValidity()) {
+				goPage('modifyProc');
+			}
 		}
 	});
+	$("#btnReturn").click(function(){
+		goPage('view','${pageNumber}','${dto.no}');
+	});
 	$("#btnList").click(function(){
-		goPage('list');
+		goPage('list','${pageNumber}');
 	});
 });
-
 function changeFile(fileIndex){
 	var i = fileIndex;
 	var fileInput = $("#fileInputDiv").html();

@@ -123,10 +123,12 @@ public class ProductController extends HttpServlet {
 			request.setAttribute("list", list);
 		}else if(uri.indexOf("chuga.do") != -1) {
 			page = "/shop/product/product_chuga.jsp";
-		}else if(uri.indexOf("chugaProc.do") != -1) {
+		}else if(uri.indexOf("chugaProc.do") != -1 || uri.indexOf("modifyProc.do") != -1) {
 			//page = "/board2/board_list.jsp";
-			reUrl = "/shop/product_servlet2/index.do";
-			previousPageUrl += "/chuga.do";
+//			reUrl = "/shop/product_servlet2/index.do";
+//			previousPageUrl += "/chuga.do";
+			
+			// 파일 업로드 처리 프로세스
 			String webPath = "/attach/product_img/";
 			String realPath = request.getServletContext().getRealPath(webPath);
 			
@@ -140,6 +142,9 @@ public class ProductController extends HttpServlet {
 			MultipartRequest multi = new MultipartRequest(request, realPath, 
 					maxSize, "UTF-8", new DefaultFileRenamePolicy());
 			
+			
+			String no_ = multi.getParameter("no");
+			int no = util.numberCheck(no_, 0);
 			String name = multi.getParameter("pName");
 			String price_ = multi.getParameter("price");
 			String description = multi.getParameter("description");
@@ -147,6 +152,7 @@ public class ProductController extends HttpServlet {
 			int price = util.numberCheck(price_, 0);
 			
 			String[] fileNames = new String[3];
+			String[] fileTypes = new String[3];
 			
 			Enumeration files = multi.getFileNames();
 			
@@ -156,8 +162,25 @@ public class ProductController extends HttpServlet {
 				
 				int fileNamesIndex = Integer.parseInt(formName);
 				fileNames[fileNamesIndex] = fileName;
+				String fileType = multi.getContentType(formName);
+				fileTypes[fileNamesIndex] = fileType;
+				//System.out.printf("fileOrgName is %s\nfileType is %s",fileOrgName,fileType);
 			}
 		
+			// fileType Check
+			for(int i=0; i<fileTypes.length; i++) {
+				if(fileTypes[i] != null) {
+					if(!fileTypes[i].contains("image")){
+						int extIndex = fileNames[i].lastIndexOf(".");
+						String fileExt = fileNames[i].substring(extIndex+1).toLowerCase();
+						String tempPath = realPath + File.separator + fileNames[i];
+						File tempFile = new File(tempPath);
+						tempFile.delete();
+						fileNames[i] = null;
+					}
+				}
+			}
+			
 			for(int i=0; i<fileNames.length; i++) {
 				
 				// 파일 확장자, null 체크
@@ -167,7 +190,10 @@ public class ProductController extends HttpServlet {
 				//String fileType = multi.getContentType(formName);
 				
 				// 파일이름이 null일 경우 continue
-				if(fileNames[i] == null) continue;
+				if(fileNames[i] == null) {
+					fileNames[i] = "-";
+					continue;
+				}
 				
 				// 파일 확장자 추출, 파일 객체 생성
 				int extIndex = fileNames[i].lastIndexOf(".");
@@ -175,16 +201,17 @@ public class ProductController extends HttpServlet {
 				String tempPath = realPath + File.separator + fileNames[i];
 				File tempFile = new File(tempPath);
 				
+				
 				// 파일이 실제로 존재하는 지 확인
 				if(!tempFile.exists()) {
-					fileNames[i] = null;
+					fileNames[i] = "-";
 					continue;
 				}
 				
 				// 파일 확장자가 없을 경우 업로드된 파일 삭제
 				if(extIndex==-1) {
 					tempFile.delete();
-					fileNames[i] = null;
+					fileNames[i] = "-";
 					continue;
 				}
 				
@@ -192,7 +219,7 @@ public class ProductController extends HttpServlet {
 				if(!(fileExt.equals("jpg") || fileExt.equals("jpeg") ||
 						fileExt.equals("gif") || fileExt.equals("png"))) {
 					tempFile.delete();
-					fileNames[i] = null;
+					fileNames[i] = "-";
 					continue;
 				}
 				
@@ -206,26 +233,73 @@ public class ProductController extends HttpServlet {
 				
 			}
 			
+			// 수정 프로세스
+			// 기존 이미지 존재여부 파악 후 기존 이미지로 변경
+			if(no>0) {
+				String[] curImgNames = multi.getParameterValues("curImgNames");
+				
+				
+				for(int i=0; i<curImgNames.length; i++) {
+					
+					if(!(curImgNames[i].equals("")||curImgNames[i]==null)){
+						int index = -1;
+						String imgName = "";
+						int tempIndex = curImgNames[i].lastIndexOf("|");
+						imgName = curImgNames[i].substring(0, tempIndex);
+						index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
+						
+						// 해당 위치에 새로 업로드한 파일이 없을 경우
+						if(fileNames[index].equals("-")) fileNames[index] = imgName;
+					}
+				}
+				
+				// 이미지 변경시 기존 이미지 삭제
+				String[] dbImgNames = dao.getView(no).getProduct_img().split(",");
+				for(int i=0; i<dbImgNames.length; i++) {
+					// 이미지 원본 이름과 실제 이름 분리
+					int seperatorIndex = dbImgNames[i].indexOf("|");
+					dbImgNames[i] = dbImgNames[i].substring(seperatorIndex+1);
+					
+					if(!fileNames[i].equals(dbImgNames[i])) {
+						String tempPath = realPath + File.separator + dbImgNames[i];
+						File tempFile = new File(tempPath);
+						tempFile.delete();
+					}
+				}
+				
+			}
+			
+			//DB 업로드용 파일이름 결합
 			String tempFileNames = "";
 			for(int i=0; i<fileNames.length; i++) {
-				if(fileNames[i] == null) fileNames[i] = "-";
 				tempFileNames += "," + fileNames[i];
 			}
 			tempFileNames = tempFileNames.substring(1);
-			System.out.println(tempFileNames);
-			
-			
+			//System.out.println(tempFileNames);
 			
 			ProductDTO dto = new ProductDTO();
+			if(no>0) dto.setNo(no);
 			dto.setName(name);
 			dto.setPrice(price);
 			dto.setDescription(description);
 			dto.setProduct_img(tempFileNames);
-			int result = dao.setInsert(dto);
-			if(result>0) {
-				msg = "게시글 등록 성공";
+			
+			dao = new ProductDAO();
+			
+			if(no>0) {
+				int result = dao.setUpdate(dto);
+				if(result>0) {
+					msg = "게시글 수정 성공";
+				}else {
+					msg = "게시글 수정 실패";
+				}
 			}else {
-				msg = "게시글 등록 실패";
+				int result = dao.setInsert(dto);
+				if(result>0) {
+					msg = "게시글 등록 성공";
+				}else {
+					msg = "게시글 등록 실패";
+				}
 			}
 			
 			out.print(msg);
@@ -248,156 +322,170 @@ public class ProductController extends HttpServlet {
 			
 			request.setAttribute("imgNames", imgNames);
 			request.setAttribute("dto", dto);
-		}else if(uri.indexOf("modifyProc.do") != -1) {
-			//page = "/board2/board_list.jsp";
-			//reUrl = "/board_servlet2/index.do";
-			
-			String webPath = "/attach/product_img/";
-			String realPath = request.getServletContext().getRealPath(webPath);
-			
-			File savePath = new File(realPath);
-			if(!savePath.exists()) {
-				savePath.mkdirs();
-			}
-			
-			int maxSize = 10 * 1024 * 1024; // 10MB
-			
-			MultipartRequest multi = new MultipartRequest(request, realPath, 
-					maxSize, "UTF-8", new DefaultFileRenamePolicy());
-			
-			String no_ = multi.getParameter("no");
-			int no = util.numberCheck(no_, 0);
-			String name = multi.getParameter("pName");
-			String price_ = multi.getParameter("price");
-			int price = util.numberCheck(price_, 0);
-			String description = multi.getParameter("description");
-			String product_img = "0"; //multi.getFile(arg0);
-			String[] curImgNames = multi.getParameterValues("curImgNames");
-			
-			System.out.println("dto Info");
-			System.out.println(no);
-			System.out.println(name);
-			System.out.println(price);
-			System.out.println(description);
-			System.out.println("---------------");
-			
-			String[] fileNames = new String[3];
-			Enumeration files = multi.getFileNames();
-			
-			while(files.hasMoreElements()) {
-				String formName = (String) files.nextElement();
-				String fileName = multi.getFilesystemName(formName);
-				
-				int fileNamesIndex = Integer.parseInt(formName);
-				fileNames[fileNamesIndex] = fileName;
-			}
-		
-			for(int i=0; i<fileNames.length; i++) {
-				
-				// 파일이름이 null일 경우 continue
-				if(fileNames[i] == null) {
-					fileNames[i] = "-";
-					continue;
-				}
-				
-				// 파일 확장자 추출, 파일 객체 생성
-				int extIndex = fileNames[i].lastIndexOf(".");
-				String fileExt = fileNames[i].substring(extIndex+1).toLowerCase();
-				String tempPath = realPath + File.separator + fileNames[i];
-				File tempFile = new File(tempPath);
-				
-				// 파일이 실제로 존재하는 지 확인
-				if(!tempFile.exists()) {
-					fileNames[i] = null;
-					continue;
-				}
-				
-				// 파일 확장자가 없을 경우 업로드된 파일 삭제
-				if(extIndex==-1) {
-					tempFile.delete();
-					fileNames[i] = null;
-					continue;
-				}
-				
-				// 파일 확장자 확인 후 허용되지 않을 경우 업로드 된 파일 삭제 
-				if(!(fileExt.equals("jpg") || fileExt.equals("jpeg") ||
-						fileExt.equals("gif") || fileExt.equals("png"))) {
-					tempFile.delete();
-					fileNames[i] = null;
-					continue;
-				}
-				
-				// 파일 이름 재정의
-				String uuid = util.create_uuid();
-				String new_fileName = util.getDateTimeType() + "_" + uuid + "." + fileExt;
-				File newFile = new File(realPath + File.separator + new_fileName);
-				tempFile.renameTo(newFile);
-				
-				fileNames[i] = fileNames[i] + "|" + new_fileName;
-			}
-			
-				for(int i=0; i<curImgNames.length; i++) {
-					
-					if(!(curImgNames[i].equals("")||curImgNames[i]==null)){
-						int index = -1;
-						String imgName = "";
-						int tempIndex = curImgNames[i].lastIndexOf("|");
-						imgName = curImgNames[i].substring(0, tempIndex);
-						index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
-						
-						if(fileNames[index].equals("-")) fileNames[index] = imgName;
-					}
-				}
-			
-			String tempFileNames = "";
-			for(int i=0; i<fileNames.length; i++) {
-				tempFileNames += "," + fileNames[i];
-			}
-			tempFileNames = tempFileNames.substring(1);
-			System.out.println(tempFileNames);
-			
-			ProductDTO dto = new ProductDTO();
-			dto.setNo(no);
-			dto.setName(name);
-			dto.setPrice(price);
-			dto.setDescription(description);
-			dto.setProduct_img(tempFileNames);
-			
-			int result = dao.setUpdate(dto);
-			if(result>0) {
-				msg = "게시글 수정 성공";
-			}else {
-				msg = "게시글 수정 실패";
-			}
-			out.print(msg);
-			return;
+//		}else if(uri.indexOf("modifyProc.do") != -1) {
+//			//page = "/board2/board_list.jsp";
+//			//reUrl = "/board_servlet2/index.do";
+//			
+//			
+//			// 파일 업로드 처리 프로세스
+//			String webPath = "/attach/product_img/";
+//			String realPath = request.getServletContext().getRealPath(webPath);
+//			
+//			File savePath = new File(realPath);
+//			if(!savePath.exists()) {
+//				savePath.mkdirs();
+//			}
+//			
+//			int maxSize = 10 * 1024 * 1024; // 10MB
+//			
+//			MultipartRequest multi = new MultipartRequest(request, realPath, 
+//					maxSize, "UTF-8", new DefaultFileRenamePolicy());
+//			
+//			String no_ = multi.getParameter("no");
+//			int no = util.numberCheck(no_, 0);
+//			String name = multi.getParameter("pName");
+//			String price_ = multi.getParameter("price");
+//			int price = util.numberCheck(price_, 0);
+//			String description = multi.getParameter("description");
+//			String product_img = "0"; //multi.getFile(arg0);
+//			
+//			String[] fileNames = new String[3];
+//			Enumeration files = multi.getFileNames();
+//			
+//			while(files.hasMoreElements()) {
+//				String formName = (String) files.nextElement();
+//				String fileName = multi.getFilesystemName(formName);
+//				
+//				int fileNamesIndex = Integer.parseInt(formName);
+//				fileNames[fileNamesIndex] = fileName;
+//			}
+//		
+//			for(int i=0; i<fileNames.length; i++) {
+//				
+//				// 파일이름이 null일 경우 continue
+//				if(fileNames[i] == null) {
+//					fileNames[i] = "-";
+//					continue;
+//				}
+//				
+//				// 파일 확장자 추출, 파일 객체 생성
+//				int extIndex = fileNames[i].lastIndexOf(".");
+//				String fileExt = fileNames[i].substring(extIndex+1).toLowerCase();
+//				String tempPath = realPath + File.separator + fileNames[i];
+//				File tempFile = new File(tempPath);
+//				
+//				// 파일이 실제로 존재하는 지 확인
+//				if(!tempFile.exists()) {
+//					fileNames[i] = null;
+//					continue;
+//				}
+//				
+//				// 파일 확장자가 없을 경우 업로드된 파일 삭제
+//				if(extIndex==-1) {
+//					tempFile.delete();
+//					fileNames[i] = null;
+//					continue;
+//				}
+//				
+//				// 파일 확장자 확인 후 허용되지 않을 경우 업로드 된 파일 삭제 
+//				if(!(fileExt.equals("jpg") || fileExt.equals("jpeg") ||
+//						fileExt.equals("gif") || fileExt.equals("png"))) {
+//					tempFile.delete();
+//					fileNames[i] = null;
+//					continue;
+//				}
+//				
+//				// 파일 이름 재정의
+//				String uuid = util.create_uuid();
+//				String new_fileName = util.getDateTimeType() + "_" + uuid + "." + fileExt;
+//				File newFile = new File(realPath + File.separator + new_fileName);
+//				tempFile.renameTo(newFile);
+//				
+//				fileNames[i] = fileNames[i] + "|" + new_fileName;
+//			}
+//			
+//			
+//			
+//			// 수정 프로세스
+//			// 기존 이미지 존재여부 파악 후 기존 이미지로 변경
+//			if(no>0) {
+//				String[] curImgNames = multi.getParameterValues("curImgNames");
+//			
+//				for(int i=0; i<curImgNames.length; i++) {
+//					
+//					if(!(curImgNames[i].equals("")||curImgNames[i]==null)){
+//						int index = -1;
+//						String imgName = "";
+//						int tempIndex = curImgNames[i].lastIndexOf("|");
+//						imgName = curImgNames[i].substring(0, tempIndex);
+//						index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
+//						
+//						// 해당 위치에 새로 업로드한 파일이 없을 경우
+//						if(fileNames[index].equals("-")) fileNames[index] = imgName;
+//					}
+//				}
+//			}
+//			String tempFileNames = "";
+//			for(int i=0; i<fileNames.length; i++) {
+//				tempFileNames += "," + fileNames[i];
+//			}
+//			tempFileNames = tempFileNames.substring(1);
+//			System.out.println(tempFileNames);
+//			
+//			ProductDTO dto = new ProductDTO();
+//			dto.setNo(no);
+//			dto.setName(name);
+//			dto.setPrice(price);
+//			dto.setDescription(description);
+//			dto.setProduct_img(tempFileNames);
+//			
+//			if(no>0) {
+//				int result = dao.setUpdate(dto);
+//				if(result>0) {
+//					msg = "게시글 수정 성공";
+//				}else {
+//					msg = "게시글 수정 실패";
+//				}
+//			}
+//			out.print(msg);
+//			return;
 //		}else if(uri.indexOf("delete.do") != -1) {
 //			page = "/board2/board_delete.jsp";
 //			String bNo_ = request.getParameter("bNo");
 //			int bNo = util.numberCheck(bNo_, 0);
 //			request.setAttribute("bNo", bNo);
-//		}else if(uri.indexOf("deleteProc.do") != -1) {
-//			page = "/board2/board_index.jsp";
-//			//reUrl = "/board_servlet2/index.do"; 
-//			String bNo_ = request.getParameter("bNo");
-//			int bNo = util.numberCheck(bNo_, 0);
-//			String bPasswd = request.getParameter("bPasswd");
-//			bPasswd = util.nullCheck(bPasswd);
-//			BoardDTO2 dto = dao.getView(bNo);
-//			if(bPasswd.equals(dto.getbPasswd())) {
-//				dao = new BoardDAO2();
-//				int result = dao.setDelete(bNo);
-//				if(result>0) {
-//					msg = "삭제 성공";
-//				}else {
-//					msg = "삭제 실패";
-//				}
-//			}else if(bPasswd.equals("")){
-//			}else {
-//				msg = "비밀번호가 일치하지 않습니다.";
-//			}
-//			out.print(msg);
-//			return;
+		}else if(uri.indexOf("deleteProc.do") != -1) {
+			//page = "/board2/board_index.jsp";
+			//reUrl = "/board_servlet2/index.do"; 
+			String no_ = request.getParameter("no");
+			int no = util.numberCheck(no_, 0);
+			
+			
+			// DB 이미지 경로를 읽어와 파일 삭제
+			if(no>0) {
+				String webPath = "/attach/product_img/";
+				String realPath = request.getServletContext().getRealPath(webPath);
+				String[] dbImgNames = dao.getView(no).getProduct_img().split(",");
+				
+				for(int i=0; i<dbImgNames.length; i++) {
+					// 이미지 원본 이름과 실제 이름 분리
+					int seperatorIndex = dbImgNames[i].indexOf("|");
+					dbImgNames[i] = dbImgNames[i].substring(seperatorIndex+1);
+					
+					String tempPath = realPath + File.separator + dbImgNames[i];
+					File tempFile = new File(tempPath);
+					tempFile.delete();
+				}
+			}
+			dao = new ProductDAO();
+			int result = dao.setDelete(no);
+			if(result>0) {
+				msg = "삭제 성공";
+			}else {
+				msg = "삭제 실패";
+			}
+			out.print(msg);
+			return;
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);
