@@ -328,3 +328,21 @@ create sequence seq_product;
 
 select * from product;
 
+
+create table cart(
+no number not null primary key,
+memberNo number not null,
+productNo number not null,
+amount number default 0,
+regi_date Timestamp default current_timestamp
+);
+
+create sequence seq_cart;
+
+alter table cart add constraint fk_cart_memberNo
+foreign key(memberNo) references member(no);
+
+alter table cart add constraint fk_cart_productNo
+foreign key(productNo) references product(no);
+
+

@@ -249,16 +249,18 @@ public class ProductController extends HttpServlet {
 						index = Integer.parseInt(curImgNames[i].substring(tempIndex+1));
 						
 						// 해당 위치에 새로 업로드한 파일이 없을 경우
+						System.out.println(imgName);
 						if(fileNames[index].equals("-")) fileNames[index] = imgName;
+						System.out.println(fileNames[index]);
 					}
 				}
 				
 				// 이미지 변경시 기존 이미지 삭제
 				String[] dbImgNames = dao.getView(no).getProduct_img().split(",");
 				for(int i=0; i<dbImgNames.length; i++) {
-					// 이미지 원본 이름과 실제 이름 분리
-					int seperatorIndex = dbImgNames[i].indexOf("|");
-					dbImgNames[i] = dbImgNames[i].substring(seperatorIndex+1);
+					
+					// 해당 위치 이미지 없을 경우 continue
+					if(dbImgNames[i].equals("-")) continue;
 					
 					if(!fileNames[i].equals(dbImgNames[i])) {
 						String tempPath = realPath + File.separator + dbImgNames[i];
