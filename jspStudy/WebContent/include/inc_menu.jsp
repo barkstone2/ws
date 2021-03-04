@@ -59,7 +59,7 @@
 					</a>
 				</div>
 				<div id="menuMove_mall">
-					<a href="${path}/mall_servlet/list.do">
+					<a href="${path}/mall_servlet/index.do">
 						쇼핑몰
 					</a>
 				</div>

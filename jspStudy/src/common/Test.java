@@ -7,6 +7,11 @@ public class Test {
 		
 		String uuid = util.create_uuid();
 		
+		
+		String aaa = "aaa";
+		
+		System.out.println(aaa.length());
+		System.out.println(aaa.substring(0,aaa.length()));
 		System.out.println(uuid);
 	}
 }

@@ -3,6 +3,7 @@ package shop.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
@@ -12,8 +13,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mysql.jdbc.Statement;
+
 import common.UtilBoard;
+import shop.model.dao.CartDAO;
 import shop.model.dao.ProductDAO;
+import shop.model.dto.CartDTO;
 import shop.model.dto.ProductDTO;
 
 /**
@@ -81,8 +86,11 @@ public class MallController extends HttpServlet {
 		request.setAttribute("search_option", search_option);
 		request.setAttribute("search_data", search_data);
 		
-		if(uri.indexOf("list.do") != -1) {
-			gubun = "/shop/mall/mall_list.jsp";
+		if(uri.indexOf("index.do") != -1) {
+			gubun = "/shop/mall/mall_index.jsp";
+			
+		}else if(uri.indexOf("list.do") != -1) {
+			page = "/shop/mall/mall_list.jsp";
 			
 			int conPerPage = 12; // 페이지 당 개시글 수
 			int pageNavLength = 5; // 페이징 범위
@@ -115,6 +123,101 @@ public class MallController extends HttpServlet {
 			
 			ArrayList<ProductDTO> list = dao.getListAll(startRecord, endRecord, search_option, search_data);
 			request.setAttribute("list", list);
+		}else if(uri.indexOf("view.do") != -1) {
+			page = "/shop/mall/mall_view.jsp";
+			String no_ = request.getParameter("no");
+			int no = util.numberCheck(no_, 0);
+			ProductDTO dto = dao.getView(no);
+			request.setAttribute("dto", dto);
+		}else if(uri.indexOf("addProc.do") != -1) {
+			
+			if(cookNo==0) {
+				out.print("로그인 후 이용하세요");
+				return;
+			}
+			
+			String productNo_ = request.getParameter("no");
+			int productNo = util.numberCheck(productNo_, 0);
+			
+			CartDAO cartDao = new CartDAO();
+			CartDTO dto = new CartDTO();
+			
+			int amount = cartDao.checkCart(cookNo, productNo);
+			
+			dto.setMemberNo(cookNo);
+			dto.setProductNo(productNo);
+			dto.setAmount(amount);
+			int result = 0;
+			if(amount>1) {
+				result = cartDao.updateAmount(dto);
+			}else {
+				result = cartDao.add(dto);
+			}
+			
+			if(result>0) {
+				out.print("장바구니 추가 성공");
+				return;
+			}else {
+				out.print("장바구니 추가 실패");
+				return;
+			}
+			
+		}else if(uri.indexOf("cart.do") != -1) {
+			page = "/shop/mall/mall_cart_list.jsp";
+			if(cookNo==0) {
+				out.print("로그인 후 이용하세요");
+				return;
+			}
+			
+			CartDAO cartDao = new CartDAO();
+			List<CartDTO> list = cartDao.getList(cookNo);
+			request.setAttribute("list", list);
+		}else if(uri.indexOf("deleteAllProc.do") != -1) {
+			
+			if(cookNo==0) {
+				out.print("로그인 후 이용하세요");
+				return;
+			}
+			
+			CartDAO cartDao = new CartDAO();
+			
+			int result = cartDao.deleteAll(cookNo);
+			
+			if(result>0) {
+				out.print("장바구니를 비웠습니다.");
+				return;
+			}else {
+				out.print("장바구니 비우기 실패");
+				return;
+			}
+			
+		}else if(uri.indexOf("deleteProc.do") != -1) {
+			if(cookNo==0) {
+				out.print("로그인 후 이용하세요");
+				return;
+			}
+			
+			String[] productNoArr = request.getParameterValues("productNos");
+			
+			if(productNoArr.length>0) {
+				CartDAO cartDao = new CartDAO();
+				
+				int[] resultArr = cartDao.delete(productNoArr);
+				int result = 1;
+				for(int i=0; i<resultArr.length; i++) {
+					if(resultArr[i]==Statement.EXECUTE_FAILED) {
+						result = 0;
+					}
+				}
+				
+				if(result>0) {
+					out.print("선택한 항목을 장바구니에서 삭제했습니다.");
+					return;
+				}else {
+					out.print("선택 항목 삭제 실패");
+					return;
+				}
+			}
 		}
 		
 		request.setAttribute("pageNumber", pageNumber);

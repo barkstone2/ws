@@ -30,6 +30,7 @@
 	height:297px;
 	margin:5px;
 	border: 1px solid black;
+	cursor: pointer;
 }
 .label{
 	width:120px;
@@ -38,6 +39,9 @@
 #btn{
 	display:flex;
 	justify-content: center;
+}
+#btn > div{
+	margin-right:10px;
 }
 #radioInput{
 	width:180px;
@@ -166,7 +170,7 @@
 						</div>
 					</div>
 				</c:forEach>
-				<c:if test="${list.size()<(i+3) and i==aa*3}">
+				<c:if test="${i<12 and list.size()<(i+3) and i==aa*3}">
 					<c:forEach begin="0" end="${(i+2)-list.size()}" step="1">
 						<div class="content-block">
 						<div class="content">
@@ -253,7 +257,7 @@
 			</div>
 			<div id="btn">
 				<div>
-					<button type="button" id="btnChuga">상품등록</button>
+					<button type="button" id="btnCart">장바구니</button>
 				</div>
 			</div>
 		</form>
@@ -262,8 +266,8 @@
 
 <script>
 $(document).ready(function(){
-	$("#btnChuga").click(function(){
-		goPage('chuga');
+	$("#btnCart").click(function(){
+		goPage('cart');
 	});
 	$("#btnSearch").click(function(){
 		goPage('search','','');
@@ -280,13 +284,7 @@ $(document).ready(function(){
 });
 
 function move(v_location, v_pageNumber, v_bNo){
-	var prefix = "${path}/mall_servlet/";
-	var suffix = ".do";
-	
-	var queryString = 
-		"?pageNumber="+v_pageNumber;
-	location.href=prefix+v_location+suffix+queryString;
-	
+	goPage(v_location, v_pageNumber, v_bNo);
 }
 
 

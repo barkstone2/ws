@@ -334,7 +334,7 @@ no number not null primary key,
 memberNo number not null,
 productNo number not null,
 amount number default 0,
-regi_date Timestamp default current_timestamp
+regidate Timestamp default current_timestamp
 );
 
 create sequence seq_cart;
@@ -345,4 +345,15 @@ foreign key(memberNo) references member(no);
 alter table cart add constraint fk_cart_productNo
 foreign key(productNo) references product(no);
 
+select * from product;
 
+select * from cart;
+
+select a.no, a.memberNo, a.productNo, a.amount, a.regiDate, 
+b.name productName, b.description, b.product_img, b.price 
+from cart a, product b 
+where a.memberNo=2 and a.productNo=b.no 
+order by regidate desc
+
+
+select * from cart where productNo in ('','23','20','')
