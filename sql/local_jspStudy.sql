@@ -359,3 +359,9 @@ order by regidate desc
 select * from cart where productNo in ('','23','20','')
 
 select * from cart where memberno=0;
+
+select * from cart;
+
+select p.*, (select count(*) from cart where productNo=p.no) pCount from product p;
+
+select count(*) from cart where productNo=22;
