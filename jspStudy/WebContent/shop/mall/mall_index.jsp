@@ -72,7 +72,7 @@ function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 		for(i=0; i<file_counter; i++){
 			param.append(i, $('input[name="files"]')[i].files[0]);
 		}
-	}else if(v_location=='deleteProc'){
+	}else if(v_location=='cartDeleteProc'){
 		param = $("#deleteCart").serialize();
 	}
 				
@@ -83,7 +83,10 @@ function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 			contentType: contentType,
 			url: url,
 			success: function(data){
-				if(/.*Proc/.exec(v_location)){
+				if(/cart.*Proc/.exec(v_location)){
+					alert(data);
+					goPage('cartList');
+				}else if(/.*Proc/.exec(v_location)){
 					alert(data);
 					goPage('list');
 				}else{

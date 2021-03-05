@@ -129,18 +129,27 @@ public class CartDAO {
 		return result;
 	}
 	
-	public int[] delete(String[] productNoArr) {
+	public int[] delete(String[] productNoArr, int cookNo) {
 		int[] resultArr = {};
 		try {
+			conn.setAutoCommit(false);
 			String sql = "delete from "+tableName1
-					+" where productNo = ?";
+					+" where productNo = ? and memberNo=?";
 			pstmt = conn.prepareStatement(sql);
 			for(int i=0; i<productNoArr.length; i++) {
 				pstmt.setString(1, productNoArr[i]);
+				pstmt.setInt(2, cookNo);
 				pstmt.addBatch();
+				pstmt.clearParameters();
 			}
 			resultArr = pstmt.executeBatch();
+			conn.commit();
 		}catch (Exception e) {
+			try {
+				conn.rollback();
+			}catch (Exception ee) {
+				ee.printStackTrace();
+			}
 			e.printStackTrace();
 		}finally {
 			db.quitConn(rs, pstmt, conn);
@@ -148,5 +157,42 @@ public class CartDAO {
 		return resultArr;
 	}
 	
-	
+	public int getTotalCount(String search_option, String search_data) {
+		int result = 0;
+		try {
+			String sql = "select count(*) from "+tableName1+" where no>0";
+			boolean[] sqlCheck = new boolean[3];
+			if(search_option.length()>0&&search_data.length()>0) {
+				if(search_option.equals("subcon")) {
+					sql+= " and (bSubject like ? or bContent like ?)";
+					sqlCheck[0] = true;
+				}else if(search_option.equals("all")) {
+					sql+= " and (bSubject like ? or bContent like ? or bWriter like ?)";
+					sqlCheck[1] = true;
+				}else {
+					sql+= " and "+search_option+" like ?";
+					sqlCheck[2] = true;
+				}
+			}
+			pstmt = conn.prepareStatement(sql);
+			int k = 0;
+			if(sqlCheck[0]) {
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+			}else if(sqlCheck[1]) {
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+				pstmt.setString(++k, "%"+search_data+"%");
+			}else if(sqlCheck[2]){
+				pstmt.setString(++k, "%"+search_data+"%");
+			}
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

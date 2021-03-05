@@ -129,7 +129,7 @@ public class MallController extends HttpServlet {
 			int no = util.numberCheck(no_, 0);
 			ProductDTO dto = dao.getView(no);
 			request.setAttribute("dto", dto);
-		}else if(uri.indexOf("addProc.do") != -1) {
+		}else if(uri.indexOf("cartAddProc.do") != -1) {
 			
 			if(cookNo==0) {
 				out.print("로그인 후 이용하세요");
@@ -162,17 +162,18 @@ public class MallController extends HttpServlet {
 				return;
 			}
 			
-		}else if(uri.indexOf("cart.do") != -1) {
+		}else if(uri.indexOf("cartList.do") != -1) {
 			page = "/shop/mall/mall_cart_list.jsp";
 			if(cookNo==0) {
-				out.print("로그인 후 이용하세요");
+				out.print("<script>alert('로그인 후 이용하세요');goPage('list');</script>");
 				return;
 			}
-			
 			CartDAO cartDao = new CartDAO();
+			int totalConCount = cartDao.getTotalCount(search_option, search_data);
 			List<CartDTO> list = cartDao.getList(cookNo);
+			request.setAttribute("totalConCount", totalConCount);
 			request.setAttribute("list", list);
-		}else if(uri.indexOf("deleteAllProc.do") != -1) {
+		}else if(uri.indexOf("cartDeleteAllProc.do") != -1) {
 			
 			if(cookNo==0) {
 				out.print("로그인 후 이용하세요");
@@ -180,7 +181,11 @@ public class MallController extends HttpServlet {
 			}
 			
 			CartDAO cartDao = new CartDAO();
-			
+			int totalConCount = cartDao.getTotalCount(search_option, search_data);
+			if(totalConCount==0) {
+				out.print("장바구니가 비어있습니다.");
+				return;
+			}
 			int result = cartDao.deleteAll(cookNo);
 			
 			if(result>0) {
@@ -191,7 +196,7 @@ public class MallController extends HttpServlet {
 				return;
 			}
 			
-		}else if(uri.indexOf("deleteProc.do") != -1) {
+		}else if(uri.indexOf("cartDeleteProc.do") != -1) {
 			if(cookNo==0) {
 				out.print("로그인 후 이용하세요");
 				return;
@@ -199,10 +204,15 @@ public class MallController extends HttpServlet {
 			
 			String[] productNoArr = request.getParameterValues("productNos");
 			
-			if(productNoArr.length>0) {
+			if(productNoArr==null) {
+				out.print("선택한 항목이 없습니다.");
+				return;
+			}
+			
+			if(productNoArr!=null && productNoArr.length>0) {
 				CartDAO cartDao = new CartDAO();
 				
-				int[] resultArr = cartDao.delete(productNoArr);
+				int[] resultArr = cartDao.delete(productNoArr, cookNo);
 				int result = 1;
 				for(int i=0; i<resultArr.length; i++) {
 					if(resultArr[i]==Statement.EXECUTE_FAILED) {

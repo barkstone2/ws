@@ -105,7 +105,7 @@
 				<div class="btn">
 					<div style="width:400px; display:flex; justify-content: space-around;">
 						<div>
-							<input type="button" value="장바구니에 추가" onclick="move('addProc','${pageNumber}','${dto.no}');" id="btnSave">
+							<input type="button" value="장바구니에 추가" onclick="move('cartAddProc','${pageNumber}','${dto.no}');" id="btnSave">
 						</div>
 						<div>
 							<input type="button" value="목록으로" onclick="move('list','${pageNumber}');" id="btnList">

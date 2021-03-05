@@ -357,3 +357,5 @@ order by regidate desc
 
 
 select * from cart where productNo in ('','23','20','')
+
+select * from cart where memberno=0;

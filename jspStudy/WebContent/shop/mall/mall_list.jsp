@@ -267,7 +267,7 @@
 <script>
 $(document).ready(function(){
 	$("#btnCart").click(function(){
-		goPage('cart');
+		goPage('cartList');
 	});
 	$("#btnSearch").click(function(){
 		goPage('search','','');

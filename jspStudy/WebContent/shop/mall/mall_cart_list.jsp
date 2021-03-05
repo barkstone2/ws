@@ -2,6 +2,16 @@
     pageEncoding="UTF-8"%>
 <%@include file="../../include/inc_header.jsp" %>
 
+<div id="memcount">
+	* 장바구니에 ${totalConCount}개의 상품이 존재합니다.
+</div>
+	
+<c:if test="${totalConCount==0}">
+	<div style="text-align:center;">
+		장바구니가 비어있습니다.
+	</div>
+</c:if>
+
 <c:set var="totalPrice" value="0" />
 <form name="deleteCart" id="deleteCart" method="post">
 	<c:forEach var="dto" items="${list}">
@@ -17,7 +27,7 @@
 		</div>
 		<div style="display:flex; align-items: center; justify-content: center;">
 			<div style="margin-right:10px;">
-				<input type="checkbox" style="zoom:2.0;" name="productNos" value="${dto.productNo}">
+				<input type="checkbox" style="width:30px; height:30px;" name="productNos" value="${dto.productNo}">
 			</div>
 			<div style="cursor:pointer; display:flex; align-items: center; justify-content: center;">
 				<c:if test="${imgPath=='이미지X'}">
@@ -48,10 +58,10 @@
 			<input type="button" value="목록으로" onclick="move('list','${pageNumber}');" id="btnList">
 		</div>
 		<div>
-			<input type="button" value="선택 항목 삭제" onclick="move('deleteProc','${pageNumber}');" id="btnList">
+			<input type="button" value="선택 항목 삭제" onclick="move('cartDeleteProc','${pageNumber}');" id="btnList">
 		</div>
 		<div>
-			<input type="button" value="장바구니 비우기" onclick="move('deleteAllProc','${pageNumber}');" id="btnList">
+			<input type="button" value="장바구니 비우기" onclick="move('cartDeleteAllProc','${pageNumber}');" id="btnList">
 		</div>
 	</div>
 </div>
