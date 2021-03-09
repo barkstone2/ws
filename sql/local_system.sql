@@ -227,3 +227,10 @@ create user example01
 identified by 1234;
 
 grant connect, resource, dba to example01;
+
+
+create user jspTest
+identified by 1234;
+
+grant connect, resource, dba to jspTest;
+

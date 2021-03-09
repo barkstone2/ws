@@ -142,13 +142,17 @@ public class MallController extends HttpServlet {
 			CartDAO cartDao = new CartDAO();
 			CartDTO dto = new CartDTO();
 			
-			int amount = cartDao.checkCart(cookNo, productNo);
+			String amount_ = request.getParameter("amount");
+			int amount = util.numberCheck(amount_, 0);
+					
+			int curAmount = cartDao.checkCart(cookNo, productNo);
+			amount += curAmount;
 			
 			dto.setMemberNo(cookNo);
 			dto.setProductNo(productNo);
 			dto.setAmount(amount);
 			int result = 0;
-			if(amount>1) {
+			if(curAmount>0) {
 				result = cartDao.updateAmount(dto);
 			}else {
 				result = cartDao.add(dto);

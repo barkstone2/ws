@@ -105,6 +105,18 @@
 				<div class="btn">
 					<div style="width:400px; display:flex; justify-content: space-around;">
 						<div>
+							<select name="amount" id="amount">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+								<option>5</option>
+								<option>6</option>
+								<option>7</option>
+								<option>8</option>
+								<option>9</option>
+								<option>10</option>
+							</select>
 							<input type="button" value="장바구니에 추가" onclick="move('cartAddProc','${pageNumber}','${dto.no}');" id="btnSave">
 						</div>
 						<div>

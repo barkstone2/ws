@@ -365,3 +365,5 @@ select * from cart;
 select p.*, (select count(*) from cart where productNo=p.no) pCount from product p;
 
 select count(*) from cart where productNo=22;
+
+

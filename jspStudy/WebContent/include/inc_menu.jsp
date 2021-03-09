@@ -17,68 +17,82 @@
 			<c:out value="${targetMenu}" />
 		</div>
 		<div id="menu">
-			<nav id="mainMenu" class="menu">
-				<div id="menuMove_main">
-					<a href="${path}">
-						Home
-					</a>
-				</div>
-				<div id="menuMove_member">
-					<a href="${path}/member_servlet/list.do">
-						회원관리
-					</a>
-				</div>
-				<div id="menuMove_memo">
-					<a href="${path}/memo_servlet/memo.do">
-						메모장
-					</a>
-				</div>
-				<div id="menuMove_guestbook">
-					<a href="${path}/guestbook_servlet/list.do">
-						방명록
-					</a>
-				</div>
-				<div id="menuMove_survey">
-					<a href="${path}/survey_servlet/index.do">
-						설문조사(ajax)
-					</a>
-				</div>
-				<div id="menuMove_survey2">
-					<a href="${path}/survey_servlet2/list.do">
-						설문조사
-					</a>
-				</div>
-				<div id="menuMove_board">
-					<a href="${path}/board_servlet/list.do">
-						게시판
-					</a>
-				</div>
-				<div id="menuMove_board2">
-					<a href="${path}/board_servlet2/index.do">
-						게시판(ajax)
-					</a>
-				</div>
-				<div id="menuMove_mall">
-					<a href="${path}/mall_servlet/index.do">
-						쇼핑몰
-					</a>
-				</div>
-				<div id="menuMove_product">
-					<a href="${path}/product_servlet/index.do">
-						쇼핑몰 관리(ajax)
-					</a>
-				</div>
-				<div id="menuMove_admin">
-					<a href="#">
-						관리자
-					</a>
-				</div>
-				<div id="menuMove_util">
-					<a href="${path}/util.do">
-						유틸리티
-					</a>
-				</div>
-			</nav>
+			<div>
+				<nav id="mainMenu" class="menu">
+					<div id="menuMove_main">
+						<a href="${path}">
+							Home
+						</a>
+					</div>
+					<div id="menuMove_member">
+						<a href="${path}/member_servlet/list.do">
+							회원관리
+						</a>
+					</div>
+					<div id="menuMove_memo">
+						<a href="${path}/memo_servlet/memo.do">
+							메모장
+						</a>
+					</div>
+					<div id="menuMove_guestbook">
+						<a href="${path}/guestbook_servlet/list.do">
+							방명록
+						</a>
+					</div>
+					<div id="menuMove_survey">
+						<a href="${path}/survey_servlet/index.do">
+							설문조사(ajax)
+						</a>
+					</div>
+					<div id="menuMove_survey2">
+						<a href="${path}/survey_servlet2/list.do">
+							설문조사
+						</a>
+					</div>
+					<div id="menuMove_board">
+						<a href="${path}/board_servlet/list.do">
+							게시판
+						</a>
+					</div>
+					<div id="menuMove_board2">
+						<a href="${path}/board_servlet2/index.do">
+							게시판(ajax)
+						</a>
+					</div>
+				</nav>
+				<nav class="menu">
+					<div id="menuMove_mall">
+						<a href="${path}/mall_servlet/index.do">
+							쇼핑몰
+						</a>
+					</div>
+					<div id="menuMove_product">
+						<a href="${path}/product_servlet/index.do">
+							쇼핑몰 관리(ajax)
+						</a>
+					</div>
+					<div id="menuMove_chart">
+						<a href="${path}/chart_servlet/index.do">
+							차트
+						</a>
+					</div>
+					<div id="menuMove_admin">
+						<a href="#">
+							관리자
+						</a>
+					</div>
+					<div id="menuMove_util">
+						<a href="${path}/util.do">
+							유틸리티
+						</a>
+					</div>
+					<div id="menuMove_email">
+						<a href="${path}/email_servlet/index.do">
+							Email
+						</a>
+					</div>
+				</nav>
+			</div>
 			<nav id="userMenu" class="menu">
 				<div>
 					<div id="nologin">

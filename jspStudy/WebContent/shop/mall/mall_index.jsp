@@ -74,6 +74,8 @@ function goPage(v_location, v_pageNumber, v_bNo, v_passwd){
 		}
 	}else if(v_location=='cartDeleteProc'){
 		param = $("#deleteCart").serialize();
+	}else if(v_location=='cartAddProc'){
+		param.amount = $("#amount").val();
 	}
 				
 	$.ajax({

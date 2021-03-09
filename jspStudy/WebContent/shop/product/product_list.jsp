@@ -39,7 +39,7 @@
 	height: 45px;
 }
 #mList{
-	width:1000px;
+	min-width:1000px;
 	min-height: 400px;
 }
 .mlistcon{
@@ -79,15 +79,15 @@
 }
 .column5{
 	border-right: 1px solid black;
-	width:300px;
+	width:120px;
 }
 .column7, .column8, .column9{
-	border-right: 1px solid black;
-	width:100px;
+	--border-right: 1px solid black;
+	width:150px;
 }
 .column6{
-	--border-right: 1px solid black;
-	width:250px;
+	border-right: 1px solid black;
+	width:300px;
 }
 .column10{
 	width:150px;
@@ -123,7 +123,7 @@
 <c:if test="${nowDay<10}"><c:set var="nowDay" value="0${nowDate.nowDay}"/></c:if>
 <c:set var="today" value="${nowYear}-${nowMonth}-${nowDay}"/>
 
-<div style="min-width:750px; min-height: 500px; width:1000px;">
+<div style="min-width:750px; min-height: 500px; min-width:1000px;">
 	<div id="formTitle">
 		<h2>상품관리</h2>
 	</div>
@@ -145,9 +145,12 @@
 				가격
 			</div>
 			<div class="column5">
-				파일
+				장바구니수
 			</div>
 			<div class="column6">
+				파일
+			</div>
+			<div class="column7">
 				등록일
 			</div>
 		</div>
@@ -181,9 +184,12 @@
 				<fmt:formatNumber type="number" maxFractionDigits="3" value="${dto.price}" />
 			</div>
 			<div class="column5">
-				${mainImgName}
+				${dto.cartSum}
 			</div>
 			<div class="column6">
+				${mainImgName}
+			</div>
+			<div class="column7">
 				<c:if test="${today == fn:substring(dto.regiDate,0,10)}">${fn:substring(dto.regiDate,10,16)}</c:if>
 				<c:if test="${today != fn:substring(dto.regiDate,0,10)}">${fn:substring(dto.regiDate,0,10)}</c:if>
 			</div>

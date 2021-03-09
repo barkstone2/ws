@@ -78,7 +78,7 @@ public class CartDAO {
 			e.printStackTrace();
 		}
 		
-		return result+1;
+		return result;
 	}
 	
 	public List<CartDTO> getList(int memberNo){
@@ -194,5 +194,31 @@ public class CartDAO {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	public List<CartDTO> getListCartProductGroup() {
+		List<CartDTO> list = new ArrayList<>();
+		try {
+			String sql = "select p.name product_name, sum(c.amount * p.price) buy_money "
+					+ "from cart c inner join product p on c.productNo = p.no "
+					+ "group by p.name "
+					+ "order by product_name asc";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				CartDTO dto = new CartDTO();
+				dto.setProduct_name(rs.getString("product_name"));
+				dto.setBuy_money(rs.getInt("buy_money"));
+				list.add(dto);
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			db.quitConn(rs, pstmt, conn);
+		}
+		
+		
+		return list;
 	}
 }

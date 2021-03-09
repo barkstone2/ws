@@ -1,5 +1,6 @@
 package common;
 
+import java.io.File;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
@@ -237,5 +238,40 @@ public class Util {
 		SimpleDateFormat sf = new SimpleDateFormat("yyyyMMddHHmmss");
 		return sf.format(now);
 	}
+	
+	
+	public void fileDelete(HttpServletRequest request, String dir) {
+		if(dir.trim().equals("")) {
+			return;
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		long todayMil = cal.getTimeInMillis();
+		long oneDayMil = 24*60*60*1000;
+		
+		Calendar fileCal = Calendar.getInstance();
+		Date fileDate = null;
+		
+		File path = new File(dir);
+		File[] list = path.listFiles();
+		
+		for(int j=0; j<list.length; j++) {
+			long modifiedMil = list[j].lastModified();
+			long diffMil = Math.abs((modifiedMil - todayMil)) / oneDayMil;
+			if(diffMil>3 && list[j].exists()) {
+				list[j].delete();
+				System.out.println(list[j].getName()+" 파일을 삭제했습니다.");
+			}
+			
+			if(diffMil>=0 && list[j].exists()) {
+				list[j].delete();
+				System.out.println(list[j].getName()+" 파일을 삭제했습니다.");
+			}
+			
+		}
+		
+	}
+	
+	
 	
 }

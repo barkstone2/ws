@@ -6,9 +6,19 @@ public class ProductDTO {
 	private int no;
 	private String name;
 	private int price;
+	private int cartSum;
 	private String description;
 	private String product_img;
 	private Timestamp regiDate;
+	
+	
+	
+	public int getCartSum() {
+		return cartSum;
+	}
+	public void setCartSum(int cartSum) {
+		this.cartSum = cartSum;
+	}
 	public int getNo() {
 		return no;
 	}

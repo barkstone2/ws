@@ -44,7 +44,8 @@ public class ProductDAO {
 	
 	public ArrayList<ProductDTO> getListAll(int startRecord, int endRecord, String search_option, String search_data){
 		ArrayList<ProductDTO> list = new ArrayList<>();
-		String basicSql = "select a.no, a.name, a.price, a.description, a.product_img, a.regiDate "
+		String basicSql = "select a.no, a.name, a.price, a.description, a.product_img, a.regiDate, "
+				+ "(select sum(amount) from cart b where a.no=b.productNo) cartSum "
 				+ "from "+tableName1+" a where no>0";
 		String orderBy = " order by no desc";
 		try {
@@ -87,6 +88,7 @@ public class ProductDAO {
 				dto.setDescription(rs.getString("description"));
 				dto.setProduct_img(rs.getString("product_img"));
 				dto.setRegiDate(rs.getTimestamp("regiDate"));
+				dto.setCartSum(rs.getInt("cartSum"));
 				list.add(dto);
 			}
 		}catch (Exception e) {

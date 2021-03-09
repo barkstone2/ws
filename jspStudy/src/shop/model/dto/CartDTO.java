@@ -95,6 +95,10 @@ public class CartDTO {
 	public void setBuy_money() {
 		this.buy_money = amount * product_price;
 	}
+
+	public void setBuy_money(int buy_money) {
+		this.buy_money = buy_money;
+	}
 	
 	
 	
