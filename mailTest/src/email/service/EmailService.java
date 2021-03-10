@@ -24,7 +24,7 @@ public class EmailService {
 		
 		String fromName = dto.getFromName();
 		String fromEmail = dto.getFromEmail();
-		String toEmail = dto.getToEmail();
+		String[] toEmails = dto.getToEmails();
 		String subject = dto.getSubject();
 		String content = dto.getContent();
 		
@@ -37,7 +37,7 @@ public class EmailService {
 		props.put("mail.smtp.post", port);
 		props.put("mail.transport.protocol", "smtp");
 		
-		Session session = Session.getDefaultInstance(props, new Authenticator() {
+		Session session = Session.getInstance(props, new Authenticator() {
 			String un = username;
 			String pw = password;
 			
@@ -53,8 +53,13 @@ public class EmailService {
 				new InternetAddress(fromEmail, fromName)
 		});
 		
+		InternetAddress[] toAddr = new InternetAddress[toEmails.length];
+		for(int i=0; i<toEmails.length; i++) {
+			toAddr[i] = new InternetAddress(toEmails[i]);
+		}
+
 		//수신자 .TO .CC(참조) .BCC(숨은참조)
-		mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+		mimeMessage.setRecipients(Message.RecipientType.TO, toAddr);
 		//mimeMessage.setRecipient(Message.RecipientType.CC, new InternetAddress(toEmail));
 		//mimeMessage.setRecipient(Message.RecipientType.BCC, new InternetAddress(toEmail));
 		mimeMessage.setSubject(subject);
