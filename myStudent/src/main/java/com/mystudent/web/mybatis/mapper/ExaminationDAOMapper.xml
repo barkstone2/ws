@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mystudent.web.examination.dao.ExaminationDAO">
+	<insert id="insert" parameterType="com.mystudent.web.examination.entity.ExaminationDTO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+	    	select SEQ_examination.nextval FROM DUAL
+	  	</selectKey>
+		insert into examination (no, name, type)
+		values (#{no}, #{name},#{type})
+	</insert>
+	<select id="getList" resultType="com.mystudent.web.examination.entity.ExaminationDTO">
+		select * from examination
+	</select>
+	
+	
+<!-- 	<select id="getView" resultType="com.mystudent.web.student.entity.StudentDTO">
+		select * from student
+		where no=#{no}
+	</select> -->
+	<!-- <update id="update">
+		update board set title=#{title}, 
+						content=#{content}, 
+						writer=#{writer}, 
+						pwd=#{pwd} 
+		where no=#{no}
+	</update>
+	<delete id="delete">
+		delete from board 
+		where no=#{no}
+	</delete> -->
+</mapper>
+

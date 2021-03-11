@@ -234,3 +234,6 @@ identified by 1234;
 
 grant connect, resource, dba to jspTest;
 
+create user mystudent
+identified by 1234;
+grant connect, resource, dba to mystudent;

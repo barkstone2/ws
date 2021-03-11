@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mystudent.web.score.dao.ScoreDAO">
+	
+	<insert id="insert" parameterType="com.mystudent.web.score.entity.ScoreDTO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+	    	select SEQ_score.nextval FROM DUAL
+	  	</selectKey>
+		insert into score (no, studentId, examNo, score)
+		values (#{no}, #{studentId}, #{examNo}, #{score})
+	</insert>
+	<select id="getViewList" resultType="com.mystudent.web.score.entity.ScoreViewDTO">
+		select * from scoreView
+		where studentName=#{studentName}
+	</select>
+	
+	
+<!-- 	<select id="getView" resultType="com.mystudent.web.student.entity.StudentDTO">
+		select * from student
+		where no=#{no}
+	</select> -->
+	<!-- <update id="update">
+		update board set title=#{title}, 
+						content=#{content}, 
+						writer=#{writer}, 
+						pwd=#{pwd} 
+		where no=#{no}
+	</update>
+	<delete id="delete">
+		delete from board 
+		where no=#{no}
+	</delete> -->
+</mapper>
+
