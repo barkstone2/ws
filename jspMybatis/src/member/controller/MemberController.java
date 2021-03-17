@@ -2,7 +2,7 @@ package member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -237,7 +237,7 @@ public class MemberController extends HttpServlet {
 			request.setAttribute("lastPage", lastPage);
 			
 			
-			ArrayList<MemberDTO> list = dao.getListAll2(startRecord, endRecord, search_option, search_data);
+			List<MemberDTO> list = dao.getListAll(startRecord, endRecord, search_option, search_data);
 			request.setAttribute("list", list);
 			gubun = "/member/member_list.jsp";
 		}else if(url.indexOf("logout.do") != -1) {//로그아웃 처리

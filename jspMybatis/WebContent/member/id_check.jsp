@@ -37,11 +37,11 @@
 			</div>
 		</div>
 	</div>
-	
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script>
 function save(){
 	var id = document.getElementById('id').value;
-	if('${idCheckMsg}'=='사용 가능한 아이디입니다.'){
+	if('${idCheckMsg}'=='사용 가능한 아이디입니다.'&&'${inputId}'==$('#id').val()){
 		opener.document.getElementById('id').value = id;
 		opener.document.getElementById('checkedId').value = id;
 		window.close();

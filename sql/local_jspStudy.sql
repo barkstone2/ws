@@ -366,4 +366,8 @@ select p.*, (select count(*) from cart where productNo=p.no) pCount from product
 
 select count(*) from cart where productNo=22;
 
+select * from member;
+select * from memo;
 
+delete from memo where no=2;
+commit;
