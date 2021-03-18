@@ -57,6 +57,7 @@ public class ScoreController {
 		model.addAttribute("examList", examList);
 		model.addAttribute("studentList", studentList);
 		
+		
 		return "score.reg";
 	}
 	

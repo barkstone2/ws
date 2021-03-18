@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guestBook">
+	
+	<sql id="search">
+		<choose>
+			<when test="search_option == 'id_name_gender'">
+				and (id like '%' || #{search_data} || '%' or
+					name like '%' || #{search_data} || '%' or
+					gender like '%' || #{search_data} || '%')
+			</when>
+			<when test="search_option != null and search_option != ''
+			and search_data != null and search_data != '' ">
+				and (${search_option} like '%' || #{search_data} || '%')
+			</when>
+			<otherwise>
+				and no> '0'
+			</otherwise>
+		</choose>
+	</sql>
+
+	<select id="getTotalRecord" resultType="int">
+		select count(*) from guestbook
+	</select>
+	
+	<select id="getList" resultType="guestbook.model.dto.GuestBookDTO">
+		select * from (select rownum rn, a.* from (
+			select no, name, email, passwd, content, regi_date from guestbook order by no desc) a) 
+			where rn between #{startRecord} and #{endRecord}
+	</select>
+	
+	<select id="idCheck" resultType="int">
+		select count(id) from member where id=#{id}
+	</select>
+	
+	<insert id="setInsert" parameterType="guestbook.model.dto.GuestBookDTO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+	    	select seq_guestbook.nextval FROM DUAL
+	  	</selectKey>
+	  	insert into guestbook 
+				(no, name, email, passwd, content, regi_date)
+				values(#{no}, #{name}, #{email}, #{passwd}, #{content}, default)
+	</insert>
+	
+	<update id="setUpdate" parameterType="guestbook.model.dto.GuestBookDTO">
+		update member set gender=#{gender}, bornYear=#{bornYear}, postcode=#{postcode},
+						bAddr=#{bAddr}, sAddr=#{sAddr}, refAddr=#{refAddr}
+		where no=#{no} and pw=#{pw}
+	</update>
+	
+	<delete id="setDelete" parameterType="guestbook.model.dto.GuestBookDTO">
+		delete from member where no=#{no} and pw=#{pw}
+	</delete>
+	
+	<select id="getView" resultType="guestbook.model.dto.GuestBookDTO">
+		select no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr 
+		from member where no=#{no}
+	</select>
+	
+	<select id="getSelect" resultType="guestbook.model.dto.GuestBookDTO">
+		select no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr 
+		from member where id=#{id}
+	</select>
+	
+	<select id="getLogin" resultType="int">
+		select count(*)
+		from member where id=#{id} and pw=#{pw}
+	</select>
+	
+	<select id="getLoginChk" resultType="int">
+		select count(*)
+		from member where id=#{id}
+	</select>
+	
+</mapper>
+
