@@ -371,3 +371,5 @@ select * from memo;
 
 delete from memo where no=2;
 commit;
+
+

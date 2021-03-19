@@ -39,14 +39,14 @@
 							방명록
 						</a>
 					</div>
-					<div id="menuMove_survey">
-						<a href="${path}/survey_servlet/index.do">
-							설문조사(ajax)
-						</a>
-					</div>
 					<div id="menuMove_survey2">
 						<a href="${path}/survey_servlet2/list.do">
 							설문조사
+						</a>
+					</div>
+					<div id="menuMove_survey2">
+						<a href="${path}/survey_servlet2/solve.do">
+							문제은행
 						</a>
 					</div>
 					<div id="menuMove_board">

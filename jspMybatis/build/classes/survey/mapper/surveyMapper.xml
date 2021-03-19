@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="survey">
+	<sql id="search">
+		<if test="list_gubun != null">
+			<choose>
+				<when test="list_gubun == 'doing'">
+					and status=1 and current_timestamp between start_date and end_date
+				</when>
+				<when test="list_gubun == 'ended'">
+					and (status=0 or current_timestamp > end_date)
+				</when>
+			</choose>
+		</if>
+		<if test="search_option != null and search_option != ''
+		and search_data != null and search_data != '' ">
+			and (${search_option} like '%' || #{search_data} || '%')
+		</if>
+		<if test="search_date_s != null and search_date_s != ''
+		and search_date_e != null and search_date_e != '' ">
+			<![CDATA[
+			and (start_date>=to_timestamp(#{search_date_s+00:00:00.0}) and end_date <= to_timestamp(#{search_date_e+23:59:59.9}))
+			]]>
+		</if>
+	</sql>
+
+	<select id="getTotalRecord" resultType="int">
+		select count(*) from survey where 1=1
+		<include refid="search"></include>
+	</select>
+	
+	<select id="getList" resultType="survey.model.dto.SurveyDTO">
+		select * from (select rownum rn, b.* from (
+			select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date,
+			a.end_date, a.regi_date, (select count(*) from survey_answer where a.no=no) survey_counter
+			from survey a where 1=1
+			<include refid="search"></include>
+			order by end_date desc, regi_date desc
+		<![CDATA[
+				) b) where rn between #{startRecord} and #{endRecord}
+		]]>
+	</select>
+	
+	<select id="getView" resultType="survey.model.dto.SurveyDTO">
+		select rownum rn, tb.* from (
+			select a.no, a.question, a.ans1, a.ans2, a.ans3, a.ans4, a.status, a.start_date, 
+				a.end_date, a.regi_date, (select count(*) from survey_answer where a.no=no) survey_counter, 
+				b.ans1c, b.ans2c, b.ans3c, b.ans4c
+				from survey a, v_ansCount b where a.no=b.no(+)
+		) tb where tb.no=#{no}
+	</select>
+	
+	<insert id="setInsert" parameterType="survey.model.dto.SurveyDTO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+	    	select seq_survey.nextval FROM DUAL
+	  	</selectKey>
+	  	insert into survey 
+		(no, question, ans1, ans2, ans3, ans4, status, start_date, end_date, regi_date)
+		values(#{no},#{question},#{ans1},#{ans2},#{ans3},#{ans4},#{status},#{start_date},#{end_date},default)
+	</insert>
+	
+	<insert id="setAnswer" parameterType="survey.model.dto.SurveyAnswerDTO">
+		<selectKey keyProperty="answer_no" resultType="int" order="BEFORE">
+	    	select seq_answer.nextval FROM DUAL
+	  	</selectKey>
+	  	insert into survey_answer 
+				(answer_no, no, answer, regi_date)
+				values(#{answer_no},#{no},#{answer},default)
+	</insert>
+	
+	
+	<update id="setUpdate" parameterType="survey.model.dto.SurveyDTO">
+		update survey set question=#{question}, ans1=#{ans1}, ans2=#{ans2}, 
+		ans3=#{ans3}, ans4=#{ans4}, status=#{status}, start_date=#{start_date}, end_date=#{end_date}
+		where no=#{no}
+	</update>
+	
+	<delete id="setDelete" parameterType="member.model.dto.MemberDTO">
+		delete from member where no=#{no} and pw=#{pw}
+	</delete>
+	
+	
+	<select id="getSelect" resultType="member.model.dto.MemberDTO">
+		select no, id, pw, name, gender, bornYear, regi_date, postcode, bAddr, sAddr, refAddr 
+		from member where id=#{id}
+	</select>
+	
+	<select id="getLogin" resultType="int">
+		select count(*)
+		from member where id=#{id} and pw=#{pw}
+	</select>
+	
+	<select id="getLoginChk" resultType="int">
+		select count(*)
+		from member where id=#{id}
+	</select>
+	
+</mapper>
+

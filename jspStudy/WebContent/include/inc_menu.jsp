@@ -49,6 +49,11 @@
 							설문조사
 						</a>
 					</div>
+					<div id="menuMove_survey2">
+						<a href="${path}/survey_servlet2/solve.do">
+							문제은행
+						</a>
+					</div>
 					<div id="menuMove_board">
 						<a href="${path}/board_servlet/list.do">
 							게시판
