@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h2>test04.do / exam01Result.jsp</h2>
+	<h2>test05.do / exam01Result.jsp</h2>
 	<h2>이름 : ${name}</h2>
 	<h2>국어 : ${kor}</h2>
 	<h2>영어 : ${eng}</h2>

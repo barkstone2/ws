@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.spring01.member">
+	<insert id="insert" parameterType="com.test.spring01.member.entity.MemberDTO">
+		insert into member
+		(id, pw, name, email)
+		values(#{id}, #{pw}, #{name}, #{email})
+	</insert>
+	<select id="getList" resultType="com.test.spring01.member.entity.MemberDTO">
+		select * from member order by regDate desc
+	</select>
+	<select id="getView" resultType="com.test.spring01.member.entity.MemberDTO">
+		select * from member
+		where id=#{id}
+	</select>
+	<update id="update" parameterType="com.myboard.web.member.entity.MemberDTO">
+		update member
+		set pw=#{pw}, name=#{name}, email=#{email}
+		where id=#{id}
+	</update>
+	<delete id="delete">
+		delete from member
+		where id=#{id}
+	</delete>
+</mapper>
+

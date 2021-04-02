@@ -1,4 +1,4 @@
-package com.test.spring01.controller;
+package com.test.spring01.test;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
@@ -116,4 +118,66 @@ public class Test01Controller {
 		return "/test05/exam01Result";
 	}
 	
+	@RequestMapping("/test06.do")
+	public String test06() {
+		
+		return "/test06/exam01";
+	}
+	
+	@RequestMapping("/test06Proc.do")
+	public String test06Proc(
+			@ModelAttribute Test06VO vo, 
+			Model model) {
+		
+		vo.setDcPrice();
+		model.addAttribute("vo", vo);
+		
+		return "/test06/exam01Result";
+	}
+	
+	@RequestMapping("/test07.do")
+	public String test07() {
+		
+		return "/test07/exam01";
+	}
+	
+	@RequestMapping("/test07Proc.do")
+	public ModelAndView test07Proc(
+			@ModelAttribute Test06VO vo, 
+			ModelAndView mv) {
+		
+		vo.setDcPrice();
+		mv.setViewName("/test07/exam01Result");
+		mv.addObject("vo", vo);
+		return mv;
+	}
+	
+	@RequestMapping("/test08.do")
+	public String test08() {
+		
+		return "/test08/exam01";
+	}
+	
+	@RequestMapping("/test08Proc.do")
+	public String test08Proc(String id, String pwd,
+			Model model) {
+		
+		model.addAttribute("id", id);
+		model.addAttribute("pwd", pwd);
+		
+		return "/test08/exam01Result";
+	}
+	
+	@RequestMapping("/test09.do")
+	public String test09() {
+		
+		return "/test09/exam01";
+	}
+	
+	@RequestMapping("/test09Proc.do")
+	@ResponseBody
+	public String test09Proc(String id, String pwd, String email,
+			Model model) {
+		return "id: " + id + "<br>pwd: " + pwd + "<br>email: " + email;
+	}
 }
