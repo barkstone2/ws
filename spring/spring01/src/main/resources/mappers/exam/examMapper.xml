@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="exam">
+	<insert id="insert" parameterType="com.test.spring01.exam.entity.dto.ExamDTO">
+		<selectKey keyProperty="no" resultType="int" order="BEFORE">
+	    	select seq_exam.nextval as no FROM DUAL
+	  	</selectKey>
+	  	
+		insert into exam (no, name, jumin, gender, age)
+		values(#{no}, #{name}, #{jumin}, #{gender}, #{age})
+	</insert>
+	<select id="getList" resultType="com.test.spring01.exam.entity.dto.ExamDTO">
+		select * from member order by regDate desc
+	</select>
+	<select id="getView" resultType="com.test.spring01.exam.entity.dto.ExamDTO">
+		select * from member
+		where id=#{id}
+	</select>
+	<select id="checkPwd" resultType="int">
+		select count(*) from member where id=#{id} and pw=#{pw}
+	</select>
+	<update id="update" parameterType="com.test.spring01.exam.entity.dto.ExamDTO">
+		update member
+		set pw=#{pw}, name=#{name}, email=#{email}
+		where id=#{id}
+	</update>
+	<delete id="delete">
+		delete from member
+		where id=#{id}
+	</delete>
+</mapper>
+

@@ -2,30 +2,31 @@ package com.test.spring01.member.dao;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.test.spring01.member.entity.MemberDTO;
 
-@Component
+@Repository
 public class MemberDAOImpl implements MemberDAO{
-
 	
-	public MemberDAOImpl() {
-	}
+	@Autowired
+	SqlSession sqlSession;
 	
 	@Override
 	public int insert(MemberDTO dto) {
-		return 0;
+		return sqlSession.insert("member.insert", dto);
 	}
 
 	@Override
 	public List<MemberDTO> getList() {
-		return null;
+		return sqlSession.selectList("member.getList");
 	}
 
 	@Override
 	public MemberDTO getView(String id) {
-		return null;
+		return sqlSession.selectOne("member.getView", id);
 	}
 
 }

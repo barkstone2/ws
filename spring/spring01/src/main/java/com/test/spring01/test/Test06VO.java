@@ -14,4 +14,5 @@ public class Test06VO {
 	public void setDcPrice() {
 		dcPrice = (int)(price * (dcRate/100.0));
 	}
+	
 }

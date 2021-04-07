@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.test.spring01.member">
+<mapper namespace="member">
 	<insert id="insert" parameterType="com.test.spring01.member.entity.MemberDTO">
 		insert into member
 		(id, pw, name, email)
@@ -15,7 +15,10 @@
 		select * from member
 		where id=#{id}
 	</select>
-	<update id="update" parameterType="com.myboard.web.member.entity.MemberDTO">
+	<select id="checkPwd" resultType="int">
+		select count(*) from member where id=#{id} and pw=#{pw}
+	</select>
+	<update id="update" parameterType="com.test.spring01.member.entity.MemberDTO">
 		update member
 		set pw=#{pw}, name=#{name}, email=#{email}
 		where id=#{id}
