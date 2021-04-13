@@ -27,7 +27,7 @@ public class UtilBoard extends Util{
 		
 
 		if (search_data == null || search_data.trim().equals("")) {
-			search_data = "";
+			search_data = "";                                                                                                                                              
 		}
 
 		if (search_option.equals("") || search_data.equals("")) {

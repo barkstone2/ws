@@ -14,8 +14,12 @@ public class Test {
 		System.out.println(aaa.substring(0,aaa.length()));
 		System.out.println(uuid);
 	
+		String test = "1,2,3,4,5";
 		
+		String[] aa = test.split(",");
 		
+		for(String a: aa)
+			System.out.println(a);
 		
 		
 		
